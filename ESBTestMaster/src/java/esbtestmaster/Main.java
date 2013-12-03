@@ -5,6 +5,14 @@
 
 package esbtestmaster;
 
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.naturalcli.*;
+
+
 /**
  *
  * @author gilles
@@ -15,7 +23,10 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        CLI shell = new CLI();
+        shell.launch();
     }
 
 }
+
+
