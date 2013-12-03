@@ -11,5 +11,5 @@ package interfaces;
  */
 public interface ClientTerminal {
     public int StartSimulation(String filename);
-    public int CalculateKPI();
+    public String CalculateKPI();
 }
