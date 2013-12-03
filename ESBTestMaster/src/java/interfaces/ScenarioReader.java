@@ -5,10 +5,13 @@
 
 package interfaces;
 
+import datas.SimulationScenario;
+
 /**
  *
  * @author gilles
  */
 public interface ScenarioReader {
-
+    public SimulationScenario getScenarioFromFile(String filename);
+    
 }
