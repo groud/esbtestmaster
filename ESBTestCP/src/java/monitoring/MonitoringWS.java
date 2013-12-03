@@ -22,11 +22,11 @@ public class MonitoringWS implements MonitoringWSInterface{
      {
         if(behavior==0)
 
-            System.out.print("you are consumer and your id is" + id);//just a test
-            //Here We will We invoke the configuration method
+            System.out.print("you are consumer and your id is " + id);//just a test
+            //Here We will invoke the configuration method
         else
-             System.out.print("you are provider and your id is" + id);//just a test
-              //Here We will We invoke the configuration method
+             System.out.print("you are provider and your id is" +  id);//just a test
+              //Here We will invoke the configuration method
      }
 
     public void configureProvider(int responseTime, int messageLength)
