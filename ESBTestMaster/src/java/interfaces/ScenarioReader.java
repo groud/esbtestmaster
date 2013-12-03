@@ -13,5 +13,4 @@ import datas.SimulationScenario;
  */
 public interface ScenarioReader {
     public SimulationScenario getScenarioFromFile(String filename);
-    
 }
