@@ -1,5 +1,6 @@
-ESBTestMaster/nbproject/private/
-ESBTestCP/nbproject/private/
+*/nbproject/private
+*/build
+*/dist
 
 *.class
 
