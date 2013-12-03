@@ -14,4 +14,6 @@ import javax.jws.WebService;
 @WebService()
 public class MonitoringWS {
 
+    
+
 }
