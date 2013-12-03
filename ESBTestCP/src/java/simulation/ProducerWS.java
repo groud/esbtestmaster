@@ -14,7 +14,7 @@ import javax.jws.WebService;
  * @author gilles
  */
 @WebService()
-public class SimulationWS {
+public class ProducerWS {
 
     /**
      * Web service operation
