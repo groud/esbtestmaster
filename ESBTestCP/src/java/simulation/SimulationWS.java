@@ -5,6 +5,8 @@
 
 package simulation;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 /**
@@ -13,5 +15,16 @@ import javax.jws.WebService;
  */
 @WebService()
 public class SimulationWS {
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "Requestoperation")
+    public String Requestoperation(@WebParam(name = "id")
+    String id, @WebParam(name = "requestType")
+    char requestType) {
+        //TODO write your implementation code here:
+        return null;
+    }
 
 }
