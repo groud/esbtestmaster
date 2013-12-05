@@ -5,6 +5,8 @@
 
 package esbtestmaster;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -21,6 +23,7 @@ public class CLI {
 
      private Set<Command> cs = new HashSet<Command>();
      private Scanner input = new Scanner(System.in);
+     private ArrayList<String> historic = new ArrayList<String>();
 
      public CLI(){
          super();
@@ -37,6 +40,7 @@ public class CLI {
                 // Execute
                 System.out.print("ESB# ");
                 cmd = input.nextLine();
+                historic.add(cmd);
                 new NaturalCLI(cs).execute(cmd);
             } catch (ExecutionException ex) {
 
@@ -51,15 +55,15 @@ public class CLI {
       */
      private void init(){
         try {
-            Command helloWorldCommand = new Command("hello world <name:string>", "Says hello to the world and especially to some one.", new ICommandExecutor() {
 
+            Command helloWorldCommand = new Command("hello world <name:string>", "Says hello to the world and especially to some one.", new ICommandExecutor() {
                 public void execute(ParseResult pr) {
                     System.out.println("Hello world! And hello especially to " + pr.getParameterValue(0));
                 }
             });
-            Command run = new Command("run <scenario:string>", "Starts the test described in scenario and creates a XML results file.", new ICommandExecutor() {
 
-                public void execute(ParseResult pr) {
+            Command run = new Command("run <scenario:string>", "Starts the test described in scenario and creates a XML results file.", new ICommandExecutor() {
+               public void execute(ParseResult pr) {
                     try {
                         runAction(pr);
                     } catch (InvalidSyntaxException ex) {
@@ -67,10 +71,14 @@ public class CLI {
                     }
                 }
             });
-            Command process = new Command("process <testresult:string>", "processes the raw XML output file and generates the processed output XML file containing the processed data.", new ICommandExecutor() {
 
+            Command process = new Command("process <testresult:string>", "processes the raw XML output file and generates the processed output XML file containing the processed data.", new ICommandExecutor() {
                 public void execute(ParseResult pr) {
-                   processAction(pr);
+                    try {
+                        processAction(pr);
+                    } catch (InvalidSyntaxException ex) {
+                        System.out.println(ex.getLocalizedMessage());
+                    }
                 }
             });
             
@@ -86,10 +94,13 @@ public class CLI {
 
      /*
       * Action appelée par la commande run
+      * Lève l'exception InvalidSyntaxException si le fichier n'existe pas
       */
      private void runAction(ParseResult pr) throws InvalidSyntaxException {
          //Ici le bloc exécuté par la commande run
-           if(pr.getParameterValue(0).equals("lol")){
+         
+           File file = new File((String)pr.getParameterValue(0));
+           if(file.exists() && !file.isDirectory()){
                 System.out.println("Run Scenario " + pr.getParameterValue(0));
            } else {
                 throw new InvalidSyntaxException("Fichier " + pr.getParameterValue(0) + " non existant");
@@ -98,10 +109,16 @@ public class CLI {
 
      /*
       * Action appelée par la commande process
+      * Lève l'exception InvalidSyntaxException si le fichier n'existe pas
       */
-     private void processAction(ParseResult pr){
+     private void processAction(ParseResult pr) throws InvalidSyntaxException{
          //Ici le bloc exécut par la commande process
-         System.out.println("Process File " + pr.getParameterValue(0));
+           File file = new File((String)pr.getParameterValue(0));
+           if(file.exists() && !file.isDirectory()){
+                System.out.println("Process file " + pr.getParameterValue(0));
+           } else {
+               throw new InvalidSyntaxException("Fichier " + pr.getParameterValue(0) + " non existant");
+           }
      }
 
 }
