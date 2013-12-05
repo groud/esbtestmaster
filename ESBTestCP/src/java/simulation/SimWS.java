@@ -15,16 +15,30 @@ import javax.jws.WebService;
  */
 @WebService()
 public class SimWS {
+    SimEntity sim;
 
     /**
      * Web service operation
      */
     @WebMethod(operationName = "Requestoperation")
-    public String Requestoperation(@WebParam(name = "id")
-    String id, @WebParam(name = "requestType")
-    char requestType) {
+    public String Requestoperation(@WebParam(name = "name")
+    String name, @WebParam(name = "requestType")
+    char requestType, @WebParam(name = "requestData")
+    String requestData) {
         //TODO write your implementation code here:
-        return null;
+        if(sim != null) {
+            return sim.processRequest(requestType, requestData);
+        }
+        else {
+            return null;
+        }
+    }
+    /**
+     * To be called by the AgentMonitor
+     * @param sim
+     */
+    public void registerSim(SimEntity sim) {
+        this.sim = sim;
     }
 
 }

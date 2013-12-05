@@ -10,5 +10,16 @@ package simulation;
  * @author samy
  */
 public abstract class SimEntity {
+    private String name;
 
+
+    /**
+     * TODO : change return type to byte[] or a Response object
+     * @param reqType
+     * @param reqData
+     * @return
+     */
+    public String processRequest(char reqType, String reqData) {
+        return "DUMMY";
+    }
 }
