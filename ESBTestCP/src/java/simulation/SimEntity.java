@@ -9,6 +9,6 @@ package simulation;
  *
  * @author samy
  */
-public class SimController {
+public abstract class SimEntity {
 
 }

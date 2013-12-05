@@ -9,6 +9,6 @@ package simulation;
  *
  * @author samy
  */
-public class SimConsumer {
+public class Producer extends SimEntity {
 
 }

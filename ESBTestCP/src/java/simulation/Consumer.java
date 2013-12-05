@@ -7,33 +7,8 @@ package simulation;
 
 /**
  *
- * @author root
+ * @author samy
  */
-public class Consumer implements Simulation {
-
-private ArrayList<SimulationStep> steps;
-private int id;
-
-    public Consumer(ArrayList<SimulationStep> steps, int id) {
-        this.steps = steps;
-        this.id = id;
-    }
-
-
-
-    public void startSimulation() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void stopSimulation() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setParameters() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-
-
+public class Consumer extends SimEntity{
 
 }

@@ -4,8 +4,8 @@
     <service name="MonitoringWS">
       <implementation-class>monitoring.MonitoringWS</implementation-class>
     </service>
-    <service name="SimulationWS">
-      <implementation-class>simulation.SimulationWS</implementation-class>
+    <service name="SimWS">
+      <implementation-class>simulation.SimWS</implementation-class>
     </service>
   </services>
   <clients/>

@@ -9,6 +9,6 @@ package simulation;
  *
  * @author samy
  */
-public class SimProducer {
+public class Logger {
 
 }
