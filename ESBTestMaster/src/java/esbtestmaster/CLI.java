@@ -11,15 +11,15 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.naturalcli.*;
+import org.naturalcli.InvalidSyntaxException;
 
 /**
  *
- * @author root
+ * @author matthieu
  */
 public class CLI {
 
-     Set<Command> cs = new HashSet<Command>();
-
+     private Set<Command> cs = new HashSet<Command>();
      private Scanner input = new Scanner(System.in);
 
      public CLI(){
@@ -27,6 +27,9 @@ public class CLI {
          init();
      }
 
+     /*
+      *  Lance le CLI
+      */
      public void launch(){
          String cmd = "";
           while(true){
@@ -42,6 +45,10 @@ public class CLI {
           }
      }
 
+
+     /*
+      * Initialise le CLI en ajoutant les commandes run, process
+      */
      private void init(){
         try {
             Command helloWorldCommand = new Command("hello world <name:string>", "Says hello to the world and especially to some one.", new ICommandExecutor() {
@@ -53,24 +60,48 @@ public class CLI {
             Command run = new Command("run <scenario:string>", "Starts the test described in scenario and creates a XML results file.", new ICommandExecutor() {
 
                 public void execute(ParseResult pr) {
-                    System.out.println("Run Scenario " + pr.getParameterValue(0));
+                    try {
+                        runAction(pr);
+                    } catch (InvalidSyntaxException ex) {
+                       System.out.println(ex.getLocalizedMessage());
+                    }
                 }
             });
             Command process = new Command("process <testresult:string>", "processes the raw XML output file and generates the processed output XML file containing the processed data.", new ICommandExecutor() {
 
                 public void execute(ParseResult pr) {
-                    System.out.println("Process File " + pr.getParameterValue(0));
+                   processAction(pr);
                 }
             });
             
           cs.add(helloWorldCommand);
           cs.add(run);
           cs.add(process);
+          
         } catch (InvalidSyntaxException ex) {
             Logger.getLogger(CLI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
 
      }
 
+     /*
+      * Action appelée par la commande run
+      */
+     private void runAction(ParseResult pr) throws InvalidSyntaxException {
+         //Ici le bloc exécuté par la commande run
+           if(pr.getParameterValue(0).equals("lol")){
+                System.out.println("Run Scenario " + pr.getParameterValue(0));
+           } else {
+                throw new InvalidSyntaxException("Fichier " + pr.getParameterValue(0) + " non existant");
+           }
+     }
+
+     /*
+      * Action appelée par la commande process
+      */
+     private void processAction(ParseResult pr){
+         //Ici le bloc exécut par la commande process
+         System.out.println("Process File " + pr.getParameterValue(0));
+     }
 
 }
