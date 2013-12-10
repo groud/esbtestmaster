@@ -3,12 +3,12 @@
  * and open the template in the editor.
  */
 
-package simulation;
+package datas;
 
 /**
  *
- * @author samy
+ * @author gilles
  */
-public class SimController {
-
+public enum AgentType {
+    CONSUMER, PRODUCER
 }

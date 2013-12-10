@@ -3,12 +3,12 @@
  * and open the template in the editor.
  */
 
-package simulation;
+package esbtestmaster;
 
 /**
  *
- * @author samy
+ * @author gilles
  */
-public class SimProducer {
+public class ResultKeeper {
 
 }
