@@ -1,0 +1,43 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package simulation;
+
+/**
+ *
+ * @author mariatas
+ */
+public class ProducerEntity extends SimulationEntity {
+
+    private float responseTime;
+    private float responseSize;
+
+    //constructor
+    public ProducerEntity() {
+
+
+    }
+
+    public void configureProducer(int responseTime, int messageLength){
+
+        this.responseTime=responseTime;
+        this.responseSize=messageLength;
+
+    }
+
+    @Override
+    public void startSimulation() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void abortSimulation() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    
+
+
+}
