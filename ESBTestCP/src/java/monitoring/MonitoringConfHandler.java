@@ -33,9 +33,9 @@ public class MonitoringConfHandler {
    //create C/P
    public void createAgent(){
    if (agentType == 1) {
-        Provider simulation = new Provider(id, responseTime, responseSize);}
+        ProviderEntity simulation = new ProviderEntity(id, responseTime, responseSize);}
    else {
-       Consumer simulation = new Consumer( steps, id);}
+       ConsumerEntity simulation = new ConsumerEntity( steps, id);}
    }
    
 
