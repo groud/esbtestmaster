@@ -13,6 +13,11 @@ public abstract class SimulationEntity {
 
 private int id;
 
+public void setId( int id){
+
+    this.id= id;
+}
+
 
 public abstract void startSimulation();
 public abstract void abortSimulation();
