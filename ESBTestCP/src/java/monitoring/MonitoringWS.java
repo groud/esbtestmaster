@@ -29,14 +29,9 @@ public class MonitoringWS implements MonitoringWSInterface{
               //Here We will invoke the configuration method
      }
 
-<<<<<<< HEAD
-    
-
-=======
     public void configureProvider(int responseTime, int messageLength)
     {
         System.out.print("response Time is" +responseTime+ "and Message Length" + messageLength);//just a test
          //Here We will invoke the provider method
     }
->>>>>>> 53dca679da0cadfee9e413841f6f355d78e96f03
 }
