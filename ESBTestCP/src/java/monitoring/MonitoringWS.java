@@ -6,6 +6,7 @@
 package monitoring;
 
 
+import interfaces.MonitoringInterface;
 import javax.jws.WebService;
 
 
@@ -14,7 +15,7 @@ import javax.jws.WebService;
  * @author gilles
  */
 @WebService()
-public class MonitoringWS implements MonitoringWSInterface{
+public class MonitoringWS implements MonitoringInterface{
 
 
 
