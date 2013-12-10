@@ -399,11 +399,13 @@ exists or setup the property manually. For example like this:
     <target depends="compile" name="library-inclusion-in-archive">
         <mkdir dir="${build.classes.dir}/META-INF/lib"/>
         <copyfiles files="${file.reference.naturalcli-1.2.3.jar}" todir="${build.classes.dir}/META-INF/lib"/>
+        <copyfiles files="${file.reference.jdom-2.0.5.jar}" todir="${build.classes.dir}/META-INF/lib"/>
     </target>
     <target depends="compile" if="dist.ear.dir" name="library-inclusion-in-manifest">
         <copyfiles files="${file.reference.naturalcli-1.2.3.jar}" manifestproperty="manifest.file.reference.naturalcli-1.2.3.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.jdom-2.0.5.jar}" manifestproperty="manifest.file.reference.jdom-2.0.5.jar" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${manifest.file.reference.naturalcli-1.2.3.jar} "/>
+            <attribute name="Class-Path" value="${manifest.file.reference.naturalcli-1.2.3.jar} ${manifest.file.reference.jdom-2.0.5.jar} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">

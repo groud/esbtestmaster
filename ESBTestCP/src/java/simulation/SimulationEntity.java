@@ -3,16 +3,12 @@
  * and open the template in the editor.
  */
 
-package datas;
-
-import java.util.ArrayList;
+package simulation;
 
 /**
  *
  * @author gilles
  */
-public class SimulationScenario {
-
-    private ArrayList<SimulationStep> steps;
+public class SimulationEntity extends SimulationEntity {
 
 }

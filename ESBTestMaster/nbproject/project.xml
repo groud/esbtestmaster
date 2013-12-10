@@ -12,6 +12,7 @@
                 <root id="test.src.dir"/>
             </test-roots>
             <included-library>file.reference.naturalcli-1.2.3.jar</included-library>
+            <included-library>file.reference.jdom-2.0.5.jar</included-library>
         </data>
     </configuration>
 </project>

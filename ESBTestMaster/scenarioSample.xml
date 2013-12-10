@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<scenario>
+	<configuration>
+		<provider>
+			<name>prov1</name> 
+			<address>http://lol.com:6666</address>
+		</provider>
+		<consumer>
+			<name>cons1</name> 
+			<address>http://lol.com:6666</address>
+		</consumer>
+	</configuration>
+	<run>
+		<burst src="cons1" dest="prov1" startdate="0" stopdate="10">
+			<rate>30</rate>
+			<payloadsize>120</payloadsize>
+		</burst>
+		<burst src="cons1" dest="prov1" startdate="10" stopdate="20">
+			<rate>10</rate>
+			<payloadsize>200</payloadsize>
+		</burst>
+	</run>
+</scenario>
