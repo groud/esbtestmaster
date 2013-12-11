@@ -3,7 +3,6 @@
 * and open the template in the editor.
 */
 
-
 package monitoring;
 
 
@@ -15,6 +14,7 @@ import java.util.ArrayList;
 import simulation.*;
 
 /**
+<<<<<<< HEAD
 *
 * @author root
 */
@@ -39,7 +39,9 @@ public void configureAS(int behavior, int id)
 
             ProducerEntity producer = new ProducerEntity();
             consumer.setId(id);
+
              System.out.print("you are provider and your id is" + id);//just a test
+
               //Here We will invoke the configuration method
 
         }

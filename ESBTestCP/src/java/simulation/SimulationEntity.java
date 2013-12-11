@@ -17,6 +17,10 @@ public void setId( int id){
 
     this.id= id;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> b759d1a970a256461d8ef3da6d3b7458b57d266b
 
 public abstract void startSimulation();
 public abstract void abortSimulation();
