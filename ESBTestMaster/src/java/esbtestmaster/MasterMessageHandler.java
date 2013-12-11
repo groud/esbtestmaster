@@ -5,10 +5,16 @@
 
 package esbtestmaster;
 
+import interfaces.MonitoringMsgListener;
+
 /**
  *
  * @author gilles
  */
 public class MasterMessageHandler {
+    MonitoringMsgListener mmListener;
 
+    public void setListener(MonitoringMsgListener mmListener) {
+        this.mmListener = mmListener;
+    }
 }

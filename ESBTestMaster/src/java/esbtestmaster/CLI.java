@@ -5,7 +5,9 @@
 
 package esbtestmaster;
 
+import datas.SimulationScenario;
 import interfaces.UserInputsListener;
+import interfaces.UserOutputsListener;
 import java.util.*;
 import java.util.logging.*;
 import org.naturalcli.*;
@@ -16,7 +18,7 @@ import utils.Debug;
  *
  * @author root
  */
-public class CLI {
+public class CLI implements UserOutputsListener {
      private UserInputsListener listener;
      private Set<Command> cs = new HashSet<Command>();
      private Scanner input = new Scanner(System.in);
@@ -25,7 +27,6 @@ public class CLI {
         setListener(uil);
         initCommands();
      }
-
 
      /**
       * Run the command line interface
@@ -45,7 +46,7 @@ public class CLI {
      }
 
      /**
-      * Connects the listeners
+      * select the listener
       */
      private void setListener(UserInputsListener uil) {
         this.listener = uil;
@@ -56,14 +57,12 @@ public class CLI {
       */
      private void initCommands() {
         try {
-            //loadconf command
             Command loadconf = new Command("loadconf <filename:string>", "Loads an XML simulation configration file.", new ICommandExecutor() {
                 public void execute(ParseResult pr) {
                     if (pr.getParameterCount() > 0) {
                         String filename = pr.getParameterValue(0).toString();
                         System.out.println("Loading configuration from " + filename + " ...");
                         listener.loadScenario(filename);
-                        System.out.println("System configuration done. Ready for the simulation.");
                     }
                 }
             });
@@ -97,8 +96,13 @@ public class CLI {
                     }
 
                     System.out.println("Calculating KPI from "+ infilename +"...");
-                    //EXECUTION
-                    if (outfilename != null) System.out.println("Results in "+ outfilename +".");
+                    if (outfilename != null) {
+                        System.out.println("(Results in "+ outfilename +".)");
+                        listener.calculateKPI(infilename,outfilename);
+                    } else {
+                        listener.calculateKPI(infilename);
+                    }
+                    
                 }
             });
 
@@ -107,10 +111,8 @@ public class CLI {
                 public void execute(ParseResult pr) {
                     System.out.println("Aborting simulation.");
                     listener.stopSimulation();
-                    System.out.println("Simulation aborted.");
                 }
             });
-
 
             //debug command
             Command debug = new Command("debug", "Switch on/off the debug mode.", new ICommandExecutor() {
@@ -147,5 +149,41 @@ public class CLI {
         }
 
      }
+
+
+    /**
+     * Displays an error message
+     * @param msg
+     */
+    public void displayErrorMessage(String msg) {
+        System.err.println("ERROR : " + msg);
+    }
+
+    // -------------------------------
+    //   INTERFACES IMPLEMENTATIONS
+    // -------------------------------
+    /**
+     * Displays a message indicating that the simulation is done
+     * @param msg
+     */
+    public void notifySimulationDone() {
+        System.out.println("Simulation done.");
+    }
+
+    /**
+     * Displays a message indicating that the simulation has been aborted
+     * @param msg
+     */
+    public void notifySimulationAborted() {
+        System.out.println("Simulation aborted.");
+    }
+
+    /**
+     * Displays a message indicating that the configuration has been loaded
+     * @param msg
+     */
+    public void notifyConfigurationLoaded(SimulationScenario ss) {
+        System.out.println("System configuration done. Ready for the simulation.");
+    }
 
 }

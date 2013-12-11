@@ -11,8 +11,6 @@ import interfaces.ScenarioReaderInterface;
 
 import java.io.*;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jdom2.*;
 import org.jdom2.input.*;
 import utils.Debug;
@@ -22,7 +20,6 @@ import utils.Debug;
  * @author gilles
  */
 public class ScenarioReader implements ScenarioReaderInterface  {
-
     public SimulationScenario readXMLFile(String filename) throws IOException, BadXMLException {
 	SAXBuilder builder = new SAXBuilder();//XMLReaders.XSDVALIDATING);
 	File xmlFile = new File(filename);
@@ -73,11 +70,10 @@ public class ScenarioReader implements ScenarioReaderInterface  {
                simulationStep.setDataPayloadSize(Integer.parseInt(burst.getChildText("payloadsize")));
 
                simulationScenario.getSteps().add(simulationStep);
-
-               Debug.info(simulationScenario);
             }
+             Debug.info(simulationScenario);
         } catch (JDOMException ex) {
-            throw new BadXMLException();
+            throw new BadXMLException("Bad XML file : \n"+ex.getMessage());
         }
         return simulationScenario;
     }

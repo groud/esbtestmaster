@@ -11,7 +11,6 @@ package esbtestmaster;
  * @author gilles
  */
 public class Main {
-
     /**
      * @param args the command line arguments
      */

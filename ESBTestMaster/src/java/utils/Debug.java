@@ -13,7 +13,7 @@ public class Debug {
     static private boolean activated = false;
 
     static public void info(Object msg) {
-        System.out.println("INFO : "+msg.toString());
+        if(Debug.isActivated()) System.out.println("INFO : "+msg.toString());
     }
 
     static public boolean isActivated() {

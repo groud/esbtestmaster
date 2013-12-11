@@ -14,4 +14,5 @@ public interface UserInputsListener {
     public void stopSimulation();
     public void loadScenario(String XMLfile);
     public void calculateKPI(String XMLfile);
+    public void calculateKPI(String inXMLfile, String outXMLfile);
 }

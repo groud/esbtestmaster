@@ -41,7 +41,7 @@ public class SimulationScenario {
 
         @Override
     public String toString() {
-        String str ="";
+        String str ="\n";
         str = str + " - Agents configuration - \n";
         for (int i=0;i<agentsconfiguration.size();i++) {
             str = str + agentsconfiguration.get(i);
