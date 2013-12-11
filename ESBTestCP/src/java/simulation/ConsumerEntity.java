@@ -26,8 +26,6 @@ public class ConsumerEntity extends SimulationEntity {
 
     public ConsumerEntity() {
 
-
-
     }
 
 public void configureConsumer( ArrayList<SimulationStep> steps) {
@@ -36,38 +34,34 @@ public void configureConsumer( ArrayList<SimulationStep> steps) {
 
 }
 
-    public void sendReqest(){
-
-      // call web service
-
-    }
-
-
-
-
-
+    
     @Override
 
-    public void startSimulation( ) {
+  public void startSimulation( ) {
+
+    SimulationStep step = steps.get(0);
 
 
 
-        timer = new Timer();
+     
 
-        int period = 10;
+       timer = new Timer();
 
+       int nbRequest = (int) (step.getBurstDuration() * step.getBurstRate());
 
-         timer.scheduleAtFixedRate(new TimerTask(){
+       long period = (long) (step.getBurstDuration() / nbRequest);
 
-         @Override
+        timer.scheduleAtFixedRate(new TimerTask(){
 
-           public void run() {
+        @Override
 
-            //code send resquest
+          public void run() {
 
-           }
+           //code send resquest
 
-         }, 0, period);
+          }
+
+        }, step.getBurstStartDate(),period );
 
 
 
