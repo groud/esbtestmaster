@@ -4,10 +4,13 @@
 		<provider>
 			<name>prov1</name> 
 			<address>http://lol.com:6666</address>
+			<monitoringAddress>http://lol.com:6667</monitoringAddress>
+			<responsetime>10</responsetime>
 		</provider>
 		<consumer>
 			<name>cons1</name> 
-			<address>http://lol.com:6666</address>
+			<address>http://lol.com:6668</address>
+			<monitoringAddress>http://lol.com:6669</monitoringAddress>
 		</consumer>
 	</configuration>
 	<run>

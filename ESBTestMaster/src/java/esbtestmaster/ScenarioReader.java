@@ -5,7 +5,7 @@
 
 package esbtestmaster;
 
-import datas.SimulationScenario;
+import datas.*;
 import interfaces.ScenarioReaderInterface;
 
 import java.io.*;
@@ -21,8 +21,10 @@ import org.jdom2.input.sax.XMLReaders;
 public class ScenarioReader implements ScenarioReaderInterface{
 
     public SimulationScenario readXMLFile(String filename) {
-	SAXBuilder builder = new SAXBuilder(XMLReaders.XSDVALIDATING);
+	SAXBuilder builder = new SAXBuilder();//XMLReaders.XSDVALIDATING);
 	File xmlFile = new File(filename);
+
+        SimulationScenario simulationScenario = new SimulationScenario();
 
         try {
             Document document = (Document) builder.build(xmlFile);
@@ -35,10 +37,19 @@ public class ScenarioReader implements ScenarioReaderInterface{
             for (int i = 0; i < agentslist.size(); i++) {
                Element agent = (Element) agentslist.get(i);
                if (agent.getName().equals("provider")) {
-                   System.out.println("Provider : " + agent.getChildText("name")+" at "+agent.getChildText("address"));
+                   ProducerConfiguration prodConf = new ProducerConfiguration();
+                   prodConf.setWsAddress(agent.getChildText("address"));
+                   prodConf.setMonitoringWSAddress(agent.getChildText("monitoringAddress"));
+                   prodConf.setName(agent.getChildText("name"));
+                   prodConf.setResponseTime(Integer.parseInt(agent.getChildText("responsetime")));
+                   simulationScenario.getAgentsconfiguration().add(prodConf);
                } else if (agent.getName().equals("consumer")) {
-                   System.out.println("Consumer : " + agent.getChildText("name")+" at "+agent.getChildText("address"));
-               }
+                   ConsumerConfiguration consConf = new ConsumerConfiguration();
+                   consConf.setWsAddress(agent.getChildText("address"));
+                   consConf.setMonitoringWSAddress(agent.getChildText("monitoringAddress"));
+                   consConf.setName(agent.getChildText("name"));
+                   simulationScenario.getAgentsconfiguration().add(consConf);
+              }
             }
 
             //Run
@@ -47,12 +58,16 @@ public class ScenarioReader implements ScenarioReaderInterface{
 
             for (int i = 0; i < burstslist.size(); i++) {
                Element burst = (Element) burstslist.get(i);
-               System.out.println(  " src : "+burst.getAttributeValue("src") +
-                                    " dest : "+burst.getAttributeValue("dest") +
-                                    " startdate : "+burst.getAttributeValue("startdate") +
-                                    " stopdate : "+burst.getAttributeValue("stopdate") +
-                                    " rate : "+burst.getChildText("rate") +
-                                    " payloadsize : "+burst.getChildText("payloadsize"));
+               SimulationStep simulationStep = new SimulationStep();
+
+               simulationStep.setConsumerID(burst.getAttributeValue("src"));
+               simulationStep.setProviderID(burst.getAttributeValue("dest"));
+               simulationStep.setBurstStartDate(Long.parseLong(burst.getAttributeValue("startdate")));
+               simulationStep.setBurstStopDate(Long.parseLong(burst.getAttributeValue("stopdate")));
+               simulationStep.setBurstRate(Float.parseFloat(burst.getChildText("rate")));
+               simulationStep.setDataPayloadSize(Integer.parseInt(burst.getChildText("payloadsize")));
+
+               simulationScenario.getSteps().add(simulationStep);
             }
 	} catch (IOException io) {
             System.out.println(io.getMessage());
@@ -60,6 +75,7 @@ public class ScenarioReader implements ScenarioReaderInterface{
             System.out.println(jdomex.getMessage());
 	}
 
+        System.out.println(simulationScenario);
         return null;
     }
 }
