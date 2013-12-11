@@ -5,8 +5,6 @@
 
 package utils;
 
-import datas.SimulationScenario;
-
 /**
  *
  * @author gilles
@@ -17,7 +15,6 @@ public class Debug {
     static public void info(Object msg) {
         System.out.println("INFO : "+msg.toString());
     }
-
 
     static public boolean isActivated() {
         return activated;

@@ -5,11 +5,14 @@
 
 package esbtestmaster;
 
+import Exceptions.BadXMLException;
 import datas.*;
 import interfaces.ScenarioReaderInterface;
 
 import java.io.*;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jdom2.*;
 import org.jdom2.input.*;
 import utils.Debug;
@@ -18,22 +21,24 @@ import utils.Debug;
  *
  * @author gilles
  */
-public class ScenarioReader implements ScenarioReaderInterface{
+public class ScenarioReader implements ScenarioReaderInterface  {
 
-    public SimulationScenario readXMLFile(String filename) {
+    public SimulationScenario readXMLFile(String filename) throws IOException, BadXMLException {
 	SAXBuilder builder = new SAXBuilder();//XMLReaders.XSDVALIDATING);
 	File xmlFile = new File(filename);
 
         SimulationScenario simulationScenario = new SimulationScenario();
 
+        Document document;
         try {
-            Document document = (Document) builder.build(xmlFile);
+            document = (Document) builder.build(xmlFile);
+
             Element rootNode = document.getRootElement(); //Get the scenario object
-           
+
             //Configuration
             Element configuration = rootNode.getChild("configuration");//Get the configuration object
             List agentslist = configuration.getChildren();//Get the configuration object
-            
+
             for (int i = 0; i < agentslist.size(); i++) {
                Element agent = (Element) agentslist.get(i);
                if (agent.getName().equals("provider")) {
@@ -68,14 +73,12 @@ public class ScenarioReader implements ScenarioReaderInterface{
                simulationStep.setDataPayloadSize(Integer.parseInt(burst.getChildText("payloadsize")));
 
                simulationScenario.getSteps().add(simulationStep);
-            }
-	} catch (IOException io) {
-            System.out.println(io.getMessage());
-	} catch (JDOMException jdomex) {
-            System.out.println(jdomex.getMessage());
-	}
 
-        Debug.info(simulationScenario);
+               Debug.info(simulationScenario);
+            }
+        } catch (JDOMException ex) {
+            throw new BadXMLException();
+        }
         return simulationScenario;
     }
 }
