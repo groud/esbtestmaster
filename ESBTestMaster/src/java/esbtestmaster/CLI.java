@@ -7,7 +7,7 @@ package esbtestmaster;
 
 import datas.SimulationScenario;
 import interfaces.UserInputsListener;
-import interfaces.UserOutputsListener;
+import interfaces.UserOutputsInterface;
 import java.util.*;
 import java.util.logging.*;
 import org.naturalcli.*;
@@ -18,7 +18,7 @@ import utils.Debug;
  *
  * @author root
  */
-public class CLI implements UserOutputsListener {
+public class CLI implements UserOutputsInterface {
      private UserInputsListener listener;
      private Set<Command> cs = new HashSet<Command>();
      private Scanner input = new Scanner(System.in);
