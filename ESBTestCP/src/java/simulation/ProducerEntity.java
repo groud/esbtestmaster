@@ -7,7 +7,7 @@ package simulation;
 
 /**
 *
-* @author mariatas
+* @author mariata
 */
 public class ProducerEntity extends SimulationEntity {
 
