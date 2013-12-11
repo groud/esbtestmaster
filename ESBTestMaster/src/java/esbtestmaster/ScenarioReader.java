@@ -12,6 +12,7 @@ import java.io.*;
 import java.util.List;
 import org.jdom2.*;
 import org.jdom2.input.*;
+import utils.Debug;
 
 /**
  *
@@ -74,7 +75,7 @@ public class ScenarioReader implements ScenarioReaderInterface{
             System.out.println(jdomex.getMessage());
 	}
 
-        System.out.println(simulationScenario);
-        return null;
+        Debug.info(simulationScenario);
+        return simulationScenario;
     }
 }

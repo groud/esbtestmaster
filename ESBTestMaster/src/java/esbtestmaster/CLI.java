@@ -5,27 +5,25 @@
 
 package esbtestmaster;
 
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import interfaces.UserInputsListener;
+import java.util.*;
+import java.util.logging.*;
 import org.naturalcli.*;
 import org.naturalcli.commands.HelpCommand;
+import utils.Debug;
 
 /**
  *
  * @author root
  */
 public class CLI {
-
-     Set<Command> cs = new HashSet<Command>();
-
+     private UserInputsListener listener;
+     private Set<Command> cs = new HashSet<Command>();
      private Scanner input = new Scanner(System.in);
 
-     public CLI(){
-         super();
-         init();
+     public CLI(UserInputsListener uil){
+        setListener(uil);
+        initCommands();
      }
 
 
@@ -47,9 +45,16 @@ public class CLI {
      }
 
      /**
-      * Init the command line interface
+      * Connects the listeners
       */
-     private void init() {
+     private void setListener(UserInputsListener uil) {
+        this.listener = uil;
+     }
+
+     /**
+      * Init the commands
+      */
+     private void initCommands() {
         try {
             //loadconf command
             Command loadconf = new Command("loadconf <filename:string>", "Loads an XML simulation configration file.", new ICommandExecutor() {
@@ -57,7 +62,7 @@ public class CLI {
                     if (pr.getParameterCount() > 0) {
                         String filename = pr.getParameterValue(0).toString();
                         System.out.println("Loading configuration from " + filename + " ...");
-                        //EXECUTION
+                        listener.loadScenario(filename);
                         System.out.println("System configuration done. Ready for the simulation.");
                     }
                 }
@@ -73,8 +78,8 @@ public class CLI {
                         filename = "results.xml";
                     }
                     System.out.println("Starting simulation ...");
-                    //EXECUTION
-                    System.out.println("Simulation done. Results in "+filename+".");
+                    listener.startSimulation();
+                    //System.out.println("Simulation done. Results in "+filename+".");
                 }
             });
 
@@ -101,8 +106,22 @@ public class CLI {
             Command abort = new Command("abort", "Aborts the simulation.", new ICommandExecutor() {
                 public void execute(ParseResult pr) {
                     System.out.println("Aborting simulation.");
-                    //EXECUTION
+                    listener.stopSimulation();
                     System.out.println("Simulation aborted.");
+                }
+            });
+
+
+            //debug command
+            Command debug = new Command("debug", "Switch on/off the debug mode.", new ICommandExecutor() {
+                public void execute(ParseResult pr) {
+                    if (Debug.isActivated()) {
+                        Debug.setActivated(false);
+                        System.out.println("Debug mode off.");
+                    } else {
+                        Debug.setActivated(true);
+                        System.out.println("Debug mode on.");
+                    }
                 }
             });
 
@@ -120,6 +139,7 @@ public class CLI {
           cs.add(processfile);
           cs.add(abort);
           cs.add(exit);
+          cs.add(debug);
           cs.add(new HelpCommand(cs));
 
         } catch (InvalidSyntaxException ex) {

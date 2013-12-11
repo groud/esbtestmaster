@@ -5,8 +5,6 @@
 
 package esbtestmaster;
 
-import org.naturalcli.ExecutionException;
-
 
 /**
  *
@@ -18,10 +16,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //CLI shell = new CLI();
-        //shell.launch();
-        ScenarioReader sr = new ScenarioReader();
-        sr.readXMLFile("scenarioSample.xml");
+        MasterController masterController = new MasterController();
     }
 
 }
