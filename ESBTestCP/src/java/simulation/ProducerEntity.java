@@ -5,28 +5,27 @@
 
 package simulation;
 
-import java.util.ArrayList;
-
-import datas.*;
 /**
 *
-* @author mariata
+* @author mariatas
 */
-public class ConsumerEntity extends SimulationEntity {
+public class ProducerEntity extends SimulationEntity {
 
+    private float responseTime;
+    private float responseSize;
 
-    private ArrayList<SimulationStep> steps;
-
-    public ConsumerEntity() {
+    //constructor
+    public ProducerEntity() {
 
 
     }
 
-public void configureConsumer( ArrayList<SimulationStep> steps) {
+    public void configureProducer(int responseTime, int messageLength){
 
-      this.steps = steps;
-}
+        this.responseTime=responseTime;
+        this.responseSize=messageLength;
 
+    }
 
     public void startSimulation() {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -35,5 +34,4 @@ public void configureConsumer( ArrayList<SimulationStep> steps) {
     public void abortSimulation() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }
