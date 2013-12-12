@@ -10,7 +10,7 @@ package interfaces;
  * @author gilles
  */
 public interface UserInputsListener {
-    public void startSimulation();
+    public void startSimulation(String resultsFilename);
     public void stopSimulation();
     public void loadScenario(String XMLfile);
     public void calculateKPI(String XMLfile);

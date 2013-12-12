@@ -14,6 +14,6 @@ import datas.ResultSet;
 public interface MonitoringMsgListener {
     //--->Les types sont à mettre à jour
     //il doit recevoir le fichier depuis le JMS 
-    public void simulationDoneForOneAgent(ResultSet resultSet);
-    public void fatalErrorOccured(String agentId, String msg);
+    public void simulationDoneForOneAgent(String agentID, ResultSet resultSet);
+    public void fatalErrorOccured(String agentID, String msg);
 }

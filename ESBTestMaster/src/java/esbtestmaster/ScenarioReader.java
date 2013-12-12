@@ -13,6 +13,7 @@ import java.io.*;
 import java.util.List;
 import org.jdom2.*;
 import org.jdom2.input.*;
+import org.jdom2.input.sax.XMLReaders;
 import utils.Debug;
 
 /**

@@ -23,16 +23,16 @@ public class JMSHandler implements MonitoringMessageHandler {
 
     public void startSimulationMessage(AgentConfiguration receiverAgent) {
         //TODO JMS message
-        throw new UnsupportedOperationException("Not supported yet.");
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void stopSimulationMessage(AgentConfiguration receiverAgent) {
         //TODO JMS message
-        throw new UnsupportedOperationException("Not supported yet.");
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
         //TODO JMS message
-        throw new UnsupportedOperationException("Not supported yet.");
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
 }

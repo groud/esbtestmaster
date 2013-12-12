@@ -77,7 +77,7 @@ public class CLI implements UserOutputsInterface {
                         filename = "results.xml";
                     }
                     System.out.println("Starting simulation ...");
-                    listener.startSimulation();
+                    listener.startSimulation(filename);
                     //System.out.println("Simulation done. Results in "+filename+".");
                 }
             });

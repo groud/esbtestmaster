@@ -10,6 +10,7 @@ import datas.ResultSet;
 import datas.SimulationScenario;
 import interfaces.*;
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  *
@@ -20,8 +21,11 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
     private ScenarioReaderInterface scenarioReader;
     private KPICalculatorInterface kpiCalculator;
     private MonitoringMessageHandler monitoringMsgHandler;
+    private ResultKeeperInterface resultsKeeper;
 
     private SimulationScenario currentScenario;
+
+    private HashMap<String,Boolean> finishedMap;
 
     public MasterController() {
         shell = new CLI(this);
@@ -32,17 +36,28 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
         shell.launch();
     }
 
-    public void startSimulation() {
-        //throw new UnsupportedOperationException("Not supported yet.");
+    public void startSimulation(String resultsFilename) {
+        if (this.currentScenario != null) {
+             resultsKeeper = new XMLResultKeeper(resultsFilename);
+             finishedMap = new HashMap<String,Boolean>();
+            //TODO
+            //throw new UnsupportedOperationException("Not supported yet.");
+        } else {
+            shell.displayErrorMessage("Aborting failed : no configuration has been provided.");
+        }
     }
 
     public void stopSimulation() {
-        //On envoie l'ordre à tous les agents de stopper la simulation.
-        for (int i=0;i<this.currentScenario.getAgentsconfiguration().size();i++) {
-            monitoringMsgHandler.stopSimulationMessage(this.currentScenario.getAgentsconfiguration().get(i));
+        if (this.currentScenario != null) {
+            //On envoie l'ordre à tous les agents de stopper la simulation.
+            for (int i=0;i<this.currentScenario.getAgentsconfiguration().size();i++) {
+                monitoringMsgHandler.stopSimulationMessage(this.currentScenario.getAgentsconfiguration().get(i));
+            }
+            //On notifie l'utilisateur que la simulation a bien été stoppée.
+            shell.notifySimulationAborted();
+        } else {
+            shell.displayErrorMessage("Aborting failed : no configuration has been provided.");
         }
-        //On notifie l'utilisateur que la simulation a bien été stoppée.
-        shell.notifySimulationAborted();
     }
 
     /**
@@ -89,9 +104,28 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
         }
     }
 
-    public void simulationDoneForOneAgent(ResultSet resultSet) {
-        //TODO : On verifie que tous les agents ont terminé la simulation.
-        shell.notifySimulationDone();
+    public void simulationDoneForOneAgent(String agentID, ResultSet resultSet) {
+        //On ajoute le résultat de l'agent au set de résultat
+        if(this.resultsKeeper != null) {
+            if(finishedMap.get(agentID) != true) {
+                resultsKeeper.addLog(resultSet);
+                finishedMap.put(agentID, true);
+            }
+
+            //On verifie que tous les agents ont terminé la simulation.
+            boolean terminated = true;
+            for (int i=0;i<this.currentScenario.getAgentsconfiguration().size();i++) {
+                if(finishedMap.get(this.currentScenario.getAgentsconfiguration().get(i).getName()) != true) {
+                    terminated = false;
+                }
+            }
+
+            if (terminated) {
+                shell.notifySimulationDone();
+            }
+        } else {
+            shell.displayErrorMessage("A simulation done message has been received, but no results logger is available");
+        }
     }
 
     public void fatalErrorOccured(String agentID, String msg) {
@@ -102,6 +136,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
     /**
      * @param args the command line arguments
      */
+    
     public static void main(String[] args) {
         MasterController masterController = new MasterController();
     }
