@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="file:/home/samy/Dropbox/INSA/PDL/projet/esbtestmaster/ESBTestCP/src/java/simulation/SimulationWSService.wsdl" uri="src/conf/xml-resources/web-service-references/SimulationWSService/wsdl/SimulationWSService.wsdl"/>
+    <system systemId="file:/home/samy/Dropbox/INSA/PDL/projet/esbtestmaster/ESBTestCP/src/java/simulation/SimulationWSService_schema1.xsd" uri="src/conf/xml-resources/web-service-references/SimulationWSService/wsdl/SimulationWSService_schema1.xsd"/>
+</catalog>

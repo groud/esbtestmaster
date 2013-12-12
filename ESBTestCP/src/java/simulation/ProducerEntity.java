@@ -100,6 +100,16 @@ public void sendResponse (String consumerID,float dataPayload){
 
     }
 
+    /**
+     * TODO : change return type to byte[] or a Response object
+     * @param reqType
+     * @param reqData
+     * @return
+     */
+    public String processRequest(char reqType, String reqData) {
+        return "DUMMY";
+    }
+
 
 
 }
