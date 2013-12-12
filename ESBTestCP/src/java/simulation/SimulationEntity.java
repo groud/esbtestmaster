@@ -5,6 +5,8 @@
 
 package simulation;
 
+import datas.*;
+
 /**
 *
 * @author root

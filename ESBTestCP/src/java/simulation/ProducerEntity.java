@@ -5,6 +5,9 @@
 
 package simulation;
 
+import java.util.*;
+import datas.*;
+
 /**
 *
 * @author mariata
