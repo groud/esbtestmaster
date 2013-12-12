@@ -17,10 +17,19 @@ import java.util.TimerTask;
 */
 public class ConsumerEntity extends SimulationEntity {
 
+    private boolean abortSimulation=false;
+
+    private boolean stepsConfigured=false;
 
     private ArrayList<SimulationStep> steps;
 
-    Timer timer;
+    private SortedSet<ResultEvent> events;
+
+    private Timer timer;
+
+    private  SimulationStep step;
+
+  private  ResultEvent currentEvent;
 
     //constructor
 
@@ -30,40 +39,107 @@ public class ConsumerEntity extends SimulationEntity {
 
 public void configureConsumer( ArrayList<SimulationStep> steps) {
 
-     this.steps = steps;
+    this.steps = steps;
+
+    stepsConfigured=true;
 
 }
 
-    
+@Override
+
+public void writeSimulationEvent(AgentType agent, EventType event){
+
+currentEvent.setAgentId(this.getid());
+
+currentEvent.setAgentType(agent);
+
+// SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+Date date=new Date();
+
+currentEvent.setEventDate(date);
+
+currentEvent.setEventType(event);
+
+//add in list of events
+
+events.add(currentEvent);
+
+}
+
+//call web service to send request
+
+public void sendRequest (String providerID,float dataPayload){
+
+ //generate fake payload ; give provider id and consumer id
+
+ //call web service
+
+ //write simulation event
+
+    writeSimulationEvent(AgentType.CONSUMER,EventType.REQUEST_SENT);
+
+ }
+
+
+
     @Override
 
-  public void startSimulation( ) {
+ public void startSimulation( ) {
 
-    SimulationStep step = steps.get(0);
+       int i;
 
+       //send request
 
+       if(stepsConfigured){
 
-     
+           for(i=0;i<steps.size();i++){
 
-       timer = new Timer();
+              step = steps.get(i);
 
-       int nbRequest = (int) (step.getBurstDuration() * step.getBurstRate());
+              timer = new Timer();
 
-       long period = (long) (step.getBurstDuration() / nbRequest);
+              int nbRequest = (int) (step.getBurstDuration() * step.getBurstRate());
 
-        timer.scheduleAtFixedRate(new TimerTask(){
+              //interval between two request
 
-        @Override
+              long period = (long) (step.getBurstDuration() / nbRequest);
 
-          public void run() {
+              //configure timer
 
-           //code send resquest
+               timer.scheduleAtFixedRate(new TimerTask(){
 
-          }
+               @Override
 
-        }, step.getBurstStartDate(),period );
+                 public void run() {
 
+                  //code send resquest
 
+                   sendRequest(step.getProviderID(),step.getDataPayloadSize());
+
+                 }
+
+               }, step.getBurstStartDate(),period );
+
+               //if abort simulation, exit boucle
+
+               if(abortSimulation){
+
+                   break;
+
+               }
+
+           }
+
+       }
+
+       else{
+
+        System.out.println("steps have not been configured");
+
+       }
+
+       //TO DO : add receive response code
 
     }
 
@@ -71,6 +147,11 @@ public void configureConsumer( ArrayList<SimulationStep> steps) {
 
     public void abortSimulation() {
 
+       //terminate  timer and cancel current task
+
+       timer.cancel();
+
+       this.abortSimulation=true;
 
 
     }

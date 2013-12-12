@@ -16,8 +16,19 @@ private int id;
 public void setId( int id){
 
     this.id= id;
+
+}
+
+public int getid(){
+
+return this.id;
+
 }
 
 public abstract void startSimulation();
+
 public abstract void abortSimulation();
+
+public abstract void writeSimulationEvent(AgentType agent, EventType event);
+
 }
