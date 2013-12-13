@@ -21,6 +21,14 @@ import utils.Debug;
  * @author gilles
  */
 public class ScenarioReader implements ScenarioReaderInterface  {
+
+    /**
+     * Returns a SimulationScenario read from an XML file.
+     * @param filename
+     * @return
+     * @throws IOException
+     * @throws BadXMLException
+     */
     public SimulationScenario readXMLFile(String filename) throws IOException, BadXMLException {
 	SAXBuilder builder = new SAXBuilder();//XMLReaders.XSDVALIDATING);
 	File xmlFile = new File(filename);

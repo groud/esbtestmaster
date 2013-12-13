@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="results">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="resultevent" maxOccurs="unbounded" minOccurs="0">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element type="xsd:long" name="eventdate"/>
+              <xsd:element type="xsd:string" name="eventtype"/>
+              <xsd:element type="xsd:string" name="agenttype"/>
+              <xsd:element type="xsd:long" name="agentid"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<xsdd:schema 
+	xmlns:xsdd="http://www.w3.org/2001/XMLSchema">
+	
+	<xsdd:simpleType name="eventType">
+		<xsdd:restriction base="xsdd:string">
+			<xsdd:enumeration value="REQUEST_SENT"/> 	
+			<xsdd:enumeration value="REQUEST_RECEIVED"/> 	
+			<xsdd:enumeration value="RESPONSE_SENT"/> 	
+			<xsdd:enumeration value="RESPONSE_RECEIVED"/> 
+		</xsdd:restriction>	
+	</xsdd:simpleType>
+	<xsdd:simpleType name="agentType">
+		<xsdd:restriction base="xsdd:string">
+			<xsdd:enumeration value="CONSUMER"/> 	
+			<xsdd:enumeration value="PRODUCER"/> 	
+		</xsdd:restriction>	
+	</xsdd:simpleType>
+	
+  <xsdd:element name="results">
+    <xsdd:complexType>
+      <xsdd:sequence>
+        <xsdd:element name="resultevent" maxOccurs="unbounded" minOccurs="0">
+          <xsdd:complexType>
+            <xsdd:sequence>
+              <xsdd:element type="xsdd:long" name="eventdate"/>
+              <xsdd:element type="xsdd:eventType" name="eventtype"/>
+              <xsdd:element type="xsdd:agentType" name="agenttype"/>
+              <xsdd:element type="xsdd:long" name="agentid"/>
+            </xsdd:sequence>
+          </xsdd:complexType>
+        </xsdd:element>
+      </xsdd:sequence>
+    </xsdd:complexType>
+  </xsdd:element>
+</xsdd:schema>

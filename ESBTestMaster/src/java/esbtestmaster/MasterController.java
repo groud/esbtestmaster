@@ -36,6 +36,10 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
         shell.launch();
     }
 
+    /**
+     * Starts the simulation and save the results in the provided file name.
+     * @param resultsFilename
+     */
     public void startSimulation(String resultsFilename) {
         if (this.currentScenario != null) {
              resultsKeeper = new XMLResultKeeper(resultsFilename);
@@ -43,10 +47,13 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
             //TODO
             //throw new UnsupportedOperationException("Not supported yet.");
         } else {
-            shell.displayErrorMessage("Aborting failed : no configuration has been provided.");
+            shell.displayErrorMessage("Starting failed : no configuration has been provided.");
         }
     }
 
+    /**
+     * Aborts the simulation.
+     */
     public void stopSimulation() {
         if (this.currentScenario != null) {
             //On envoie l'ordre à tous les agents de stopper la simulation.
@@ -61,7 +68,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
     }
 
     /**
-     * Charge un scenario à partir d'un fichier XML
+     * Load a scenario from an XML file, then asks the agent to configure themselves.
      * @param XMLfile
      */
     public void loadScenario(String XMLfile) {
@@ -83,6 +90,10 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
         }
     }
 
+    /**
+     * Calculates the KPI from an XML file.
+     * @param XMLfile
+     */
     public void calculateKPI(String XMLfile) {
         try {
             kpiCalculator.calculateKPIfromXML(XMLfile);
@@ -93,6 +104,10 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
         }
     }
 
+    /**
+     * Calculates the KPI from an XML file, then writes the results in outXMLfile.
+     * @param XMLfile
+     */
     public void calculateKPI(String inXMLfile, String outXMLfile) {
         try {
             kpiCalculator.calculateKPIfromXML(inXMLfile);
@@ -104,6 +119,11 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
         }
     }
 
+    /**
+     * Notify the MasterController that an agent is done with the simulation.
+     * @param agentID
+     * @param resultSet
+     */
     public void simulationDoneForOneAgent(String agentID, ResultSet resultSet) {
         //On ajoute le résultat de l'agent au set de résultat
         if(this.resultsKeeper != null) {
@@ -128,15 +148,20 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
         }
     }
 
+    /**
+     * Notify an agent that an error occured to an agent.
+     * @param agentID
+     * @param msg
+     */
     public void fatalErrorOccured(String agentID, String msg) {
         shell.displayErrorMessage("A error on the agent " + agentID + " : " +msg+"\n");
         this.stopSimulation();
     }
 
     /**
-     * @param args the command line arguments
+     * Starts the Master
+     * @param args
      */
-    
     public static void main(String[] args) {
         MasterController masterController = new MasterController();
     }
