@@ -6,6 +6,7 @@
 package esbtestmaster;
 
 import datas.KPISet;
+import datas.ResultSet;
 import interfaces.KPICalculatorInterface;
 
 /**
@@ -18,8 +19,8 @@ public class KPICalculator implements KPICalculatorInterface {
      * @param filename
      * @return
      */
-    public KPISet calculateKPIfromXML(String filename) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public KPISet calculateKPI(ResultSet resultSet) {
+        return null;
     }
 
     /**
@@ -27,6 +28,6 @@ public class KPICalculator implements KPICalculatorInterface {
      * @param filename
      */
     public void saveKPItoXMLFile(String filename) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
 }

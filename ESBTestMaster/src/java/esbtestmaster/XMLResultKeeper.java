@@ -21,10 +21,10 @@ import utils.Debug;
  * @author gilles
  */
 public class XMLResultKeeper implements ResultKeeperInterface{
-    private String filename;
+    private String XMLfilename;
 
     public XMLResultKeeper (String filename) {
-        this.filename = filename;
+        this.XMLfilename = filename;
         this.init();
     }
 
@@ -39,10 +39,26 @@ public class XMLResultKeeper implements ResultKeeperInterface{
         //TODO : Add a log to the selected file
     }
 
+
     public ResultSet getLog() throws IOException, BadXMLException {
+        return getLog(XMLfilename);
+    }
+
+    public void clearLog() {
+         //TODO : Empty the file
+    }
+
+
+    /**
+     * Get a ResultSet from an XMLFile
+     * @param filename
+     * @return ResultSet
+     * @throws IOException
+     * @throws BadXMLException
+     */
+    public static ResultSet getLog(String filename) throws IOException, BadXMLException {
 	SAXBuilder builder = new SAXBuilder(XMLReaders.XSDVALIDATING);
 	File xmlFile = new File(filename);
-
 
         ResultSet resultSet = new ResultSet();
 
@@ -56,21 +72,17 @@ public class XMLResultKeeper implements ResultKeeperInterface{
             for (int i = 0; i < eventList.size(); i++) {
                Element eventElement = (Element) eventList.get(i);
                ResultEvent resultEvent = new ResultEvent();
-               resultEvent.setAgentType(AgentType.valueOf(eventElement.getAttributeValue("agenttype")));
-               resultEvent.setAgentId(eventElement.getAttributeValue("agentid"));
-               resultEvent.setEventDate(Long.parseLong(eventElement.getAttributeValue("eventdate")));
-               resultEvent.setEventType(EventType.valueOf(eventElement.getAttributeValue("eventtype")));
+               resultEvent.setAgentType(AgentType.valueOf(eventElement.getAttributeValue("agentType")));
+               resultEvent.setAgentId(eventElement.getAttributeValue("agentId"));
+               resultEvent.setEventDate(Long.parseLong(eventElement.getAttributeValue("eventDate")));
+               resultEvent.setEventType(EventType.valueOf(eventElement.getAttributeValue("eventType")));
                resultSet.getEvents().add(resultEvent);
             }
-             Debug.info(resultSet);
+             Debug.info("Events list :\n"+resultSet);
         } catch (JDOMException ex) {
             throw new BadXMLException("Bad XML file : \n"+ex.getMessage());
         }
-        return null;
-    }
-
-    public void clearLog() {
-         //TODO : Empty the file
+        return resultSet;
     }
 
 }

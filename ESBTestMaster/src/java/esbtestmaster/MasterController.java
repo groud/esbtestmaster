@@ -21,7 +21,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
     private ScenarioReaderInterface scenarioReader;
     private KPICalculatorInterface kpiCalculator;
     private MonitoringMessageHandler monitoringMsgHandler;
-    private ResultKeeperInterface resultsKeeper;
+    private XMLResultKeeper resultsKeeper;
 
     private SimulationScenario currentScenario;
 
@@ -96,7 +96,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
      */
     public void calculateKPI(String XMLfile) {
         try {
-            kpiCalculator.calculateKPIfromXML(XMLfile);
+            kpiCalculator.calculateKPI(XMLResultKeeper.getLog(XMLfile));
         } catch (BadXMLException ex) {
             shell.displayErrorMessage(ex.getMessage());
         } catch (IOException ex) {
@@ -110,7 +110,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
      */
     public void calculateKPI(String inXMLfile, String outXMLfile) {
         try {
-            kpiCalculator.calculateKPIfromXML(inXMLfile);
+            kpiCalculator.calculateKPI(XMLResultKeeper.getLog(inXMLfile));
             kpiCalculator.saveKPItoXMLFile(outXMLfile);
         } catch (BadXMLException ex) {
             shell.displayErrorMessage(ex.getMessage());
