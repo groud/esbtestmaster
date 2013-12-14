@@ -4,7 +4,11 @@
     <system systemId="file:/home/samy/Dropbox/INSA/PDL/projet/esbtestmaster/ESBTestCP/src/java/simulation/SimulationWSService_schema1.xsd" uri="src/conf/xml-resources/web-service-references/SimulationWSService/wsdl/SimulationWSService_schema1.xsd"/>
     <system systemId="http://localhost:8080/ESBTestCP/SimulationReqWSService?wsdl" uri="src/conf/xml-resources/web-service-references/SimulationReqWSService/wsdl/localhost_8080/ESBTestCP/SimulationReqWSService.wsdl"/>
     <system systemId="http://localhost:8080/ESBTestCP/SimulationReqWSService?xsd=1" uri="src/conf/xml-resources/web-service-references/SimulationReqWSService/wsdl/localhost_8080/ESBTestCP/SimulationReqWSService.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/ESBTestCP/SimulationWSService?wsdl" uri="src/conf/xml-resources/web-service-references/SimulationWSService/wsdl/localhost_8080/ESBTestCP/SimulationWSService.wsdl"/>
+    <system systemId="http://localhost:8080/ESBTestCP/SimulationWSService?xsd=1" uri="src/conf/xml-resources/web-service-references/SimulationWSService/wsdl/localhost_8080/ESBTestCP/SimulationWSService.xsd_1.xsd"/>
 </catalog>
+
+
 
 
 

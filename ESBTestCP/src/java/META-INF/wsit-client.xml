@@ -6,5 +6,7 @@
  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="mainclientconfig"
  >
     <import location="SimulationReqWSService.xml" namespace="http://simulation/"/>
+    <import location="SimulationWSService.xml" namespace="http://simulation/"/>
 </definitions>
+
 

@@ -14,21 +14,21 @@
             <isset property="conf.dir"/>
         </condition>
     </target>
-    <target name="wsimport-client-SimulationReqWSService" depends="wsimport-init">
-        <mkdir dir="${build.generated.dir}/jax-wsCache/SimulationReqWSService"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/SimulationReqWSService" destdir="${build.generated.dir}/jax-wsCache/SimulationReqWSService" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/SimulationReqWSService/wsdl/localhost_8080/ESBTestCP/SimulationReqWSService.wsdl" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/ESBTestCP/SimulationReqWSService?wsdl" xnocompile="true" package="simulationRef">
-            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/SimulationReqWSService/wsdl/localhost_8080/ESBTestCP/SimulationReqWSService.wsdl"/>
-            <produces dir="${build.generated.dir}/jax-wsCache/SimulationReqWSService"/>
+    <target name="wsimport-client-SimulationWSService" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/SimulationWSService"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/SimulationWSService" destdir="${build.generated.dir}/jax-wsCache/SimulationWSService" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/SimulationWSService/wsdl/localhost_8080/ESBTestCP/SimulationWSService.wsdl" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/ESBTestCP/SimulationWSService?wsdl" xnocompile="true" package="simulationRef">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/SimulationWSService/wsdl/localhost_8080/ESBTestCP/SimulationWSService.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/SimulationWSService"/>
         </wsimport>
         <copy todir="${build.generated.sources.dir}/jax-ws">
-            <fileset dir="${build.generated.dir}/jax-wsCache/SimulationReqWSService">
+            <fileset dir="${build.generated.dir}/jax-wsCache/SimulationWSService">
                 <include name="**/*.java"/>
             </fileset>
         </copy>
     </target>
-    <target name="wsimport-client-clean-SimulationReqWSService" depends="-init-project">
+    <target name="wsimport-client-clean-SimulationWSService" depends="-init-project">
         <delete dir="${build.generated.sources.dir}/jax-ws/simulation"/>
-        <delete dir="${build.generated.dir}/jax-wsCache/SimulationReqWSService"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/SimulationWSService"/>
     </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-SimulationReqWSService"/>
+    <target name="wsimport-client-generate" depends="wsimport-client-SimulationWSService"/>
 </project>

@@ -3,9 +3,9 @@
   <services>
   </services>
   <clients>
-    <client name="SimulationReqWSService">
-      <wsdl-url>http://localhost:8080/ESBTestCP/SimulationReqWSService?wsdl</wsdl-url>
-      <local-wsdl-file>localhost_8080/ESBTestCP/SimulationReqWSService.wsdl</local-wsdl-file>
+    <client name="SimulationWSService">
+      <wsdl-url>http://localhost:8080/ESBTestCP/SimulationWSService?wsdl</wsdl-url>
+      <local-wsdl-file>localhost_8080/ESBTestCP/SimulationWSService.wsdl</local-wsdl-file>
       <package-name>simulation</package-name>
       <catalog-file>catalog.xml</catalog-file>
       <wsimport-options>
@@ -19,7 +19,7 @@
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>wsdlLocation</wsimport-option-name>
-          <wsimport-option-value>http://localhost:8080/ESBTestCP/SimulationReqWSService?wsdl</wsimport-option-value>
+          <wsimport-option-value>http://localhost:8080/ESBTestCP/SimulationWSService?wsdl</wsimport-option-value>
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>xnocompile</wsimport-option-name>

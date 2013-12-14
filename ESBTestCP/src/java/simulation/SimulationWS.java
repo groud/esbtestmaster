@@ -14,7 +14,7 @@ import javax.jws.WebService;
  * @author samy
  */
 @WebService()
-public class SimulationReqWS {
+public class SimulationWS {
     ProducerEntity prod;
     
     /**
