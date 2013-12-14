@@ -8,6 +8,7 @@ package simulation;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import monitoring.AgentController;
 
 /**
  *
@@ -15,7 +16,8 @@ import javax.jws.WebService;
  */
 @WebService()
 public class SimulationWS {
-    ProducerEntity prod;
+    // TODO : how to set a WS attribute without a reference to the WS object ?
+    //ProducerEntity prod;
     
     /**
      * Web service operation
@@ -25,6 +27,9 @@ public class SimulationWS {
     String name, @WebParam(name = "requestType")
     char requestType, @WebParam(name = "requestData")
     String requestData) {
+
+        // TODO : get the producer from another class (doesn't work yet)
+        ProducerEntity prod = AgentController.getProducer();
         
         if(prod != null) {
             return prod.processRequest(requestType, requestData);
@@ -37,8 +42,9 @@ public class SimulationWS {
     /**
      * To be called by the AgentController after creating the producer
      * @param sim
-     */
-    public void registerProducer(ProducerEntity prod) {
-        this.prod = prod;
+     
+    public static void registerProducer(ProducerEntity prodArg) {
+        prod = prodArg;
     }
+     */
 }

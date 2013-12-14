@@ -28,18 +28,10 @@ import simulation.*;
 
 public class AgentController implements AgentControllerInterface{
 
-    ConsumerEntity consumer;
-
-    ProducerEntity producer;
-
-
-    public static void main(String[] args) {
-        // WS client test
-        String url = "http://localhost:8080/ESBTestCP/SimulationWSService";
-        ConsumerClient client = new ConsumerClient();
-        System.out.println("SENDING REQUEST");
-        client.sendRequest("Test WS", url);
-    }
+    // static keywords so that SimulationWS can access producer
+    // -> this method DOES NOT WORK yet
+    static ConsumerEntity consumer;
+    static ProducerEntity producer;
     
 public void configureAS(int behavior, int id)
 
@@ -47,11 +39,11 @@ public void configureAS(int behavior, int id)
 
        if(behavior==0){
 
-           ConsumerEntity consumer = new ConsumerEntity();
+           consumer = new ConsumerEntity();
 
            consumer.setId(id);
 
-           System.out.print("you are consumer and your id is " + id);//just a test
+           System.out.println("you are consumer and your id is " + id);//just a test
 
            //Here We will invoke the configuration method
 
@@ -59,11 +51,11 @@ public void configureAS(int behavior, int id)
 
        else{
 
-           ProducerEntity producer = new ProducerEntity();
+           producer = new ProducerEntity();
 
-           consumer.setId(id);
+           producer.setId(id);
 
-            System.out.print("you are provider and your id is" +  id);//just a test
+            System.out.println("you are provider and your id is" +  id);//just a test
 
              //Here We will invoke the configuration method
 
@@ -91,7 +83,9 @@ public void configureAS(int behavior, int id)
 
     }
 
-
+    public static ProducerEntity getProducer() {
+        return producer;
+    }
 
    
 }
