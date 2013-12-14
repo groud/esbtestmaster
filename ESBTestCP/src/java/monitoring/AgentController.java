@@ -16,7 +16,7 @@ import javax.jws.WebService;
 
 import datas.*;
 import java.util.ArrayList;
-import simulation.*;
+import simulation2.*;
 
 /**
 <<<<<<< HEAD
@@ -31,10 +31,9 @@ public class AgentController implements AgentControllerInterface{
 
     ProducerEntity producer;
 
-public void configureAS(int behavior, int id)
+    public void configureAS(int behavior, int id)
 
     {
-
        if(behavior==0){
 
            ConsumerEntity consumer = new ConsumerEntity();

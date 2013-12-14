@@ -3,7 +3,7 @@
 * and open the template in the editor.
 */
 
-package simulation;
+package simulation2;
 
 import java.util.*;
 import datas.*;

@@ -9,6 +9,7 @@ package datas;
  *
  * @author gilles
  */
+
 public abstract class AgentConfiguration {
     protected AgentType agentType;
 

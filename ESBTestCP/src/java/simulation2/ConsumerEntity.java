@@ -3,7 +3,7 @@
 * and open the template in the editor.
 */
 
-package simulation;
+package simulation2;
 
 import java.util.*;
 import datas.*;
@@ -118,16 +118,10 @@ Thread threadResListener = new Thread(new ResponseListener());
          //timer.cancel();
         this.abortSimulation=true;
 
-
     }
-
-
-
 }
 
  // ------------------- PAyload ------------------------//
-
-
     /*"MD5 + message " = total
      * total.indexof('+')
      * MD5(string)
