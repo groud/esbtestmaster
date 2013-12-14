@@ -4,8 +4,8 @@
  */
 
 package interfaces;
-import Exceptions.BadXMLException;
 import datas.KPISet;
+import datas.ResultSet;
 import java.io.IOException;
 
 /**
@@ -13,6 +13,6 @@ import java.io.IOException;
  * @author bamba
  */
 public interface KPICalculatorInterface {
-    public KPISet calculateKPIfromXML(String filename) throws BadXMLException, IOException;
+    public KPISet calculateKPI(ResultSet resultSet);
     public void saveKPItoXMLFile(String filename) throws IOException;
 }

@@ -7,6 +7,7 @@ package datas;
 
 import java.util.Iterator;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  *
@@ -14,6 +15,10 @@ import java.util.SortedSet;
  */
 public class ResultSet {
     private SortedSet<ResultEvent> events;
+
+    public ResultSet() {
+        events = new TreeSet();
+    }
 
     public SortedSet<ResultEvent> getEvents() {
         return events;

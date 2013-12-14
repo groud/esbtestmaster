@@ -7,82 +7,16 @@
       <xsd:sequence>
         <xsd:element name="resultevent" maxOccurs="unbounded" minOccurs="0">
           <xsd:complexType>
-            <xsd:attribute type="xsd:string" name="agenttype" use="required"/>
-            <xsd:attribute type="xsd:string" name="agentid" use="required"/>
-            <xsd:attribute type="xsd:long" name="eventdate" use="required"/>
-            <xsd:attribute type="xsd:string" name="eventtype" use="required"/>
             <xsd:sequence>
               <xsd:element type="xsd:long" name="requestid"/>
             </xsd:sequence>
+            <xsd:attribute type="xsd:string" name="agentType" use="required"/>
+            <xsd:attribute type="xsd:string" name="agentId" use="required"/>
+            <xsd:attribute type="xsd:long" name="eventDate" use="required"/>
+            <xsd:attribute type="xsd:string" name="eventType" use="required"/>
           </xsd:complexType>
         </xsd:element>
       </xsd:sequence>
     </xsd:complexType>
   </xsd:element>
 </xsd:schema>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<xsdd:schema 
-	xmlns:xsdd="http://www.w3.org/2001/XMLSchema">
-	
-	<xsdd:simpleType name="eventType">
-		<xsdd:restriction base="xsdd:string">
-			<xsdd:enumeration value="REQUEST_SENT"/> 	
-			<xsdd:enumeration value="REQUEST_RECEIVED"/> 	
-			<xsdd:enumeration value="RESPONSE_SENT"/> 	
-			<xsdd:enumeration value="RESPONSE_RECEIVED"/> 
-		</xsdd:restriction>	
-	</xsdd:simpleType>
-	<xsdd:simpleType name="agentType">
-		<xsdd:restriction base="xsdd:string">
-			<xsdd:enumeration value="CONSUMER"/> 	
-			<xsdd:enumeration value="PRODUCER"/> 	
-		</xsdd:restriction>	
-	</xsdd:simpleType>
-	
-  <xsdd:element name="results">
-    <xsdd:complexType>
-      <xsdd:sequence>
-        <xsdd:element name="resultevent" maxOccurs="unbounded" minOccurs="0">
-          <xsdd:complexType>
-            <xsdd:sequence>
-              <xsdd:element type="xsdd:long" name="eventdate"/>
-              <xsdd:element type="xsdd:eventType" name="eventtype"/>
-              <xsdd:element type="xsdd:agentType" name="agenttype"/>
-              <xsdd:element type="xsdd:long" name="agentid"/>
-            </xsdd:sequence>
-          </xsdd:complexType>
-        </xsdd:element>
-      </xsdd:sequence>
-    </xsdd:complexType>
-  </xsdd:element>
-</xsdd:schema>

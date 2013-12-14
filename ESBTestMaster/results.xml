@@ -1,7 +1,8 @@
 <?xml version="1.0"?> 
-
-<results> 
-	<resultevent agentid="cons1" agentType="CONSUMER" date="223086138" type="REQUEST_SENT">
-		<requestid>22<requestid>	
+<results
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="XSD/results.xsd">
+	<resultevent agentId="cons1" agentType="CONSUMER" eventDate="223086138" eventType="REQUEST_SENT">
+		<requestid>22</requestid>	
 	</resultevent>
 </results>
