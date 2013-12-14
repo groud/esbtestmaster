@@ -30,7 +30,7 @@ public class ScenarioReader implements ScenarioReaderInterface  {
      * @throws BadXMLException
      */
     public SimulationScenario readXMLFile(String filename) throws IOException, BadXMLException {
-	SAXBuilder builder = new SAXBuilder();//XMLReaders.XSDVALIDATING);
+	SAXBuilder builder = new SAXBuilder(XMLReaders.XSDVALIDATING);
 	File xmlFile = new File(filename);
 
         SimulationScenario simulationScenario = new SimulationScenario();

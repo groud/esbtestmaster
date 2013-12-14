@@ -5,8 +5,16 @@
 
 package esbtestmaster;
 
-import datas.ResultSet;
+import Exceptions.BadXMLException;
+import datas.*;
 import interfaces.ResultKeeperInterface;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import org.jdom2.*;
+import org.jdom2.input.*;
+import org.jdom2.input.sax.XMLReaders;
+import utils.Debug;
 
 /**
  *
@@ -31,8 +39,33 @@ public class XMLResultKeeper implements ResultKeeperInterface{
         //TODO : Add a log to the selected file
     }
 
-    public ResultSet getLog() {
-        //TODO : Get the results from the file
+    public ResultSet getLog() throws IOException, BadXMLException {
+	SAXBuilder builder = new SAXBuilder(XMLReaders.XSDVALIDATING);
+	File xmlFile = new File(filename);
+
+
+        ResultSet resultSet = new ResultSet();
+
+        Document document;
+        try {
+            document = (Document) builder.build(xmlFile);
+            Element rootNode = document.getRootElement(); //Get the results object
+            //Configuration
+            List<Element> eventList = rootNode.getChildren();//Get the result events
+
+            for (int i = 0; i < eventList.size(); i++) {
+               Element eventElement = (Element) eventList.get(i);
+               ResultEvent resultEvent = new ResultEvent();
+               resultEvent.setAgentType(AgentType.valueOf(eventElement.getAttributeValue("agenttype")));
+               resultEvent.setAgentId(eventElement.getAttributeValue("agentid"));
+               resultEvent.setEventDate(Long.parseLong(eventElement.getAttributeValue("eventdate")));
+               resultEvent.setEventType(EventType.valueOf(eventElement.getAttributeValue("eventtype")));
+               resultSet.getEvents().add(resultEvent);
+            }
+             Debug.info(resultSet);
+        } catch (JDOMException ex) {
+            throw new BadXMLException("Bad XML file : \n"+ex.getMessage());
+        }
         return null;
     }
 

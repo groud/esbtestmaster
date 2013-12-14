@@ -7,11 +7,12 @@
       <xsd:sequence>
         <xsd:element name="resultevent" maxOccurs="unbounded" minOccurs="0">
           <xsd:complexType>
+            <xsd:attribute type="xsd:string" name="agenttype" use="required"/>
+            <xsd:attribute type="xsd:string" name="agentid" use="required"/>
+            <xsd:attribute type="xsd:long" name="eventdate" use="required"/>
+            <xsd:attribute type="xsd:string" name="eventtype" use="required"/>
             <xsd:sequence>
-              <xsd:element type="xsd:long" name="eventdate"/>
-              <xsd:element type="xsd:string" name="eventtype"/>
-              <xsd:element type="xsd:string" name="agenttype"/>
-              <xsd:element type="xsd:long" name="agentid"/>
+              <xsd:element type="xsd:long" name="requestid"/>
             </xsd:sequence>
           </xsd:complexType>
         </xsd:element>
