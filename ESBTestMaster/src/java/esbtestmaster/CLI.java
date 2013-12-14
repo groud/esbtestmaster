@@ -23,13 +23,17 @@ public class CLI implements UserOutputsInterface {
      private Set<Command> cs = new HashSet<Command>();
      private Scanner input = new Scanner(System.in);
 
-     public CLI(UserInputsListener uil){
-        setListener(uil);
+     /**
+      * A simple shell like command line interface.
+      * @param userInputListener
+      */
+     public CLI(UserInputsListener userInputListener){
+        setListener(userInputListener);
         initCommands();
      }
 
      /**
-      * Run the command line interface
+      * Starts the shell like command line interface.
       */
      public void launch() {
          String cmd = "";
@@ -46,14 +50,15 @@ public class CLI implements UserOutputsInterface {
      }
 
      /**
-      * select the listener
+      * Define a listener for the user inputs.
+      * @param userInputListener
       */
-     private void setListener(UserInputsListener uil) {
-        this.listener = uil;
+     public void setListener(UserInputsListener userInputListener) {
+        this.listener = userInputListener;
      }
 
      /**
-      * Init the commands
+      * Initialize the available commands.
       */
      private void initCommands() {
         try {

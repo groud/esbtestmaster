@@ -25,22 +25,28 @@ import simulation2.*;
 */
 
 
+
 public class AgentController implements AgentControllerInterface{
 
-    ConsumerEntity consumer;
-
-    ProducerEntity producer;
-
+<<<<<<< HEAD
     public void configureAS(int behavior, int id)
+=======
+    // static keywords so that SimulationWS can access producer
+    // -> this method DOES NOT WORK yet
+    static ConsumerEntity consumer;
+    static ProducerEntity producer;
+    
+public void configureAS(int behavior, int id)
+>>>>>>> 9a779a26906010e85820516bd3a20b26b0f82c5b
 
     {
        if(behavior==0){
 
-           ConsumerEntity consumer = new ConsumerEntity();
+           consumer = new ConsumerEntity();
 
            consumer.setId(id);
 
-           System.out.print("you are consumer and your id is " + id);//just a test
+           System.out.println("you are consumer and your id is " + id);//just a test
 
            //Here We will invoke the configuration method
 
@@ -48,11 +54,11 @@ public class AgentController implements AgentControllerInterface{
 
        else{
 
-           ProducerEntity producer = new ProducerEntity();
+           producer = new ProducerEntity();
 
-           consumer.setId(id);
+           producer.setId(id);
 
-            System.out.print("you are provider and your id is" +  id);//just a test
+            System.out.println("you are provider and your id is" +  id);//just a test
 
              //Here We will invoke the configuration method
 
@@ -80,7 +86,9 @@ public class AgentController implements AgentControllerInterface{
 
     }
 
-
+    public static ProducerEntity getProducer() {
+        return producer;
+    }
 
    
 }

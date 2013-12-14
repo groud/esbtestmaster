@@ -1,0 +1,9 @@
+<?xml version="1.0"?> 
+<results
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="XSD/results.xsd">
+	<simulationEvent agentId="cons1" agentType="CONSUMER" eventDate="223086138" eventType="REQUEST_SENT">
+		<requestId>22</requestId>	
+	</simulationEvent>
+	<event agentId="cons1" agentType="CONSUMER" eventDate="223086138" eventType="CONNEXION_ERR"/>
+</results>

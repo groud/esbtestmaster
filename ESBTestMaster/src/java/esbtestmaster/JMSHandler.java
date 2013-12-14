@@ -21,18 +21,31 @@ public class JMSHandler implements MonitoringMessageHandler {
         this.mmListener = mmListener;
     }
 
+    /**
+     * Asks an agent to start the simulation
+     * @param receiverAgent
+     */
     public void startSimulationMessage(AgentConfiguration receiverAgent) {
-        //TODO JMS message
+        //TODO Start JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Asks an agent to abort the simulation
+     * @param receiverAgent
+     */
     public void stopSimulationMessage(AgentConfiguration receiverAgent) {
-        //TODO JMS message
+        //TODO Stop JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Asks an agent to self configure withthe given AgentConfiguration
+     * @param receiverAgent
+     * @param simulationScenario
+     */
     public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
-        //TODO JMS message
+        //TODO  Configuration JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 }

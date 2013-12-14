@@ -5,28 +5,26 @@
 
 package datas;
 
-import java.util.Date;
-
 
 /**
  *
  * @author gilles
  */
 public class ResultEvent implements Comparable<ResultEvent>{
-    private Date eventDate;
+    private long eventDate;
     private EventType eventType;
     private AgentType agentType;
-    private int agentId;
+    private String agentId;
 
 
     // ----------------------------------
     //   ACCESSORS
     // ----------------------------------
-    public int getAgentId() {
+    public String getAgentId() {
         return agentId;
     }
 
-    public void setAgentId(int agentId) {
+    public void setAgentId(String agentId) {
         this.agentId = agentId;
     }
 
@@ -38,11 +36,11 @@ public class ResultEvent implements Comparable<ResultEvent>{
         this.agentType = agentType;
     }
 
-    public Date getEventDate() {
+    public long getEventDate() {
         return eventDate;
     }
 
-    public void setEventDate(Date eventDate) {
+    public void setEventDate(long eventDate) {
         this.eventDate = eventDate;
     }
 
@@ -57,8 +55,13 @@ public class ResultEvent implements Comparable<ResultEvent>{
 
     //Comparison method
     public int compareTo(ResultEvent event) {
-        if (this.getEventDate().before(event.getEventDate())) return -1;
-        if (this.getEventDate().equals(event.getEventDate())) return 0;
+        if (this.getEventDate() < event.getEventDate()) return -1;
+        if (this.getEventDate() < event.getEventDate()) return 0;
         else return 1;
+    }
+
+    @Override
+    public String toString() {
+        return "Event from "+this.getAgentType()+" "+this.getAgentId()+" - "+this.getEventType()+" at "+this.getEventDate();
     }
 }

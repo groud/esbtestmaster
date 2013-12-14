@@ -4,7 +4,9 @@
  */
 
 package interfaces;
+import Exceptions.BadXMLException;
 import datas.ResultSet;
+import java.io.IOException;
 
 /**
  *
@@ -12,6 +14,6 @@ import datas.ResultSet;
  */
 public interface ResultKeeperInterface {
     public void addLog(ResultSet resultSet);
-    public ResultSet getLog();
+    public ResultSet getLog() throws IOException, BadXMLException;
     public void clearLog();
 }

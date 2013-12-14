@@ -5,10 +5,14 @@
 
 package datas;
 
+import java.util.HashMap;
+
 /**
  *
  * @author gilles
  */
 public class KPISet {
-
+    private HashMap<String,Integer> numberOfRequestSent;
+    private HashMap<String,Integer> numberOfRequestLost;
+    private HashMap<String,Integer> averageResponseTime;
 }
