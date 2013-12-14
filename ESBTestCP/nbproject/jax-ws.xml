@@ -4,8 +4,8 @@
     <service name="NewWebService">
       <implementation-class>ws.NewWebService</implementation-class>
     </service>
-    <service name="SimulationWS">
-      <implementation-class>simulation.SimulationWS</implementation-class>
+    <service name="SimulationReqWS">
+      <implementation-class>simulation.SimulationReqWS</implementation-class>
     </service>
   </services>
   <clients>
