@@ -14,7 +14,7 @@ import javax.jws.WebService;
  * @author samy
  */
 @WebService()
-public class SimulationReqWS {
+public class SimulationWS {
     ProducerEntity prod;
     
     /**
@@ -30,7 +30,7 @@ public class SimulationReqWS {
             return prod.processRequest(requestType, requestData);
         }
         else {
-            return null;
+            return "Error : Producer not configured";
         }
     }
     
