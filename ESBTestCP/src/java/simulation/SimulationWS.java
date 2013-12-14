@@ -30,7 +30,7 @@ public class SimulationWS {
             return prod.processRequest(requestType, requestData);
         }
         else {
-            return null;
+            return "Error : Producer not configured";
         }
     }
     

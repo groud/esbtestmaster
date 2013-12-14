@@ -25,12 +25,22 @@ import simulation.*;
 */
 
 
+
 public class AgentController implements AgentControllerInterface{
 
     ConsumerEntity consumer;
 
     ProducerEntity producer;
 
+
+    public static void main(String[] args) {
+        // WS client test
+        String url = "http://localhost:8080/ESBTestCP/SimulationWSService";
+        ConsumerClient client = new ConsumerClient();
+        System.out.println("SENDING REQUEST");
+        client.sendRequest("Test WS", url);
+    }
+    
 public void configureAS(int behavior, int id)
 
     {
