@@ -26,7 +26,8 @@ public class Main {
         }
 
         // WS client test
-        String url = "http://localhost:8080/ESBTestCP/SimulationWSService";
+        //String url = "http://localhost:8080/ESBTestCP/SimulationWSService";
+        String url = "http://localhost:8090/ESBTestCompositeService1/casaPort1";
         ConsumerClient client = new ConsumerClient();
         System.out.println("SENDING REQUEST");
         client.sendRequest("Test WS", url);
