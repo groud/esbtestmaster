@@ -5,6 +5,7 @@
 
 package datas;
 
+import java.util.Iterator;
 import java.util.SortedSet;
 
 /**
@@ -13,4 +14,22 @@ import java.util.SortedSet;
  */
 public class ResultSet {
     private SortedSet<ResultEvent> events;
+
+    public SortedSet<ResultEvent> getEvents() {
+        return events;
+    }
+
+    public void setEvents(SortedSet<ResultEvent> events) {
+        this.events = events;
+    }
+
+    @Override
+    public String toString() {
+        String str = "";
+        for(Iterator it = events.iterator(); it.hasNext();) {
+            str = str + it.next();
+        }
+        return str;
+    }
+
 }
