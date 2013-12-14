@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jax-ws xmlns="http://www.netbeans.org/ns/jax-ws/1">
   <services>
-    <service name="NewWebService">
-      <implementation-class>ws.NewWebService</implementation-class>
-    </service>
-    <service name="SimulationReqWS">
-      <implementation-class>simulation.SimulationReqWS</implementation-class>
-    </service>
   </services>
   <clients>
-    <client name="SimulationWSService">
-      <wsdl-url>file:/home/samy/Dropbox/INSA/PDL/projet/esbtestmaster/ESBTestCP/src/java/simulation/SimulationWSService.wsdl</wsdl-url>
-      <local-wsdl-file>SimulationWSService.wsdl</local-wsdl-file>
+    <client name="SimulationReqWSService">
+      <wsdl-url>http://localhost:8080/ESBTestCP/SimulationReqWSService?wsdl</wsdl-url>
+      <local-wsdl-file>localhost_8080/ESBTestCP/SimulationReqWSService.wsdl</local-wsdl-file>
       <package-name>simulation</package-name>
       <catalog-file>catalog.xml</catalog-file>
       <wsimport-options>
@@ -25,11 +19,15 @@
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>wsdlLocation</wsimport-option-name>
-          <wsimport-option-value>file:/home/samy/Dropbox/INSA/PDL/projet/esbtestmaster/ESBTestCP/src/java/simulation/SimulationWSService.wsdl</wsimport-option-value>
+          <wsimport-option-value>http://localhost:8080/ESBTestCP/SimulationReqWSService?wsdl</wsimport-option-value>
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>xnocompile</wsimport-option-name>
           <wsimport-option-value>true</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>package</wsimport-option-name>
+          <wsimport-option-value>simulationRef</wsimport-option-value>
         </wsimport-option>
       </wsimport-options>
     </client>

@@ -5,23 +5,6 @@
                 JAX-WS WSIMPORT SECTION
                 ===================
             -->
-    <target name="wsgen-init" depends="init, -do-compile">
-        <mkdir dir="${build.generated.sources.dir}/jax-ws/resources/"/>
-        <mkdir dir="${build.classes.dir}"/>
-        <taskdef name="wsgen" classname="com.sun.tools.ws.ant.WsGen">
-            <classpath path="${java.home}/../lib/tools.jar:${build.classes.dir}:${j2ee.platform.wsgen.classpath}:${javac.classpath}"/>
-        </taskdef>
-    </target>
-    <target name="wsgen-NewWebService" depends="wsgen-init">
-        <wsgen sourcedestdir="${build.generated.sources.dir}/jax-ws" resourcedestdir="${build.generated.sources.dir}/jax-ws/resources/" destdir="${build.generated.sources.dir}/jax-ws" verbose="true" xendorsed="true" keep="true" genwsdl="true" sei="ws.NewWebService">
-            <classpath path="${java.home}/../lib/tools.jar:${build.classes.dir}:${j2ee.platform.wsgen.classpath}:${javac.classpath}"/>
-        </wsgen>
-    </target>
-    <target name="wsgen-SimulationReqWS" depends="wsgen-init">
-        <wsgen sourcedestdir="${build.generated.sources.dir}/jax-ws" resourcedestdir="${build.generated.sources.dir}/jax-ws/resources/" destdir="${build.generated.sources.dir}/jax-ws" verbose="true" xendorsed="true" keep="true" genwsdl="true" sei="simulation.SimulationReqWS">
-            <classpath path="${java.home}/../lib/tools.jar:${build.classes.dir}:${j2ee.platform.wsgen.classpath}:${javac.classpath}"/>
-        </wsgen>
-    </target>
     <target name="wsimport-init" depends="init">
         <mkdir dir="${build.generated.sources.dir}/jax-ws"/>
         <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
@@ -31,21 +14,21 @@
             <isset property="conf.dir"/>
         </condition>
     </target>
-    <target name="wsimport-client-SimulationWSService" depends="wsimport-init">
-        <mkdir dir="${build.generated.dir}/jax-wsCache/SimulationWSService"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/SimulationWSService" destdir="${build.generated.dir}/jax-wsCache/SimulationWSService" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/SimulationWSService/wsdl/SimulationWSService.wsdl" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="file:/home/samy/Dropbox/INSA/PDL/projet/esbtestmaster/ESBTestCP/src/java/simulation/SimulationWSService.wsdl" xnocompile="true">
-            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/SimulationWSService/wsdl/SimulationWSService.wsdl"/>
-            <produces dir="${build.generated.dir}/jax-wsCache/SimulationWSService"/>
+    <target name="wsimport-client-SimulationReqWSService" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/SimulationReqWSService"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/SimulationReqWSService" destdir="${build.generated.dir}/jax-wsCache/SimulationReqWSService" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/SimulationReqWSService/wsdl/localhost_8080/ESBTestCP/SimulationReqWSService.wsdl" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/ESBTestCP/SimulationReqWSService?wsdl" xnocompile="true" package="simulationRef">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/SimulationReqWSService/wsdl/localhost_8080/ESBTestCP/SimulationReqWSService.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/SimulationReqWSService"/>
         </wsimport>
         <copy todir="${build.generated.sources.dir}/jax-ws">
-            <fileset dir="${build.generated.dir}/jax-wsCache/SimulationWSService">
+            <fileset dir="${build.generated.dir}/jax-wsCache/SimulationReqWSService">
                 <include name="**/*.java"/>
             </fileset>
         </copy>
     </target>
-    <target name="wsimport-client-clean-SimulationWSService" depends="-init-project">
+    <target name="wsimport-client-clean-SimulationReqWSService" depends="-init-project">
         <delete dir="${build.generated.sources.dir}/jax-ws/simulation"/>
-        <delete dir="${build.generated.dir}/jax-wsCache/SimulationWSService"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/SimulationReqWSService"/>
     </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-SimulationWSService"/>
+    <target name="wsimport-client-generate" depends="wsimport-client-SimulationReqWSService"/>
 </project>
