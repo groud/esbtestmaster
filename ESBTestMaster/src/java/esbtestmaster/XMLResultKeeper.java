@@ -71,11 +71,18 @@ public class XMLResultKeeper implements ResultKeeperInterface{
 
             for (int i = 0; i < eventList.size(); i++) {
                Element eventElement = (Element) eventList.get(i);
-               ResultEvent resultEvent = new ResultEvent();
+               ResultEvent resultEvent;
+               if(eventElement.getName().equals("simulationEvent")) {
+                   resultEvent = new ResultSimulationEvent();
+                   ((ResultSimulationEvent) resultEvent).setRequestId(Integer.parseInt(eventElement.getChildText("requestId")));
+               } else {
+                   resultEvent = new ResultEvent();
+               }
                resultEvent.setAgentType(AgentType.valueOf(eventElement.getAttributeValue("agentType")));
                resultEvent.setAgentId(eventElement.getAttributeValue("agentId"));
                resultEvent.setEventDate(Long.parseLong(eventElement.getAttributeValue("eventDate")));
                resultEvent.setEventType(EventType.valueOf(eventElement.getAttributeValue("eventType")));
+
                resultSet.getEvents().add(resultEvent);
             }
              Debug.info("Events list :\n"+resultSet);
@@ -84,5 +91,4 @@ public class XMLResultKeeper implements ResultKeeperInterface{
         }
         return resultSet;
     }
-
 }

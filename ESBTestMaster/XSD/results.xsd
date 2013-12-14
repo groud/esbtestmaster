@@ -5,11 +5,19 @@
   <xsd:element name="results">
     <xsd:complexType>
       <xsd:sequence>
-        <xsd:element name="resultevent" maxOccurs="unbounded" minOccurs="0">
+        <xsd:element name="simulationEvent" maxOccurs="unbounded" minOccurs="0">
           <xsd:complexType>
-            <xsd:sequence>
-              <xsd:element type="xsd:long" name="requestid"/>
-            </xsd:sequence>
+		<xsd:sequence>
+			<xsd:element type="xsd:long" name="requestId" minOccurs="1" maxOccurs="2"/>
+		</xsd:sequence>
+		<xsd:attribute type="xsd:string" name="agentType" use="required"/>
+		<xsd:attribute type="xsd:string" name="agentId" use="required"/>
+		<xsd:attribute type="xsd:long" name="eventDate" use="required"/>
+		<xsd:attribute type="xsd:string" name="eventType" use="required"/>
+          </xsd:complexType>
+        </xsd:element>
+	<xsd:element name="event" maxOccurs="unbounded" minOccurs="0">
+          <xsd:complexType>
             <xsd:attribute type="xsd:string" name="agentType" use="required"/>
             <xsd:attribute type="xsd:string" name="agentId" use="required"/>
             <xsd:attribute type="xsd:long" name="eventDate" use="required"/>

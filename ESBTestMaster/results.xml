@@ -2,7 +2,8 @@
 <results
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:noNamespaceSchemaLocation="XSD/results.xsd">
-	<resultevent agentId="cons1" agentType="CONSUMER" eventDate="223086138" eventType="REQUEST_SENT">
-		<requestid>22</requestid>	
-	</resultevent>
+	<simulationEvent agentId="cons1" agentType="CONSUMER" eventDate="223086138" eventType="REQUEST_SENT">
+		<requestId>22</requestId>	
+	</simulationEvent>
+	<event agentId="cons1" agentType="CONSUMER" eventDate="223086138" eventType="CONNEXION_ERR"/>
 </results>
