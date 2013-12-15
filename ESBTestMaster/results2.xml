@@ -1,0 +1,549 @@
+<?xml version="1.0"?> 
+ 
+<results>
+      <simulationEvent eventDate="230328169" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons1"> 
+        <requestId>1</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="905770154" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod1"> 
+        <requestId>1</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1129088726" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod1"> 
+        <requestId>1</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1859117438" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons1"> 
+        <requestId>1</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="40423322" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons2"> 
+        <requestId>2</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="558532833" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod2"> 
+        <requestId>2</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1304744807" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod2"> 
+        <requestId>2</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1951793927" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons2"> 
+        <requestId>2</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="142583527" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons3"> 
+        <requestId>3</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="190100188" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod3"> 
+        <requestId>3</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="970886659" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod3"> 
+        <requestId>3</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1240731418" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons3"> 
+        <requestId>3</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="73340424" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons4"> 
+        <requestId>4</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="147364236" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod4"> 
+        <requestId>4</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1398535595" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod4"> 
+        <requestId>4</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="2104884158" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons4"> 
+        <requestId>4</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="411186624" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons5"> 
+        <requestId>5</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="923335911" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod5"> 
+        <requestId>5</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1081465471" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod5"> 
+        <requestId>5</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1574393965" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons5"> 
+        <requestId>5</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="8506263" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons6"> 
+        <requestId>6</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="425495212" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod6"> 
+        <requestId>6</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1452327911" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod6"> 
+        <requestId>6</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1845515240" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons6"> 
+        <requestId>6</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="269952513" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons7"> 
+        <requestId>7</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="407235439" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod7"> 
+        <requestId>7</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="919041183" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod7"> 
+        <requestId>7</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1878426108" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons7"> 
+        <requestId>7</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="110920550" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons8"> 
+        <requestId>8</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="968134741" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod8"> 
+        <requestId>8</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="996910405" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod8"> 
+        <requestId>8</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1600062542" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons8"> 
+        <requestId>8</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="338651262" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons9"> 
+        <requestId>9</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="478927486" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod9"> 
+        <requestId>9</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="877198105" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod9"> 
+        <requestId>9</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1608992386" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons9"> 
+        <requestId>9</requestId>
+    </simulationEvent>
+  <event eventDate="2128025054" eventType="CONNEXION_ERR" agentType="CONSUMER" agentId="cons10" /> 
+      <simulationEvent eventDate="155658421" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons11"> 
+        <requestId>11</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="701576282" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod11"> 
+        <requestId>11</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1362308731" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod11"> 
+        <requestId>11</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1749781636" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons11"> 
+        <requestId>11</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="318326137" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons12"> 
+        <requestId>12</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1021563894" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod12"> 
+        <requestId>12</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1465790828" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod12"> 
+        <requestId>12</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1678526550" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons12"> 
+        <requestId>12</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="200361878" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons13"> 
+        <requestId>13</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="770796507" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod13"> 
+        <requestId>13</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="866499605" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod13"> 
+        <requestId>13</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1899757507" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons13"> 
+        <requestId>13</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="510315698" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons14"> 
+        <requestId>14</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1031549697" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod14"> 
+        <requestId>14</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1107928448" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod14"> 
+        <requestId>14</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1427531037" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons14"> 
+        <requestId>14</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="397545549" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons15"> 
+        <requestId>15</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="669516717" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod15"> 
+        <requestId>15</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="780584372" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod15"> 
+        <requestId>15</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="2140660754" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons15"> 
+        <requestId>15</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="335752713" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons16"> 
+        <requestId>16</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="971885483" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod16"> 
+        <requestId>16</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1378423877" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod16"> 
+        <requestId>16</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="2047169124" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons16"> 
+        <requestId>16</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="47056129" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons17"> 
+        <requestId>17</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="435488816" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod17"> 
+        <requestId>17</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="476785092" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod17"> 
+        <requestId>17</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1159435756" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons17"> 
+        <requestId>17</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="532672865" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons18"> 
+        <requestId>18</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="650029680" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod18"> 
+        <requestId>18</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1279147756" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod18"> 
+        <requestId>18</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1291701847" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons18"> 
+        <requestId>18</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="404393109" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons19"> 
+        <requestId>19</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="627389525" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod19"> 
+        <requestId>19</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1196776665" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod19"> 
+        <requestId>19</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1843521082" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons19"> 
+        <requestId>19</requestId>
+    </simulationEvent>
+  <event eventDate="1803166989" eventType="CONNEXION_ERR" agentType="CONSUMER" agentId="cons20" /> 
+      <simulationEvent eventDate="340184100" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons21"> 
+        <requestId>21</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="446385416" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod21"> 
+        <requestId>21</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1530073937" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod21"> 
+        <requestId>21</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1842745850" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons21"> 
+        <requestId>21</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="215390548" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons22"> 
+        <requestId>22</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1034388387" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod22"> 
+        <requestId>22</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1052725069" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod22"> 
+        <requestId>22</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1056681140" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons22"> 
+        <requestId>22</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="158530283" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons23"> 
+        <requestId>23</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="223175074" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod23"> 
+        <requestId>23</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1360924857" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod23"> 
+        <requestId>23</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1667555719" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons23"> 
+        <requestId>23</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="29960798" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons24"> 
+        <requestId>24</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="659927400" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod24"> 
+        <requestId>24</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1186279344" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod24"> 
+        <requestId>24</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1403779801" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons24"> 
+        <requestId>24</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="380244024" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons25"> 
+        <requestId>25</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="455049388" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod25"> 
+        <requestId>25</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1510155040" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod25"> 
+        <requestId>25</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1974196305" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons25"> 
+        <requestId>25</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="336778685" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons26"> 
+        <requestId>26</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1037113040" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod26"> 
+        <requestId>26</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1472586618" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod26"> 
+        <requestId>26</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="2063560859" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons26"> 
+        <requestId>26</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="147029136" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons27"> 
+        <requestId>27</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="932808018" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod27"> 
+        <requestId>27</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1319516427" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod27"> 
+        <requestId>27</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="2085213840" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons27"> 
+        <requestId>27</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="436946804" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons28"> 
+        <requestId>28</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="457919660" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod28"> 
+        <requestId>28</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="904378827" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod28"> 
+        <requestId>28</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="984900038" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons28"> 
+        <requestId>28</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="531727615" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons29"> 
+        <requestId>29</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="651627697" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod29"> 
+        <requestId>29</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1562123864" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod29"> 
+        <requestId>29</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1663077697" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons29"> 
+        <requestId>29</requestId>
+    </simulationEvent>
+  <event eventDate="527594392" eventType="CONNEXION_ERR" agentType="CONSUMER" agentId="cons30" /> 
+      <simulationEvent eventDate="263940260" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons31"> 
+        <requestId>31</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1073310866" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod31"> 
+        <requestId>31</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1258939254" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod31"> 
+        <requestId>31</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1819300318" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons31"> 
+        <requestId>31</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="484611199" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons32"> 
+        <requestId>32</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="939889168" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod32"> 
+        <requestId>32</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1172334609" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod32"> 
+        <requestId>32</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="2113695233" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons32"> 
+        <requestId>32</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="189106870" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons33"> 
+        <requestId>33</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="730693597" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod33"> 
+        <requestId>33</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1546634517" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod33"> 
+        <requestId>33</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="2124509846" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons33"> 
+        <requestId>33</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="71623546" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons34"> 
+        <requestId>34</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="168343123" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod34"> 
+        <requestId>34</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="248689343" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod34"> 
+        <requestId>34</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1579315424" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons34"> 
+        <requestId>34</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="367987674" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons35"> 
+        <requestId>35</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1038780568" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod35"> 
+        <requestId>35</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1134274219" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod35"> 
+        <requestId>35</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1787914615" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons35"> 
+        <requestId>35</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="241659368" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons36"> 
+        <requestId>36</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="451809903" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod36"> 
+        <requestId>36</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="853704130" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod36"> 
+        <requestId>36</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1572962565" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons36"> 
+        <requestId>36</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="333941228" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons37"> 
+        <requestId>37</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="373710119" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod37"> 
+        <requestId>37</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1409029384" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod37"> 
+        <requestId>37</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1849718646" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons37"> 
+        <requestId>37</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="91435312" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons38"> 
+        <requestId>38</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="935799932" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod38"> 
+        <requestId>38</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1184169779" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod38"> 
+        <requestId>38</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1585304051" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons38"> 
+        <requestId>38</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="348985979" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons39"> 
+        <requestId>39</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="709904710" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod39"> 
+        <requestId>39</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1152214642" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod39"> 
+        <requestId>39</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="2080496048" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons39"> 
+        <requestId>39</requestId>
+    </simulationEvent>
+  <event eventDate="500170212" eventType="CONNEXION_ERR" agentType="CONSUMER" agentId="cons40" /> 
+      <simulationEvent eventDate="280244537" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons41"> 
+        <requestId>41</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="786825764" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod41"> 
+        <requestId>41</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1045619495" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod41"> 
+        <requestId>41</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1580733159" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons41"> 
+        <requestId>41</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="201097980" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons42"> 
+        <requestId>42</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1000184188" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod42"> 
+        <requestId>42</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1555239817" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod42"> 
+        <requestId>42</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1881242112" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons42"> 
+        <requestId>42</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="486794698" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons43"> 
+        <requestId>43</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="739678075" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod43"> 
+        <requestId>43</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1431844584" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod43"> 
+        <requestId>43</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1993076661" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons43"> 
+        <requestId>43</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="239753340" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons44"> 
+        <requestId>44</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="684138754" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod44"> 
+        <requestId>44</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="858959154" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod44"> 
+        <requestId>44</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1203034860" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons44"> 
+        <requestId>44</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="171948803" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons45"> 
+        <requestId>45</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="225874970" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod45"> 
+        <requestId>45</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="544295916" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod45"> 
+        <requestId>45</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1952161292" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons45"> 
+        <requestId>45</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="514124596" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons46"> 
+        <requestId>46</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="599493118" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod46"> 
+        <requestId>46</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1456229997" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod46"> 
+        <requestId>46</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1660603019" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons46"> 
+        <requestId>46</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="484698762" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons47"> 
+        <requestId>47</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="662436799" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod47"> 
+        <requestId>47</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1319518331" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod47"> 
+        <requestId>47</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1690562042" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons47"> 
+        <requestId>47</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="313449107" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons48"> 
+        <requestId>48</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="368089660" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod48"> 
+        <requestId>48</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1224008108" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod48"> 
+        <requestId>48</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1627010563" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons48"> 
+        <requestId>48</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="228332785" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons49"> 
+        <requestId>49</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="380763412" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod49"> 
+        <requestId>49</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="1469215776" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod49"> 
+        <requestId>49</requestId>
+    </simulationEvent>
+      <simulationEvent eventDate="2121874824" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons49"> 
+        <requestId>49</requestId>
+    </simulationEvent>
+  <event eventDate="533813839" eventType="CONNEXION_ERR" agentType="CONSUMER" agentId="cons50" /> 
+</results>
