@@ -1,6 +1,6 @@
 <?xml version="1.0"?> 
  
-<results>
+<results  xsi:noNamespaceSchemaLocation="XSD/results.xsd">
       <simulationEvent eventDate="230328169" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons1"> 
         <requestId>1</requestId>
     </simulationEvent>
