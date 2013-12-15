@@ -1,4 +1,4 @@
-package esbtestmaster;
+package monitoring;
 
 import java.io.Serializable;
 import javax.jms.Connection;
@@ -13,12 +13,8 @@ import javax.jms.Session;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import interfaces.MonitoringMsgListener;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 /**
  *
  * @author Adrien
@@ -27,7 +23,7 @@ import interfaces.MonitoringMsgListener;
   //generic JMS handler
   //works with both queue and topic, the choice come from the object in JNDI
 
-public class MasterMessageHandler {
+public class AgentMessageHandler {
 
     Context context = null;
     ConnectionFactory factory = null;
@@ -38,14 +34,8 @@ public class MasterMessageHandler {
     MessageProducer sender = null;
     MessageConsumer receiver = null;
 
-    MonitoringMsgListener mmListener;
 
-    public void setListener(MonitoringMsgListener mmListener) {
-        this.mmListener = mmListener;
-    }
-
-
-    public MasterMessageHandler() {
+    public AgentMessageHandler() {
         try {
             //To get to JNDI context
             context = new InitialContext();
@@ -60,11 +50,11 @@ public class MasterMessageHandler {
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
             //Creating a producer to send config objects
-            toTopic = (Destination) context.lookup("config"); //Topic named "config"
+            toTopic = (Destination) context.lookup("results"); //Topic named "results"
             sender = session.createProducer(toTopic);
 
             //Creating a consumer to receive results objects
-            fromTopic = (Destination) context.lookup("results"); //Topic named "results"
+            fromTopic = (Destination) context.lookup("config"); //Topic named "config"
             receiver = session.createConsumer(fromTopic);
 
             //Starting the connection
@@ -88,7 +78,7 @@ public class MasterMessageHandler {
         return true;
     }
 
-    //receive an object from a topic
+    //receive an object from the topic
     public Serializable receiveFromTopic() {
         Serializable result = null;
         try {
@@ -121,5 +111,5 @@ public class MasterMessageHandler {
                 e.printStackTrace();
             }
         }
-    }
+    }   
 }
