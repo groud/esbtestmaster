@@ -15,80 +15,127 @@ import interfaces.MonitoringInterface;
 import javax.jws.WebService;
 
 import datas.*;
+import interfaces.MonitoringMessageHandler;
+import interfaces.interfaceOservateurJMSHandler;
+import interfaces.interfaceObservableJMS;
 import java.util.ArrayList;
-import simulation2.*;
+import java.util.HashMap;
+import java.util.Map;
+import simulation.*;
+
 
 /**
 <<<<<<< HEAD
 *
-* @author mariata
+* @author bambaLamine
 */
 
 
 
-public class AgentController implements AgentControllerInterface{
+public class AgentController implements interfaceOservateurJMSHandler{
 
-<<<<<<< HEAD
-    public void configureAS(int behavior, int id)
-=======
-    // static keywords so that SimulationWS can access producer
+   /* private MonitoringMessageHandler monitoringMsgHandler;
+      private SimulationScenario currentScenario;
+
+      public AgentController() {
+          monitoringMsgHandler = new JMSHandler();
+      }*/
+
+  // static keywords so that SimulationWS can access producer
     // -> this method DOES NOT WORK yet
+
+    //Hmap pour sauvegarder l'agent (ou use thread)
+    //Map<String, ProducerEntity> hMapProducer = new  HashMap<String, ProducerEntity>();
     static ConsumerEntity consumer;
     static ProducerEntity producer;
-    
-public void configureAS(int behavior, int id)
->>>>>>> 9a779a26906010e85820516bd3a20b26b0f82c5b
 
-    {
-       if(behavior==0){
+    public void actualiserController(interfaceObservableJMS a){
 
-           consumer = new ConsumerEntity();
+        if(a instanceof JMSHandler){
+                JMSHandler jms=(JMSHandler) a;
+               MessageFromJMSEntity_TEST mess;
+               mess=jms.getMessageFRomJMS();
+               System.out.println(mess.getMessageType());
 
-           consumer.setId(id);
 
-           System.out.println("you are consumer and your id is " + id);//just a test
+            //if messsadeTYpe=1 ==> configuration of agents
+           if(jms.getMessageFRomJMS().getMessageType()==0)
+            {
+                 if(jms.getMessageFRomJMS().getAgent().getWsAgentType() == jms.getMessageFRomJMS().getAgent().getWsAgentType().CONSUMER)
+                 {
+                      consumer = new  ConsumerEntity();
 
-           //Here We will invoke the configuration method
+                       //ICI creer le thread du producteur et enregister son pid
 
-       }
+                      consumer.configureConsumer(jms.getMessageFRomJMS().getScenario().getTabScenario());
+                 }
 
-       else{
 
-           producer = new ProducerEntity();
+                 else
+                 {
 
-           producer.setId(id);
+                      producer = new  ProducerEntity();
+                      //ICI creer le thread du producteur et enregister son pid
+                     // hMapProducer.put(jms.getMessageFRomJMS().getAgent().getName(), producer);
 
-            System.out.println("you are provider and your id is" +  id);//just a test
+                      //????? la configuration du provider c'est a dire son temps de reponse et son id,
 
-             //Here We will invoke the configuration method
 
-       }
+                     producer.configureProducer(jms.getMessageFRomJMS().getResponseTime(),jms.getMessageFRomJMS().getResponseSize());
+
+                 }
+
+            }
+             //If we receive a message of startSimulation (messageType = 1)
+            else if(jms.getMessageFRomJMS().getMessageType()==1)
+            {
+
+                  if(jms.getMessageFRomJMS().getAgent().getWsAgentType() == jms.getMessageFRomJMS().getAgent().getWsAgentType().CONSUMER)
+                 {
+                 
+                    String wsAdresse=jms.getMessageFRomJMS().getAgent().getWsAddress();
+                    String monitoringWsAdresse=jms.getMessageFRomJMS().getAgent().getMonitoringWSAddress();
+                    
+                    //recuperer le consumer à demarrer ??
+                    
+                    consumer.startSimulation();
+                 }
+                 else
+                 {
+                    String wsAdresse=jms.getMessageFRomJMS().getAgent().getWsAddress();
+                    String monitoringWsAdresse=jms.getMessageFRomJMS().getAgent().getMonitoringWSAddress();
+                    
+                    //recuperer le provider à demarrer ???
+
+                     producer.startSimulation();
+                }
+            }
+
+           //If we receive a message of abortSimulation (messageType = 2)
+            else if(jms.getMessageFRomJMS().getMessageType()==1)
+            {
+
+                  if(jms.getMessageFRomJMS().getAgent().getWsAgentType() == jms.getMessageFRomJMS().getAgent().getWsAgentType().CONSUMER)
+                 {
+
+                    String wsAdresse=jms.getMessageFRomJMS().getAgent().getWsAddress();
+                    String monitoringWsAdresse=jms.getMessageFRomJMS().getAgent().getMonitoringWSAddress();
+
+                    //recuperer le consumer à ABORTER ??
+
+                    consumer.abortSimulation();
+                 }
+                 else
+                 {
+                    String wsAdresse=jms.getMessageFRomJMS().getAgent().getWsAddress();
+                    String monitoringWsAdresse=jms.getMessageFRomJMS().getAgent().getMonitoringWSAddress();
+
+                    //recuperer le provider à ABORTER ???
+
+                     producer.abortSimulation();
+                }
+             }
+        }
 
     }
-
-    public void configureProducer(int responseTime, int messageLength)
-
-    {
-
-       producer.configureProducer(responseTime, messageLength);
-
-       System.out.print("response Time is" +responseTime+ "and Message Length" + messageLength);//just a test
-
-        //Here We will invoke the provider method
-
-    }
-
-    public void configureConsumer(ArrayList<SimulationStep> steps) {
-
-       consumer.configureConsumer(steps);
-
-       throw new UnsupportedOperationException("Not supported yet.");
-
-    }
-
-    public static ProducerEntity getProducer() {
-        return producer;
-    }
-
-   
 }

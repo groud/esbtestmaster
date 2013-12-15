@@ -14,4 +14,9 @@ import java.util.ArrayList;
 public class SimulationScenario {
     private ArrayList<SimulationStep> steps;
 
+    public ArrayList<SimulationStep> getTabScenario(){
+
+         return this.steps;
+    }
+
 }

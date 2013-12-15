@@ -3,7 +3,7 @@
 * and open the template in the editor.
 */
 
-package simulation2;
+package simulation;
 
 import datas.*;
 

@@ -42,6 +42,10 @@ public abstract class AgentConfiguration {
         this.wsAddress = wsAddress;
     }
 
+    public  AgentType getWsAgentType() {
+        return this.agentType;
+    }
+
     @Override
     public String toString() {
         return agentType + " " + this.getName() + "\n";

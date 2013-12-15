@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package simulation2;
+package simulation;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -41,10 +41,10 @@ public class SimulationWS {
     
     /**
      * To be called by the AgentController after creating the producer
-     * @param sim
+     * @param sim*/
      
     public static void registerProducer(ProducerEntity prodArg) {
         prod = prodArg;
     }
-     */
+     
 }

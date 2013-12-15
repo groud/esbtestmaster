@@ -3,7 +3,7 @@
 * and open the template in the editor.
 */
 
-package simulation2;
+package simulation;
 
 import java.util.*;
 import datas.*;
@@ -33,7 +33,6 @@ public class ProducerEntity extends SimulationEntity {
     public void configureProducer(int responseTime, int messageLength){
 
        this.responseTime=responseTime;
-
        this.responseSize=messageLength;
 
     }
@@ -42,21 +41,21 @@ public class ProducerEntity extends SimulationEntity {
 
     public void writeSimulationEvent(AgentType agent, EventType event) {
 
-    currentEvent.setAgentId(this.getid());
+        currentEvent.setAgentId(this.getid());
 
-    currentEvent.setAgentType(agent);
+        currentEvent.setAgentType(agent);
 
-    // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
-    Date date=new Date();
+        Date date=new Date();
 
-    currentEvent.setEventDate(date);
+        currentEvent.setEventDate(date);
 
-    currentEvent.setEventType(event);
+        currentEvent.setEventType(event);
 
-    //add in list of events
+        //add in list of events
 
-     events.add(currentEvent);
+         events.add(currentEvent);
 
     }
 

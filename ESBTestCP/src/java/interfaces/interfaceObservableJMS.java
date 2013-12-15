@@ -5,16 +5,19 @@
 
 package interfaces;
 
+import datas.AgentConfiguration;
 import datas.ResultSet;
+import monitoring.AgentController;
 
 /**
  *
- * @author root
+ * @author bambaLamine
  */
-public interface MonitoringMsgListener {
+public interface interfaceObservableJMS {
     //--->Les types sont à mettre à jour
     //il doit recevoir le fichier depuis le JMS 
-    public void simulationDoneForOneAgent(String agentID, ResultSet resultSet);
-    public void fatalErrorOccured(String agentID, String msg);
+    
+    public void addListener(AgentController agent);
+    public void notifyMonitor();
 
 }
