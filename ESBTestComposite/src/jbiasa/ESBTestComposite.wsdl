@@ -14,7 +14,7 @@
     <portType name="dummyCasaPortType"/>
     <binding name="casaBinding1" type="ns:SimulationWS">
         <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <operation name="Requestoperation">
+        <operation name="requestOperation">
             <soap:operation/>
             <input>
                 <soap:body use="literal"/>

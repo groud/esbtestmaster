@@ -12,7 +12,7 @@
                     <consumes endpoint="endpoint1"/>
                     <provides endpoint="endpoint1"/>
                 </port>
-                <port bindingType="soap" x="67" y="170">
+                <port bindingType="soap" x="67" y="223">
                     <link xlink:href="../jbiasa/ESBTestComposite.wsdl#xpointer(/definitions/service[@name='ESBTestCompositeService1']/port[@name='casaPort1'])" xlink:type="simple"/>
                     <consumes endpoint="endpoint2"/>
                     <provides endpoint="endpoint2"/>

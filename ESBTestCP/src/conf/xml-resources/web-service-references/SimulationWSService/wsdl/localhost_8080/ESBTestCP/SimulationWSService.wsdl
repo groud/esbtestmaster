@@ -4,21 +4,21 @@
 <xsd:import namespace="http://simulation/" schemaLocation="http://localhost:8080/ESBTestCP/SimulationWSService?xsd=1"></xsd:import>
 </xsd:schema>
 </types>
-<message name="Requestoperation">
-<part name="parameters" element="tns:Requestoperation"></part>
+<message name="requestOperation">
+<part name="parameters" element="tns:requestOperation"></part>
 </message>
-<message name="RequestoperationResponse">
-<part name="parameters" element="tns:RequestoperationResponse"></part>
+<message name="requestOperationResponse">
+<part name="parameters" element="tns:requestOperationResponse"></part>
 </message>
 <portType name="SimulationWS">
-<operation name="Requestoperation">
-<input message="tns:Requestoperation"></input>
-<output message="tns:RequestoperationResponse"></output>
+<operation name="requestOperation">
+<input message="tns:requestOperation"></input>
+<output message="tns:requestOperationResponse"></output>
 </operation>
 </portType>
 <binding name="SimulationWSPortBinding" type="tns:SimulationWS">
 <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"></soap:binding>
-<operation name="Requestoperation">
+<operation name="requestOperation">
 <soap:operation soapAction=""></soap:operation>
 <input>
 <soap:body use="literal"></soap:body>

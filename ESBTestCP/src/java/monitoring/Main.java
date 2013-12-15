@@ -5,9 +5,9 @@
 
 package monitoring;
 
-//import simulation.ConsumerClient;
+import simulation.ConsumerClient;
 //import simulation.ProducerEntity;
-import simulation.SimulationWS;
+//import simulation.SimulationWS;
 
 /**
  *
@@ -18,15 +18,10 @@ public class Main {
     public static void main(String[] args) {
         AgentController ctrl = new AgentController();
 
-        // Create a new producer
-        ctrl.configureAS(1, 0);
+       
 
-        if(AgentController.getProducer() == null) {
-            System.out.println("NULL PRODUCER");
-        }
-
-         WS client test
-        String url = "http://localhost:8080/ESBTestCP/SimulationWSService";
+         //WS client test
+        //String url = "http://localhost:8080/ESBTestCP/SimulationWSService";
         String url = "http://localhost:8090/ESBTestCompositeService1/casaPort1";
        ConsumerClient client = new ConsumerClient();
         System.out.println("SENDING REQUEST");
