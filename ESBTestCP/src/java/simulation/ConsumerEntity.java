@@ -1,81 +1,117 @@
 /*
-* To change this template, choose Tools | Templates
-* and open the template in the editor.
-*/
-
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package simulation;
 
 import java.util.*;
 import datas.*;
 import java.util.TimerTask;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 import javax.xml.ws.BindingProvider;
+
 /**
-*
-* @author mariata
-*/
-public class ConsumerEntity extends SimulationEntity  {
+ *
+ * @author mariata
+ */
+public class ConsumerEntity extends SimulationEntity {
 
-    
-    private volatile boolean abortSimulation=false;
-    private boolean stepsConfigured=false;
-    private ArrayList<SimulationStep> steps;
+    private SimulationScenario simulationScenario = null;
+    private Hashtable<String, String> hashWSAddresses;
     private SortedSet<ResultEvent> events;
-    private Timer timer;
-    private SimulationStep step;
-    private ResultEvent currentEvent;
+    private SimulationThread simulationThread;
 
-    //constructor
-    public ConsumerEntity() {
+    /**
+     * Configure the simulation scenario and id
+     * @param id
+     * @param simulationScenario
+     */
+    public void configureConsumer(String id, SimulationScenario simulationScenario) {
+        this.simulationScenario = simulationScenario;
+        this.setId(id);
 
+        hashWSAddresses = this.initializeAdressesTable();
     }
 
-public void configureConsumer( ArrayList<SimulationStep> steps) {
-     this.steps = steps;
-     stepsConfigured=true;
-}
+    @Override
+    public void startSimulation() {
+        //TODO : add receive response code
+        simulationThread = new SimulationThread();
+        simulationThread.start();
+    }
 
- @Override
-public void writeSimulationEvent(AgentType agent, EventType event){
- currentEvent.setAgentId(this.getid());
- currentEvent.setAgentType(agent);
- // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
- currentEvent.setEventDate(0);// TODOOOO
- currentEvent.setEventType(event);
+    @Override
+    public void abortSimulation() {
+        simulationThread.stop();
+    }
 
- //add in list of events
- events.add(currentEvent);
+    private Hashtable<String, String> initializeAdressesTable() {
+        Hashtable<String, String> hashtable = new Hashtable<String, String>();
+        for (int i = 0; i < this.simulationScenario.getAgentsconfiguration().size(); i++) {
+            hashtable.put(this.simulationScenario.getAgentsconfiguration().get(i).getName(), this.simulationScenario.getAgentsconfiguration().get(i).getWsAddress());
+        }
+        return hashtable;
+    }
 
-}
+    private void writeSimulationEvent(AgentType agent, EventType event) {
+        ResultEvent currentEvent = new ResultEvent();
+        currentEvent.setAgentId(this.getid());
+        currentEvent.setAgentType(agent);
+        // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        currentEvent.setEventDate(0);// TODOOOO
+        currentEvent.setEventType(event);
 
+        //add in list of events
+        events.add(currentEvent);
+    }
 
+    private class SimulationThread extends Thread {
+        private Timer timer;
+        private SimulationStep step;
  
+        
+        public void run() {
+            int i;
+            //send request
+            if (simulationScenario == null) {
+                for (i = 0; i < simulationScenario.getSteps().size(); i++) {
+                    step = simulationScenario.getSteps().get(i);
+                    timer = new Timer();
+                    long nbRequest = (long) (step.getBurstDuration() * step.getBurstRate());
+                    //interval between two request
+                    long period = (long) (step.getBurstDuration() / nbRequest);
 
+                    //configure timer,and start senario
+                    timer.scheduleAtFixedRate(new TimerTask() {
 
- /**
-     *
-     * @param req
-     * @param producerUrl e.g. "http://localhost:8090/CompositeAppProxyService1/casaPort1"
-     */
- /**
-  *
-  * @param producerId
-  * @param reqPayloadSize size in bytes of thedummy data to put in the request
-  * @param respTime producer processing time in ms
-  * @param respSize producer response size
-  * @param producerUrl producer web service url (or SOAP port on the ESB)
-  */
-    public void sendRequest(String producerId, int reqPayloadSize, int respTime, int respSize, String producerUrl) {
+                        public void run() {
+                            //code send request
+                            // ****************************************************
+                            // TODO : store respTime and respSize for each producer
+                            // instead of sending the same values everytime
+                            // ****************************************************
+                            int respTime = 1000; // ms
+                            int respSize = 32; // bytes
+                            String producerUrl = "http://localhost:8090/ESBTestCompositeService1/casaPort1";
+
+                            sendRequest(step.getProviderID(), step.getDataPayloadSize(), respTime, respSize);
+                        }
+                    }, step.getBurstStartDate(), period);
+                }
+            } else {
+                System.out.println("steps have not been configured");
+            }
+        }
+    }
+
+    private void sendRequest(String producerId, int reqPayloadSize, int respTime, int respSize) {
         String requestData = null;
 
-       try { // Call Web Service Operation
+        try { // Call Web Service Operation
             simulationRef.SimulationWSService service = new simulationRef.SimulationWSService();
             simulationRef.SimulationWS port = service.getSimulationWSPort();
 
-             // Dynamic URL binding
-            ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, producerUrl);
+            // Dynamic URL binding;
+            ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, this.hashWSAddresses.get(producerId));
 
             // Fill the same answer String with reqPayloadSize characters
             if (reqPayloadSize > 0) {
@@ -83,94 +119,12 @@ public void writeSimulationEvent(AgentType agent, EventType event){
                 Arrays.fill(array, 'A');
                 requestData = new String(array);
             }
-            
+
             // TODO : log events before and after request
-            java.lang.String result = port.requestOperation(producerId, requestData, respTime, respSize);
-            System.out.println("Result = "+result);
+            //java.lang.String result = port.requestOperation(producerId, requestData, respTime, respSize);
+            //System.out.println("Result = "+result);
         } catch (Exception ex) {
             // TODO handle custom exceptions here
         }
     }
-
-
-//inner class response Listener, for second thread
-public class ResponseListener implements Runnable{
-
-        public void run() {
-           while(true){
-           System.out.println("steps have not been configured");
-           }
-        }
-
 }
-Thread threadResListener = new Thread(new ResponseListener());
-
-
-    @Override
-  public void startSimulation( ) {        
-        int i;
-        //send request
-        if(stepsConfigured){
-            //start thread to receive response
-             threadResListener.start();
-
-            for(i=0;i<steps.size();i++){
-               step = steps.get(i);
-               timer = new Timer();
-               long nbRequest = (long) (step.getBurstDuration() * step.getBurstRate());
-               //interval between two request
-               long period = (long) (step.getBurstDuration() / nbRequest);
-
-               //configure timer,and start senario
-                timer.scheduleAtFixedRate(new TimerTask(){
-                @Override
-
-                  public void run() {
-                   //code send request
-                    // ****************************************************
-                    // TODO : store respTime and respSize for each producer
-                    // instead of sending the same values everytime
-                    // ****************************************************
-                    int respTime = 1000; // ms
-                    int respSize = 32; // bytes
-                    String producerUrl = "http://localhost:8090/ESBTestCompositeService1/casaPort1";
-                    
-                    sendRequest(step.getProviderID(), step.getDataPayloadSize(),
-                                respTime, respSize, producerUrl);
-                  }
-
-                }, step.getBurstStartDate(),period );
-
-                //if abort simulation, exit boucle
-                if(abortSimulation){
-                     timer.cancel();
-                     threadResListener.stop();
-                    break;
-                }
-            }
-        }
-        else{
-         System.out.println("steps have not been configured");
-        }
-
-        //TO DO : add receive response code
-    }
-
-    @Override
-    public void abortSimulation() {
-        //terminate  timer and cancel current task
-         //timer.cancel();
-        this.abortSimulation=true;
-
-    }
-}
-
- // ------------------- PAyload ------------------------//
-    /*"MD5 + message " = total
-     * total.indexof('+')
-     * MD5(string)
-     * MD5(string).length -> lgt
-     * indexof(lgt) -> mess
-     * md5(message)
-
-    */

@@ -13,29 +13,34 @@ package monitoring;
 import datas.AgentConfiguration;
 import datas.ConsumerConfiguration;
 import datas.ProducerConfiguration;
+import datas.ResultSet;
 import datas.SimulationScenario;
 import interfaces.MonitoringMessageListener;
+import interfaces.SimulationMessageListener;
 import simulation.*;
 
 
 /**
 <<<<<<< HEAD
 *
-* @author bambaLamine
+* @author BambaLamine
 */
 
 
 
-public class AgentController implements MonitoringMessageListener {
+public class AgentController implements MonitoringMessageListener, SimulationMessageListener {
     private SimulationEntity simulationEntity;
     private JMSHandler jms;
 
     public AgentController() {
         jms = new JMSHandler();
+        jms.setListener(this);
 
         Thread jmsThread = new Thread (jms);
         jmsThread.start();
+       
     }
+
 
    /* public void actualiserController(interfaceObservableJMS a){
         if(a instanceof JMSHandler){
@@ -119,11 +124,11 @@ public class AgentController implements MonitoringMessageListener {
 
     }
 */
-    public void startSimulationMessage(AgentConfiguration receiverAgent) {
+    public void startSimulationMessage() {
         simulationEntity.startSimulation();
     }
 
-    public void stopSimulationMessage(AgentConfiguration receiverAgent) {
+    public void stopSimulationMessage() {
         simulationEntity.abortSimulation();
     }
 
@@ -137,5 +142,13 @@ public class AgentController implements MonitoringMessageListener {
             //Passer la configuration au simulationEntity 
         }
         simulationEntity.setId(receiverAgent.getName());
+    }
+
+    public void simulationDone(ResultSet resultSet) {
+        jms.simulationDone(resultSet);
+    }
+
+    public void fatalErrorOccured() {
+         jms.fatalErrorOccured();
     }
 }
