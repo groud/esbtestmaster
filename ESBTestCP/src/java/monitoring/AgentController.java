@@ -10,17 +10,11 @@
 
 package monitoring;
 
-
-import interfaces.MonitoringInterface;
-import javax.jws.WebService;
-
-import datas.*;
-import interfaces.MonitoringMessageHandler;
-import interfaces.interfaceOservateurJMSHandler;
-import interfaces.interfaceObservableJMS;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import datas.AgentConfiguration;
+import datas.ConsumerConfiguration;
+import datas.ProducerConfiguration;
+import datas.SimulationScenario;
+import interfaces.MonitoringMessageListener;
 import simulation.*;
 
 
@@ -32,32 +26,17 @@ import simulation.*;
 
 
 
-public class AgentController implements interfaceOservateurJMSHandler{
+public class AgentController implements MonitoringMessageListener {
+    private SimulationEntity simulationEntity;
+    private JMSHandler jms;
 
-   /* private MonitoringMessageHandler monitoringMsgHandler;
-      private SimulationScenario currentScenario;
-
-      public AgentController() {
-          monitoringMsgHandler = new JMSHandler();
-      }*/
-
-  // static keywords so that SimulationWS can access producer
-    // -> this method DOES NOT WORK yet
-
-    //Hmap pour sauvegarder l'agent (ou use thread)
-    //Map<String, ProducerEntity> hMapProducer = new  HashMap<String, ProducerEntity>();
-    static ConsumerEntity consumer;
-    static ProducerEntity producer;
-
-    public void actualiserController(interfaceObservableJMS a){
-
+   /* public void actualiserController(interfaceObservableJMS a){
         if(a instanceof JMSHandler){
-                JMSHandler jms=(JMSHandler) a;
+               jms=(JMSHandler) a;
                MessageFromJMSEntity_TEST mess;
                mess=jms.getMessageFRomJMS();
                System.out.println(mess.getMessageType());
-
-
+               
             //if messsadeTYpe=1 ==> configuration of agents
            if(jms.getMessageFRomJMS().getMessageType()==0)
             {
@@ -68,19 +47,13 @@ public class AgentController implements interfaceOservateurJMSHandler{
                        //ICI creer le thread du producteur et enregister son pid
 
                       consumer.configureConsumer(jms.getMessageFRomJMS().getScenario().getTabScenario());
-                 }
-
-
-                 else
-                 {
-
+                 } else {
                       producer = new  ProducerEntity();
+
                       //ICI creer le thread du producteur et enregister son pid
                      // hMapProducer.put(jms.getMessageFRomJMS().getAgent().getName(), producer);
 
                       //????? la configuration du provider c'est a dire son temps de reponse et son id,
-
-
                      producer.configureProducer(jms.getMessageFRomJMS().getResponseTime(),jms.getMessageFRomJMS().getResponseSize());
 
                  }
@@ -137,5 +110,25 @@ public class AgentController implements interfaceOservateurJMSHandler{
              }
         }
 
+    }
+*/
+    public void startSimulationMessage(AgentConfiguration receiverAgent) {
+        simulationEntity.startSimulation();
+    }
+
+    public void stopSimulationMessage(AgentConfiguration receiverAgent) {
+        simulationEntity.abortSimulation();
+    }
+
+    public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
+        //On crée une simulationEntity correspondant à la configuration reçue
+        if (receiverAgent instanceof ConsumerConfiguration) {
+            simulationEntity = new ConsumerEntity();
+            //Passer la configuration au simulationEntity
+        } else if (receiverAgent instanceof ProducerConfiguration) {
+            simulationEntity = new ProducerEntity();
+            //Passer la configuration au simulationEntity 
+        }
+        simulationEntity.setId(receiverAgent.getName());
     }
 }

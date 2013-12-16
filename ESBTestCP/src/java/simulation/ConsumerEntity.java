@@ -42,8 +42,7 @@ public void writeSimulationEvent(AgentType agent, EventType event){
  currentEvent.setAgentId(this.getid());
  currentEvent.setAgentType(agent);
  // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
- Date date=new Date();
- currentEvent.setEventDate(date);
+ currentEvent.setEventDate(0);// TODOOOO
  currentEvent.setEventType(event);
 
  //add in list of events
@@ -114,7 +113,7 @@ Thread threadResListener = new Thread(new ResponseListener());
             for(i=0;i<steps.size();i++){
                step = steps.get(i);
                timer = new Timer();
-               int nbRequest = (int) (step.getBurstDuration() * step.getBurstRate());
+               long nbRequest = (long) (step.getBurstDuration() * step.getBurstRate());
                //interval between two request
                long period = (long) (step.getBurstDuration() / nbRequest);
 

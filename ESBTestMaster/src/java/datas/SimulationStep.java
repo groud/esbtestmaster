@@ -70,6 +70,12 @@ public class SimulationStep implements Comparable<SimulationStep> {
     public void setBurstStopDate(long burstStopDate) {
         this.burstStopDate = burstStopDate;
     }
+    
+    //Other
+    public long getBurstDuration() {
+        return this.getBurstStopDate() - this.getBurstStartDate();
+    }
+
 
     //Comparison method
     public int compareTo(SimulationStep step) {

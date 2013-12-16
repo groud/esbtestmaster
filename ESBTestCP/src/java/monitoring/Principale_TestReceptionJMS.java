@@ -11,7 +11,7 @@ import datas.AgentConfiguration;
  *
  * @author bambaLamine
  */
-public class Principale_TestReceptionJMS {
+/*public class Principale_TestReceptionJMS {
 
     public static void main(String[] args)
     {
@@ -25,12 +25,12 @@ public class Principale_TestReceptionJMS {
         mess.setMessageType(0);
 
 
-        /*AgentConfiguration config=null ;
-        config.setName("test");
-        config.setWsAddress("testAddress");
-        config.setMonitoringWSAddress("testMonitorAddress");*/
+        //AgentConfiguration config=null ;
+        //config.setName("test");
+        //config.setWsAddress("testAddress");
+        //config.setMonitoringWSAddress("testMonitorAddress");
         jms.receivedJMSMessage(mess);
 
   }
 
-}
+}*/
