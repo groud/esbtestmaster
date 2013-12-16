@@ -63,7 +63,8 @@ public class ConsumerEntity extends SimulationEntity {
         currentEvent.setAgentId(this.getid());
         currentEvent.setAgentType(agent);
         // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-        currentEvent.setEventDate(0);// TODOOOO
+        Date now =new Date();
+        currentEvent.setEventDate(now.getTime());// TODOOOO
         currentEvent.setEventType(event);
 
         //add in list of events
@@ -78,7 +79,7 @@ public class ConsumerEntity extends SimulationEntity {
         public void run() {
             int i;
             //send request
-            if (simulationScenario == null) {
+            if (simulationScenario != null) {
                 for (i = 0; i < simulationScenario.getSteps().size(); i++) {
                     step = simulationScenario.getSteps().get(i);
                     timer = new Timer();
@@ -99,6 +100,8 @@ public class ConsumerEntity extends SimulationEntity {
                             int respSize = 32; // bytes
 
                             sendRequest(step.getProviderID(), step.getDataPayloadSize(), respTime, respSize);
+                                 writeSimulationEvent(AgentType.CONSUMER , EventType.REQUEST_SENT );
+                                 
 
                         }
                     }, step.getBurstStartDate(), period);
