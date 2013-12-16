@@ -41,7 +41,6 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
        
     }
 
-
    /* public void actualiserController(interfaceObservableJMS a){
         if(a instanceof JMSHandler){
                jms=(JMSHandler) a;
