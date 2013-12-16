@@ -11,6 +11,7 @@ import java.util.TimerTask;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import javax.xml.ws.BindingProvider;
 /**
 *
 * @author mariata
@@ -23,8 +24,8 @@ public class ConsumerEntity extends SimulationEntity  {
     private ArrayList<SimulationStep> steps;
     private SortedSet<ResultEvent> events;
     private Timer timer;
-    private  SimulationStep step;
-    private  ResultEvent currentEvent;
+    private SimulationStep step;
+    private ResultEvent currentEvent;
 
     //constructor
     public ConsumerEntity() {
@@ -50,13 +51,44 @@ public void writeSimulationEvent(AgentType agent, EventType event){
 
 }
 
- //call web service to send request
- public void sendRequest (String providerID,float dataPayload){
-  //generate fake payload ; give provider id and consumer id
-  //call web service
-  //write simulation event
-     writeSimulationEvent(AgentType.CONSUMER,EventType.REQUEST_SENT);
-  }
+
+ 
+
+
+ /**
+     *
+     * @param req
+     * @param producerUrl e.g. "http://localhost:8090/CompositeAppProxyService1/casaPort1"
+     */
+    public void sendRequest(String producerId, int reqPayloadSize, int respTime, int respSize, String producerUrl) {
+        String requestData = null;
+
+        try { // Call Web Service Operation
+             simulation.SimulationWSService service = new simulation.SimulationWSService();
+             simulation.SimulationWS port = service.getSimulationWSPort();
+
+             // Dynamic URL binding
+            ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, producerUrl);
+             // create the request data payload
+            if (reqPayloadSize > 0) {
+            char[] array = new char[reqPayloadSize];
+            Arrays.fill(array, 'A');
+             requestData = new String(array);
+            }
+
+            //write simulation event
+            writeSimulationEvent(AgentType.CONSUMER,EventType.REQUEST_SENT);
+
+            // Send request (***SYNCHRONOUS*** CALL)
+            java.lang.String result = port.requestOperation(producerId, requestData, respTime, respSize);
+
+            //write simulation event
+            writeSimulationEvent(AgentType.CONSUMER,EventType.REQUEST_RECEIVED);
+         } catch (Exception ex) {
+             // TODO handle custom exceptions here
+         }
+    }
+
 
 //inner class response Listener, for second thread
 public class ResponseListener implements Runnable{
@@ -72,7 +104,7 @@ Thread threadResListener = new Thread(new ResponseListener());
 
 
     @Override
-  public void startSimulation( ) {
+  public void startSimulation( ) {        
         int i;
         //send request
         if(stepsConfigured){
@@ -91,8 +123,17 @@ Thread threadResListener = new Thread(new ResponseListener());
                 @Override
 
                   public void run() {
-                   //code send resquest
-                    sendRequest(step.getProviderID(),step.getDataPayloadSize());
+                   //code send request
+                    // ****************************************************
+                    // TODO : store respTime and respSize for each producer
+                    // instead of sending the same values everytime
+                    // ****************************************************
+                    int respTime = 1000; // ms
+                    int respSize = 32; // bytes
+                    String producerUrl = "http://localhost:8090/ESBTestCompositeService1/casaPort1";
+                    
+                    sendRequest(step.getProviderID(), step.getDataPayloadSize(),
+                                respTime, respSize, producerUrl);
                   }
 
                 }, step.getBurstStartDate(),period );

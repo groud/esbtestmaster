@@ -17,7 +17,7 @@ public class SimulationStep implements Comparable<SimulationStep> {
     private Date burstStartDate;
     private float burstDuration;
     private float burstRate;
-    private float dataPayloadSize;
+    private int dataPayloadSize;
 
     // ----------------------------------
     //   ACCESSORS
@@ -62,11 +62,11 @@ public class SimulationStep implements Comparable<SimulationStep> {
         this.burstStartDate = burstStartDate;
     }
 
-    public float getDataPayloadSize() {
+    public int getDataPayloadSize() {
         return dataPayloadSize;
     }
 
-    public void setDataPayloadSize(float dataPayloadSize) {
+    public void setDataPayloadSize(int dataPayloadSize) {
         this.dataPayloadSize = dataPayloadSize;
     }
 

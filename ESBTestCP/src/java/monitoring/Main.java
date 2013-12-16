@@ -5,7 +5,7 @@
 
 package monitoring;
 
-import simulation.ConsumerClient;
+import simulation.ConsumerEntity;
 //import simulation.ProducerEntity;
 //import simulation.SimulationWS;
 
@@ -16,15 +16,16 @@ import simulation.ConsumerClient;
 public class Main {
 
     public static void main(String[] args) {
-        AgentController ctrl = new AgentController();
-
-       
-
+/*
          //WS client test
         //String url = "http://localhost:8080/ESBTestCP/SimulationWSService";
         String url = "http://localhost:8090/ESBTestCompositeService1/casaPort1";
-       ConsumerClient client = new ConsumerClient();
+        ConsumerEntity client = new ConsumerEntity();
         System.out.println("SENDING REQUEST");
-        client.sendRequest("Test WS", url); 
+        // ***IMPORTANT*** : synchronous call -> waits for the response
+        client.sendRequest(0, "TEST REQUEST", 10000, 32, url);
+        System.out.println("RECEIVED RESPONSE");
+ * */
     }
+ 
 }
