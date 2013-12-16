@@ -119,11 +119,11 @@ public class AgentController implements MonitoringMessageListener {
 
     }
 */
-    public void startSimulationMessage(AgentConfiguration receiverAgent) {
+    public void startSimulationMessage() {
         simulationEntity.startSimulation();
     }
 
-    public void stopSimulationMessage(AgentConfiguration receiverAgent) {
+    public void stopSimulationMessage() {
         simulationEntity.abortSimulation();
     }
 

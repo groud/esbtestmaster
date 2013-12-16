@@ -13,7 +13,7 @@ import datas.SimulationScenario;
  * @author gilles
  */
 public interface MonitoringMessageListener {
-   public void startSimulationMessage(AgentConfiguration receiverAgent);
-   public void stopSimulationMessage(AgentConfiguration receiverAgent);
+   public void startSimulationMessage();
+   public void stopSimulationMessage();
    public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario);
 }
