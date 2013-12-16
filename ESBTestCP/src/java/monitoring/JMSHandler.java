@@ -13,7 +13,7 @@ import interfaces.MonitoringMessageListener;
  *
  * @author bambaLamine
  */
-public class JMSHandler implements MonitoringMessageHandler {
+public class JMSHandler implements MonitoringMessageHandler, Runnable{
     MonitoringMessageListener listener;
 
     public JMSHandler() {
@@ -34,6 +34,13 @@ public class JMSHandler implements MonitoringMessageHandler {
 
     public void fatalErrorOccured() {
         //TODO : Envoyer le message JMS au master pour indiquer que la simulation n'a pu être terminée
+    }
+
+    public void run() {
+        //TODO Ecouter les messages et les envoie au MasterController avec :
+        //listener.configurationMessage(null, null);
+        //listener.startSimulationMessage(null);
+        //listener.stopSimulationMessage(null);
     }
 
 

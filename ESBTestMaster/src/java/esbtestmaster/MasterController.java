@@ -20,7 +20,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
     private CLI shell;
     private ScenarioReaderInterface scenarioReader;
     private KPICalculatorInterface kpiCalculator;
-    private MonitoringMessageHandler monitoringMsgHandler;
+    private JMSHandler monitoringMsgHandler;
     private XMLResultKeeper resultsKeeper;
 
     private SimulationScenario currentScenario;
@@ -33,6 +33,10 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
         kpiCalculator = new KPICalculator();
         monitoringMsgHandler = new JMSHandler();
 
+        //On starte le thread en écoute des messages JMS
+        Thread monitoringThread = new Thread (monitoringMsgHandler);
+        monitoringThread.start();
+        
         shell.launch();
     }
 

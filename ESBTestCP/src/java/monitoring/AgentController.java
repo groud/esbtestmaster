@@ -30,6 +30,13 @@ public class AgentController implements MonitoringMessageListener {
     private SimulationEntity simulationEntity;
     private JMSHandler jms;
 
+    public AgentController() {
+        jms = new JMSHandler();
+
+        Thread jmsThread = new Thread (jms);
+        jmsThread.start();
+    }
+
    /* public void actualiserController(interfaceObservableJMS a){
         if(a instanceof JMSHandler){
                jms=(JMSHandler) a;
