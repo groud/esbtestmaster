@@ -16,15 +16,6 @@ import simulation.ConsumerEntity;
  */
 public class Main {
 
-    public static void main(String[] args) {
-      
-        String producerUrl = "http://localhost:8090/ESBTestCompositeService1/casaPort1";
-        
-         // Test ConsumerEntity
-        ConsumerEntity cons = new ConsumerEntity();
 
-        cons.sendRequest("id", 16, 1000, 32, producerUrl);
-         
-    }
  
 }

@@ -60,6 +60,4 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable{
         else{}
  
     }
-
-
 }
