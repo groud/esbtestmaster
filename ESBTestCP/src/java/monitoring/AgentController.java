@@ -23,7 +23,7 @@ import simulation.*;
 /**
 <<<<<<< HEAD
 *
-* @author bambaLamine
+* @author BambaLamine
 */
 
 
