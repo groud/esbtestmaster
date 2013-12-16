@@ -7,6 +7,7 @@ package simulation;
 import java.util.*;
 import datas.*;
 import java.util.TimerTask;
+import javax.xml.ws.BindingProvider;
 
 /**
  *
@@ -44,12 +45,42 @@ public class ConsumerEntity extends SimulationEntity {
 
     }
 
-    //call web service to send request
-    public void sendRequest(String providerID, float dataPayload) {
-        //generate fake payload ; give provider id and consumer id
-        //call web service
-        //write simulation event
-        writeSimulationEvent(AgentType.CONSUMER, EventType.REQUEST_SENT);
+ /**
+     *
+     * @param req
+     * @param producerUrl e.g. "http://localhost:8090/CompositeAppProxyService1/casaPort1"
+     */
+ /**
+  *
+  * @param producerId
+  * @param reqPayloadSize size in bytes of thedummy data to put in the request
+  * @param respTime producer processing time in ms
+  * @param respSize producer response size
+  * @param producerUrl producer web service url (or SOAP port on the ESB)
+  */
+    public void sendRequest(String producerId, int reqPayloadSize, int respTime, int respSize, String producerUrl) {
+        String requestData = null;
+
+       try { // Call Web Service Operation
+            simulationRef.SimulationWSService service = new simulationRef.SimulationWSService();
+            simulationRef.SimulationWS port = service.getSimulationWSPort();
+
+             // Dynamic URL binding
+            ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, producerUrl);
+
+            // Fill the same answer String with reqPayloadSize characters
+            if (reqPayloadSize > 0) {
+                char[] array = new char[respSize];
+                Arrays.fill(array, 'A');
+                requestData = new String(array);
+            }
+            
+            // TODO : log events before and after request
+            //java.lang.String result = port.requestOperation(producerId, requestData, respTime, respSize);
+            //System.out.println("Result = "+result);
+        } catch (Exception ex) {
+            // TODO handle custom exceptions here
+        }
     }
 
 //inner class response Listener, for second thread
@@ -64,7 +95,8 @@ public class ConsumerEntity extends SimulationEntity {
     Thread threadResListener = new Thread(new ResponseListener());
 
     @Override
-    public void startSimulation() {
+    public void startSimulation( ) {
+
         int i;
         //send request
         if (stepsConfigured) {
@@ -81,12 +113,21 @@ public class ConsumerEntity extends SimulationEntity {
                 //configure timer,and start senario
                 timer.scheduleAtFixedRate(new TimerTask() {
 
-                    @Override
-                    public void run() {
-                        //code send resquest
-                        sendRequest(step.getProviderID(), step.getDataPayloadSize());
-                    }
-                }, step.getBurstStartDate(), period);
+                  public void run() {
+                   //code send request
+                    // ****************************************************
+                    // TODO : store respTime and respSize for each producer
+                    // instead of sending the same values everytime
+                    // ****************************************************
+                    int respTime = 1000; // ms
+                    int respSize = 32; // bytes
+                    String producerUrl = "http://localhost:8090/ESBTestCompositeService1/casaPort1";
+                    
+                    sendRequest(step.getProviderID(), step.getDataPayloadSize(),
+                                respTime, respSize, producerUrl);
+                  }
+
+                }, step.getBurstStartDate(),period );
 
                 //if abort simulation, exit boucle
                 if (abortSimulation) {
