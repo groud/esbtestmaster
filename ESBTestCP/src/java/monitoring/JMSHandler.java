@@ -5,9 +5,14 @@
 
 package monitoring;
 
+import datas.JMSMessages.ConfigJMSMessage;
+import datas.JMSMessages.StartJMSMessage;
+import datas.JMSMessages.StopJMSMessage;
+import datas.JMSMessages.*;
 import datas.ResultSet;
 import interfaces.MonitoringMessageHandler;
 import interfaces.MonitoringMessageListener;
+import java.io.Serializable;
 
 /**
  *
@@ -38,9 +43,22 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable{
 
     public void run() {
         //TODO Ecouter les messages et les envoie au MasterController avec :
-        //listener.configurationMessage(null, null);
-        //listener.startSimulationMessage(null);
-        //listener.stopSimulationMessage(null);
+        AgentMessageHandler myAgentMsgHandler= new AgentMessageHandler();
+        Serializable message;
+        message=myAgentMsgHandler.receiveFromTopic();
+
+        if(message instanceof ConfigJMSMessage){
+              ConfigJMSMessage myMessage=(ConfigJMSMessage) message;
+              listener.configurationMessage(myMessage.getAgentConfiguration(), myMessage.getScenario());
+        }
+        else if(message instanceof StartJMSMessage){
+             listener.startSimulationMessage();
+        }
+        else if(message instanceof StopJMSMessage){
+             listener.stopSimulationMessage();
+        }
+        else{}
+ 
     }
 
 
