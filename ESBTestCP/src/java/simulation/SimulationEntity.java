@@ -5,6 +5,7 @@
 package simulation;
 
 import datas.*;
+import interfaces.SimulationMessageListener;
 
 /**
  *
@@ -13,6 +14,12 @@ import datas.*;
 public abstract class SimulationEntity {
 
     private String id;
+    
+    SimulationMessageListener listener;
+
+    public void setListener(SimulationMessageListener listener) {
+        this.listener = listener;
+    }
 
     public void setId(String id) {
         this.id = id;

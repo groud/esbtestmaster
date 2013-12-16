@@ -6,6 +6,7 @@ package simulation;
 
 import java.util.*;
 import datas.*;
+import interfaces.SimulationMessageListener;
 
 /**
  *
@@ -18,6 +19,8 @@ public class ProducerEntity extends SimulationEntity {
     private boolean abortSimulation = false;
     private SortedSet<ResultEvent> events;
     private ResultEvent currentEvent;
+
+
 
     //constructor
     public ProducerEntity() {

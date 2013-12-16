@@ -6,6 +6,7 @@ package simulation;
 
 import java.util.*;
 import datas.*;
+import interfaces.SimulationMessageListener;
 import java.util.TimerTask;
 import javax.xml.ws.BindingProvider;
 
@@ -25,6 +26,7 @@ public class ConsumerEntity extends SimulationEntity {
      * @param id
      * @param simulationScenario
      */
+
     public void configureConsumer(String id, SimulationScenario simulationScenario) {
         this.simulationScenario = simulationScenario;
         this.setId(id);
@@ -94,6 +96,7 @@ public class ConsumerEntity extends SimulationEntity {
                             String producerUrl = "http://localhost:8090/ESBTestCompositeService1/casaPort1";
 
                             sendRequest(step.getProviderID(), step.getDataPayloadSize(), respTime, respSize);
+
                         }
                     }, step.getBurstStartDate(), period);
                 }

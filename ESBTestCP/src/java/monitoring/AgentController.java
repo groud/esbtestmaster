@@ -21,7 +21,6 @@ import simulation.*;
 
 
 /**
-<<<<<<< HEAD
 *
 * @author BambaLamine
 */
@@ -136,9 +135,11 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
         //On crée une simulationEntity correspondant à la configuration reçue
         if (receiverAgent instanceof ConsumerConfiguration) {
             simulationEntity = new ConsumerEntity();
+            simulationEntity.setListener(this);
             //Passer la configuration au simulationEntity
         } else if (receiverAgent instanceof ProducerConfiguration) {
             simulationEntity = new ProducerEntity();
+            simulationEntity.setListener(this);
             //Passer la configuration au simulationEntity 
         }
         simulationEntity.setId(receiverAgent.getName());
