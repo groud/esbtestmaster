@@ -44,9 +44,9 @@ public class SimulationWS {
 
         // Fill the same answer String with respSize characters
         if (respSize > 0) {
-        char[] array = new char[respSize];
-        Arrays.fill(array, 'A');
-        return new String(array);
+            char[] array = new char[respSize];
+            Arrays.fill(array, 'A');
+            return new String(array);
         }
         else {
             return "Error : response size not strictly positive" ;

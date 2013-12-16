@@ -5,6 +5,7 @@
 
 package monitoring;
 
+import javax.xml.ws.BindingProvider;
 import simulation.ConsumerEntity;
 //import simulation.ProducerEntity;
 //import simulation.SimulationWS;
@@ -16,16 +17,14 @@ import simulation.ConsumerEntity;
 public class Main {
 
     public static void main(String[] args) {
-/*
-         //WS client test
-        //String url = "http://localhost:8080/ESBTestCP/SimulationWSService";
-        String url = "http://localhost:8090/ESBTestCompositeService1/casaPort1";
-        ConsumerEntity client = new ConsumerEntity();
-        System.out.println("SENDING REQUEST");
-        // ***IMPORTANT*** : synchronous call -> waits for the response
-        client.sendRequest(0, "TEST REQUEST", 10000, 32, url);
-        System.out.println("RECEIVED RESPONSE");
- * */
+      
+        String producerUrl = "http://localhost:8090/ESBTestCompositeService1/casaPort1";
+        
+         // Test ConsumerEntity
+        ConsumerEntity cons = new ConsumerEntity();
+
+        cons.sendRequest("id", 16, 1000, 32, producerUrl);
+         
     }
  
 }

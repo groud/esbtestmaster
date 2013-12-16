@@ -59,33 +59,37 @@ public void writeSimulationEvent(AgentType agent, EventType event){
      * @param req
      * @param producerUrl e.g. "http://localhost:8090/CompositeAppProxyService1/casaPort1"
      */
+ /**
+  *
+  * @param producerId
+  * @param reqPayloadSize size in bytes of thedummy data to put in the request
+  * @param respTime producer processing time in ms
+  * @param respSize producer response size
+  * @param producerUrl producer web service url (or SOAP port on the ESB)
+  */
     public void sendRequest(String producerId, int reqPayloadSize, int respTime, int respSize, String producerUrl) {
         String requestData = null;
 
-        try { // Call Web Service Operation
-             simulation.SimulationWSService service = new simulation.SimulationWSService();
-             simulation.SimulationWS port = service.getSimulationWSPort();
+       try { // Call Web Service Operation
+            simulationRef.SimulationWSService service = new simulationRef.SimulationWSService();
+            simulationRef.SimulationWS port = service.getSimulationWSPort();
 
              // Dynamic URL binding
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, producerUrl);
-             // create the request data payload
+
+            // Fill the same answer String with reqPayloadSize characters
             if (reqPayloadSize > 0) {
-            char[] array = new char[reqPayloadSize];
-            Arrays.fill(array, 'A');
-             requestData = new String(array);
+                char[] array = new char[respSize];
+                Arrays.fill(array, 'A');
+                requestData = new String(array);
             }
-
-            //write simulation event
-            writeSimulationEvent(AgentType.CONSUMER,EventType.REQUEST_SENT);
-
-            // Send request (***SYNCHRONOUS*** CALL)
+            
+            // TODO : log events before and after request
             java.lang.String result = port.requestOperation(producerId, requestData, respTime, respSize);
-
-            //write simulation event
-            writeSimulationEvent(AgentType.CONSUMER,EventType.REQUEST_RECEIVED);
-         } catch (Exception ex) {
-             // TODO handle custom exceptions here
-         }
+            System.out.println("Result = "+result);
+        } catch (Exception ex) {
+            // TODO handle custom exceptions here
+        }
     }
 
 
