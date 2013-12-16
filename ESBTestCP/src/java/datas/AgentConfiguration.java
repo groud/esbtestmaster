@@ -9,7 +9,6 @@ package datas;
  *
  * @author gilles
  */
-
 public abstract class AgentConfiguration {
     protected AgentType agentType;
 
@@ -40,10 +39,6 @@ public abstract class AgentConfiguration {
 
     public void setWsAddress(String wsAddress) {
         this.wsAddress = wsAddress;
-    }
-
-    public  AgentType getWsAgentType() {
-        return this.agentType;
     }
 
     @Override

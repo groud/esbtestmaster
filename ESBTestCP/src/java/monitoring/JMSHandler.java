@@ -5,35 +5,35 @@
 
 package monitoring;
 
-import datas.AgentConfiguration;
-import datas.SimulationScenario;
+import datas.ResultSet;
 import interfaces.MonitoringMessageHandler;
-import interfaces.interfaceObservableJMS;
+import interfaces.MonitoringMessageListener;
 
 /**
  *
  * @author bambaLamine
  */
-public class JMSHandler implements interfaceObservableJMS {
-    AgentController monitor;
-    MessageFromJMSEntity_TEST messageRecue;
+public class JMSHandler implements MonitoringMessageHandler {
+    MonitoringMessageListener listener;
 
-    public void addListener(AgentController agent) {
-        this.monitor = agent;
-    }
-
-    public void notifyMonitor() {
-        this.monitor.actualiserController(this);
-
-    }
-    public void receivedJMSMessage(MessageFromJMSEntity_TEST messageRecue) {
-       this.messageRecue=messageRecue;
-
+    public JMSHandler() {
+        //TODO : Créer un thread en écoute des messages JMS. En fonction de ceux-ci, prévenir le controller à l'aide de :
+        //listener.configurationMessage(config, config);
+        //listener.configurationMessage(config, config);
+        //listener.configurationMessage(config, config);
     }
 
 
-    public MessageFromJMSEntity_TEST getMessageFRomJMS(){
-        return this.messageRecue;
+    public void setListener(MonitoringMessageListener listener) {
+        this.listener = listener;
+    }
+
+    public void simulationDone(ResultSet resultSet) {
+        //TODO : Envoyer le message JMS au master pour indiquer que la simulation est terminée
+    }
+
+    public void fatalErrorOccured() {
+        //TODO : Envoyer le message JMS au master pour indiquer que la simulation n'a pu être terminée
     }
 
 

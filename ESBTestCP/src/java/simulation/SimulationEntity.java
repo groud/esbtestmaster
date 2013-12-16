@@ -13,18 +13,14 @@ import datas.*;
 */
 public abstract class SimulationEntity {
 
-private int id;
+private String id;
 
-public void setId( int id){
-
+public void setId(String id){
     this.id= id;
-
 }
 
-public int getid(){
-
-return this.id;
-
+public String getid(){
+    return this.id;
 }
 
 public abstract void startSimulation();

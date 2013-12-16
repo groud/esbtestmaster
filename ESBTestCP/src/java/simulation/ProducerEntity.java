@@ -7,6 +7,7 @@ package simulation;
 
 import java.util.*;
 import datas.*;
+import java.sql.Timestamp;
 
 /**
 *
@@ -40,23 +41,13 @@ public class ProducerEntity extends SimulationEntity {
     @Override
 
     public void writeSimulationEvent(AgentType agent, EventType event) {
-
         currentEvent.setAgentId(this.getid());
-
         currentEvent.setAgentType(agent);
-
-        // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-
-        Date date=new Date();
-
-        currentEvent.setEventDate(date);
-
+        currentEvent.setEventDate(0);//TODOOOOO !!!
         currentEvent.setEventType(event);
 
         //add in list of events
-
-         events.add(currentEvent);
-
+        events.add(currentEvent);
     }
 
 public void sendResponse (String consumerID,float dataPayload){

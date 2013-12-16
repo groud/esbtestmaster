@@ -5,16 +5,16 @@
 
 package interfaces;
 
-import datas.AgentConfiguration;
-import datas.SimulationScenario;
+//import datas.*;
+
+import datas.ResultSet;
+
 
 /**
  *
- * @author gilles
+ * @author root
  */
 public interface MonitoringMessageHandler {
-   public void startSimulationMessage(AgentConfiguration receiverAgent);
-   public void stopSimulationMessage(AgentConfiguration receiverAgent);
-   public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario);
-
+    public void simulationDone(ResultSet resultSet);
+    public void fatalErrorOccured();
 }
