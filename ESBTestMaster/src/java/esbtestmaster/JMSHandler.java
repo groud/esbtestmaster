@@ -14,7 +14,7 @@ import interfaces.MonitoringMsgListener;
  *
  * @author gilles
  */
-public class JMSHandler implements MonitoringMessageHandler {
+public class JMSHandler implements MonitoringMessageHandler, Runnable {
     MonitoringMsgListener mmListener;
 
     public void setListener(MonitoringMsgListener mmListener) {
@@ -47,5 +47,11 @@ public class JMSHandler implements MonitoringMessageHandler {
     public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
         //TODO  Configuration JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void run() {
+        //TODO Ecouter les messages et les envoie au MasterController avec :
+        //mmListener.simulationDoneForOneAgent(null, null);
+        //mmListener.fatalErrorOccured(null, null);
     }
 }
