@@ -1,44 +1,33 @@
 /*
-* To change this template, choose Tools | Templates
-* and open the template in the editor.
-*/
-
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package simulation;
 
 import java.util.*;
 import datas.*;
-import java.sql.Timestamp;
 
 /**
-*
-* @author mariata
-*/
+ *
+ * @author mariata
+ */
 public class ProducerEntity extends SimulationEntity {
 
     private float responseTime;
-
     private float responseSize;
-
-    private  boolean abortSimulation=false;
-
+    private boolean abortSimulation = false;
     private SortedSet<ResultEvent> events;
-
     private ResultEvent currentEvent;
 
     //constructor
-
     public ProducerEntity() {
-
     }
 
-    public void configureProducer(int responseTime, int messageLength){
-
-       this.responseTime=responseTime;
-       this.responseSize=messageLength;
-
+    public void configureProducer(int responseTime, int messageLength) {
+        this.responseTime = responseTime;
+        this.responseSize = messageLength;
     }
 
-    @Override
 
     public void writeSimulationEvent(AgentType agent, EventType event) {
         currentEvent.setAgentId(this.getid());
@@ -50,43 +39,41 @@ public class ProducerEntity extends SimulationEntity {
         events.add(currentEvent);
     }
 
-public void sendResponse (String consumerID,float dataPayload){
+    public void sendResponse(String consumerID, float dataPayload) {
 
- //generate fake payload
+        //generate fake payload
 
- //call web service
+        //call web service
 
- //write simulation event
+        //write simulation event
 
-    writeSimulationEvent(AgentType.PRODUCER,EventType.RESPONSE_SENT);
+        writeSimulationEvent(AgentType.PRODUCER, EventType.RESPONSE_SENT);
 
- }
-
-
+    }
 
     public void startSimulation() {
 
-       String consumerID = null;
+        String consumerID = null;
 
-       float dataPayload = 0;
+        float dataPayload = 0;
 
 
 
-       if (!abortSimulation){
+        if (!abortSimulation) {
 
-        //listen request,and grab consumerID
+            //listen request,and grab consumerID
 
-       //when a request arrive, send response
+            //when a request arrive, send response
 
-       sendResponse(consumerID, dataPayload);
+            sendResponse(consumerID, dataPayload);
 
-       }
+        }
 
     }
 
     public void abortSimulation() {
 
-       abortSimulation=true;
+        abortSimulation = true;
 
     }
 
@@ -99,7 +86,4 @@ public void sendResponse (String consumerID,float dataPayload){
     public String processRequest(char reqType, String reqData) {
         return "DUMMY";
     }
-
-
-
 }
