@@ -35,6 +35,12 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable{
 
     public void simulationDone(ResultSet resultSet) {
         //TODO : Envoyer le message JMS au master pour indiquer que la simulation est terminée
+        AgentMessageHandler myAgentHandler= new AgentMessageHandler();
+        
+       // A REVOIR
+        //Serializable message=(Serializable) resultSet;
+        //myAgentHandler.sendToTopic(message);
+
     }
 
     public void fatalErrorOccured() {

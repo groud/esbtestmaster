@@ -18,8 +18,10 @@ public class ConsumerEntity extends SimulationEntity {
 
     private SimulationScenario simulationScenario = null;
     private Hashtable<String, String> hashWSAddresses;
-    private SortedSet<ResultEvent> events;
+    private ResultSet resultSet;
     private SimulationThread simulationThread;
+
+    SimulationMessageListener listener;
 
     /**
      * Configure the simulation scenario and id
@@ -37,8 +39,10 @@ public class ConsumerEntity extends SimulationEntity {
     @Override
     public void startSimulation() {
         //TODO : add receive response code
+        resultSet = new ResultSet();
         simulationThread = new SimulationThread();
         simulationThread.start();
+
     }
 
     @Override
@@ -63,7 +67,7 @@ public class ConsumerEntity extends SimulationEntity {
         currentEvent.setEventType(event);
 
         //add in list of events
-        events.add(currentEvent);
+        resultSet.getEvents().add(currentEvent);
     }
 
     private class SimulationThread extends Thread {
@@ -99,9 +103,13 @@ public class ConsumerEntity extends SimulationEntity {
                         }
                     }, step.getBurstStartDate(), period);
                 }
+                //TO DO : send the results to the agent controller, wait the end of all thread
+               //listener.simulationDone(resultSet);
+
             } else {
                 System.out.println("steps have not been configured");
             }
+            
         }
     }
 

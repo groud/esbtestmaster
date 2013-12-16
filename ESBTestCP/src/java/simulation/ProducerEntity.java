@@ -17,7 +17,8 @@ public class ProducerEntity extends SimulationEntity {
     private float responseTime;
     private float responseSize;
     private boolean abortSimulation = false;
-    private SortedSet<ResultEvent> events;
+    //private SortedSet<ResultEvent> events;
+    ResultSet resultSet;
     private ResultEvent currentEvent;
 
 
@@ -39,7 +40,7 @@ public class ProducerEntity extends SimulationEntity {
         currentEvent.setEventType(event);
 
         //add in list of events
-        events.add(currentEvent);
+        resultSet.getEvents().add(currentEvent);
     }
 
     public void sendResponse(String consumerID, float dataPayload) {
@@ -88,5 +89,12 @@ public class ProducerEntity extends SimulationEntity {
      */
     public String processRequest(char reqType, String reqData) {
         return "DUMMY";
+    }
+
+   //A REVOIR : proposition lever un timer au niveau du controller et dire au producer que c'est fini a la fin de la simulation
+   public void endOfSimlation() {
+
+        //TO DO : send the results to the agent controller, wait the end of all thread
+        // listener.simulationDone(resultSet);
     }
 }
