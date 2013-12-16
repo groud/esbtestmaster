@@ -10,7 +10,6 @@ import datas.KPISet;
 import datas.ResultEvent;
 import datas.ResultSet;
 import datas.ResultSimulationEvent;
-import datas.ResultSimulationSet;
 import interfaces.KPICalculatorInterface;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -61,7 +60,7 @@ public class KPICalculator implements KPICalculatorInterface {
 
 
         //Modifier le calcul du temps
-        kpi.setAverageResponseTime(responseTime);
+   //     kpi.setAverageResponseTime(responseTime);
         kpi.setNumberOfRequestLost(numberOfRequestLost);
         kpi.setNumberOfRequestSent(numberOfRequestSent);
 
