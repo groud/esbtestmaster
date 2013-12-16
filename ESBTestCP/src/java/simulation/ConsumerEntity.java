@@ -67,10 +67,10 @@ public class ConsumerEntity extends SimulationEntity {
     }
 
     private class SimulationThread extends Thread {
+
         private Timer timer;
         private SimulationStep step;
- 
-        
+
         public void run() {
             int i;
             //send request
@@ -93,7 +93,6 @@ public class ConsumerEntity extends SimulationEntity {
                             // ****************************************************
                             int respTime = 1000; // ms
                             int respSize = 32; // bytes
-                            String producerUrl = "http://localhost:8090/ESBTestCompositeService1/casaPort1";
 
                             sendRequest(step.getProviderID(), step.getDataPayloadSize(), respTime, respSize);
 
@@ -129,5 +128,21 @@ public class ConsumerEntity extends SimulationEntity {
         } catch (Exception ex) {
             // TODO handle custom exceptions here
         }
+    }
+
+    public static void main(String[] args) {
+        // Test ConsumerEntity
+        ConsumerEntity cons = new ConsumerEntity();
+
+        SimulationScenario ss = new SimulationScenario();
+        ProducerConfiguration pc = new ProducerConfiguration();
+        pc.setName("id");
+        pc.setWsAddress("http://localhost:8090/ESBTestCompositeService1/casaPort1");
+        ss.getAgentsconfiguration().add(pc);
+        cons.configureConsumer("lol", ss);
+
+        cons.initializeAdressesTable();
+
+        cons.sendRequest("id", 16, 1000, 32);
     }
 }
