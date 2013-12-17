@@ -22,19 +22,31 @@ public class SimulationWS {
     /**
      * Note : processing time = respTime + time to create the response
      * 
-     * @param id of agent : which should be a producer
+     * @param agentId of agent : which should be a producer
      * @param requestData : dummy data -> do not read
      * @param respTime : fake processing time (ms) before sending the response
      * @param respSize : response size in bytes
      * @return
      */
     @WebMethod(operationName = "requestOperation")
-    public String requestOperation(@WebParam(name = "id")
-    String id, @WebParam(name = "requestData")
+    public String requestOperation(@WebParam(name = "agentId")
+    String agentId, @WebParam(name = "requestId")
+    int requestId, @WebParam(name = "requestData")
     String requestData, @WebParam(name = "respTime")
     int respTime, @WebParam(name = "respSize")
     int respSize) {
 
+        String ret;
+
+        // TODO : remove (only for tests)
+        ret = "agentId = " + agentId + "\n";
+        ret += "requestId = " + requestId + "\n";
+        ret += "requestData = " + requestData + "\n";
+        ret += "requestTime = " + respTime + "\n";
+        ret += "requestSize = " + respSize + "\n";
+
+        // TODO : log the request
+        
         // Wait for respTime ms
         try {
             Thread.sleep(respTime);
@@ -46,11 +58,13 @@ public class SimulationWS {
         if (respSize > 0) {
             char[] array = new char[respSize];
             Arrays.fill(array, 'A');
-            return new String(array);
+            ret += new String(array);
         }
         else {
-            return "Error : response size not strictly positive" ;
+            ret += "Error : response size not strictly positive" ;
         }
+
+        return ret;
     }
 
 

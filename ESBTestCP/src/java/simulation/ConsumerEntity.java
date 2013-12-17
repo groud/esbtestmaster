@@ -119,7 +119,7 @@ public class ConsumerEntity extends SimulationEntity {
         }
     }
 
-    private void sendRequest(String producerId, int reqPayloadSize) {
+    private void sendRequest(String producerId, int requestId, int reqPayloadSize) {
         String requestData = null;
         ProducerConfiguration producerConf = null;
         // tempAgentConf used to test if the AgentConfiguration exists and if it's
@@ -154,9 +154,9 @@ public class ConsumerEntity extends SimulationEntity {
             }
 
             // TODO : log events before and after request
-            java.lang.String result = port.requestOperation(producerId, requestData, 
+            String result = port.requestOperation(producerId, requestId, requestData,
                                    producerConf.getResponseTime(), producerConf.getResponseSize());
-            System.out.println("Producer response = "+result);
+            System.out.println("Producer response :\n"+result);
         } catch (Exception ex) {
             // TODO handle custom exceptions here
         }
@@ -179,6 +179,6 @@ public class ConsumerEntity extends SimulationEntity {
 
         cons.initializeAdressesTable();
 
-        cons.sendRequest("id", requestPayloadSize);
+        cons.sendRequest("id", 0, requestPayloadSize);
     }
 }
