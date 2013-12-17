@@ -20,6 +20,16 @@ public class SimulationStep implements Comparable<SimulationStep> {
     private float burstRate;
     private int dataPayloadSize;
 
+    public SimulationStep(String ConsumerID, String ProviderID, long burstStartDate, long burstStopDate, float burstRate, int dataPayloadSize) {
+        this.ConsumerID = ConsumerID;
+        this.ProviderID = ProviderID;
+        this.burstStartDate = burstStartDate; //ms
+        this.burstStopDate = burstStopDate; //ms
+        this.burstRate = burstRate; //req/s
+        this.dataPayloadSize = dataPayloadSize; //bytes
+    }
+
+    
     // ----------------------------------
     //   ACCESSORS
     // ----------------------------------

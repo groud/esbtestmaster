@@ -78,6 +78,10 @@ public class ConsumerEntity extends SimulationEntity {
         private SimulationStep step;
         private int reqId = 0;
 
+        // TODO (Samy) : save the simulation start date in startSimulation() (System.currentTimeMillis)
+        // use timer.scheduleAtFixedRate with delay = startDate + step.getBurstStartDate()
+        // and period = step.getBurstDuration() / nbRequest
+        // and CANCEL timer after the correct number of requests has been sent
         public void run() {
             int i;
             //send request
@@ -94,8 +98,10 @@ public class ConsumerEntity extends SimulationEntity {
 
                         public void run() {
                             
-                            writeSimulationEvent(AgentType.CONSUMER , EventType.REQUEST_SENT );
-                            sendAsyncRequest("id", reqId, step.getDataPayloadSize());
+                            //writeSimulationEvent(AgentType.CONSUMER , EventType.REQUEST_SENT );
+                            // Send the request to the producer
+                            // (the response logging is done in the request callback)
+                            sendAsyncRequest(step.getProviderID(), reqId, step.getDataPayloadSize());
                             reqId++;
                                  
 
@@ -112,6 +118,7 @@ public class ConsumerEntity extends SimulationEntity {
         }
     }
 
+    /* Synchronous -> not used
     private void sendRequest(String producerId, int requestId, int reqPayloadSize) {
         String requestData = null;
         ProducerConfiguration producerConf = null;
@@ -151,7 +158,15 @@ public class ConsumerEntity extends SimulationEntity {
             // TODO handle custom exceptions here
         }
     }
-               
+    */
+
+    /**
+     * Sends an asynchronous request to the WS whose ID is producerID.
+     * The request callback handler logs the response when it is received
+     * @param producerId
+     * @param requestId
+     * @param reqPayloadSize
+     */
     private void sendAsyncRequest(String producerId, int requestId, int reqPayloadSize) {
         String requestData = null;
         ProducerConfiguration producerConf = null;
@@ -182,6 +197,7 @@ public class ConsumerEntity extends SimulationEntity {
             javax.xml.ws.AsyncHandler<simulationRef.RequestOperationResponse> asyncHandler = new javax.xml.ws.AsyncHandler<simulationRef.RequestOperationResponse>() {
                 public void handleResponse(javax.xml.ws.Response<simulationRef.RequestOperationResponse> response) {
                     try {
+                        // TODO : log response
                         //writeSimulationEvent(AgentType.CONSUMER , EventType.RESPONSE_RECEIVED);
                         System.out.println("Result :\n "+ response.get().getReturn());
                     } catch(Exception ex) {
@@ -189,15 +205,11 @@ public class ConsumerEntity extends SimulationEntity {
                     }
                 }
             };
-
             
             requestData = Utils.getDummyString(reqPayloadSize, 'A');
 
             // Call web service asynchronously (callback)
             java.util.concurrent.Future<? extends java.lang.Object> callBackResult = port.requestOperationAsync(producerId, requestId, requestData, producerConf.getResponseTime(), producerConf.getResponseSize(), asyncHandler);
-            
-             
-
             /*
             while(!callBackResult.isDone()) {
                 // do something                
@@ -215,26 +227,31 @@ public class ConsumerEntity extends SimulationEntity {
 
     public static void main(String[] args) {
         int requestPayloadSize = 16;
-
+        String producerId = "producer1";
+        String consumerId = "consumer1";
         // Test ConsumerEntity
         ConsumerEntity cons = new ConsumerEntity();
 
         SimulationScenario ss = new SimulationScenario();
         ProducerConfiguration pc = new ProducerConfiguration();
-        pc.setName("id");
+        pc.setName(producerId);
         pc.setWsAddress("http://localhost:8090/ESBTestCompositeService1/casaPort1");
         pc.setResponseSize(32);
         pc.setResponseTime(1000);
         ss.getAgentsconfiguration().add(pc);
 
-        
-        cons.configureConsumer("lol", ss);
+        ss.addStep(new SimulationStep(consumerId, producerId, 0, 2, 1, 16));
+        //ss.addStep(new SimulationStep(consumerId, producerId, 0, 1000, 1, 16));
+        //ss.addStep(new SimulationStep(consumerId, producerId, 0, 1000, 1, 16));
+        //ss.addStep(new SimulationStep(consumerId, producerId, 0, 1000, 1, 16));
+        cons.configureConsumer(consumerId, ss);
 
-        cons.initializeAdressesTable();
+        //cons.initializeAdressesTable();
 
         //cons.sendRequest("id", 0, requestPayloadSize);
-        cons.sendAsyncRequest("id", 0, requestPayloadSize);
-        System.out.println("after\n ");
-        while(true);
+        //cons.sendAsyncRequest(producerId, 0, requestPayloadSize);
+        cons.startSimulation();
+        //System.out.println("after\n ");
+        //while(true);
     }
 }
