@@ -6,6 +6,7 @@
 package esbtestmaster;
 
 import Exceptions.BadXMLException;
+import datas.ProducerConfiguration;
 import datas.ResultSet;
 import datas.SimulationScenario;
 import interfaces.*;
@@ -143,21 +144,40 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
         //On ajoute le résultat de l'agent au set de résultat
         if(this.resultsKeeper != null) {
             if(finishedMap.get(agentID) != true) {
-                resultsKeeper.addLog(resultSet);
+                try {
+                    resultsKeeper.addLog(resultSet);
+                } catch (IOException ex) {
+                    shell.displayErrorMessage(ex.getMessage());
+                } catch (BadXMLException ex) {
+                    shell.displayErrorMessage(ex.getMessage());
+                }
                 finishedMap.put(agentID, true);
             }
-
-            //On verifie que tous les agents ont terminé la simulation.
-            boolean terminated = true;
+            
+            //On verifie que tous les consumers ont terminé la simulation
+            boolean consumersTerminated = true;
             for (int i=0;i<this.currentScenario.getAgentsconfiguration().size();i++) {
-                if(finishedMap.get(this.currentScenario.getAgentsconfiguration().get(i).getName()) != true) {
-                    terminated = false;
+                if(this.currentScenario.getAgentsconfiguration().get(i) instanceof ProducerConfiguration && finishedMap.get(this.currentScenario.getAgentsconfiguration().get(i).getName()) != true) {
+                    consumersTerminated = false;
                 }
             }
+            
+            
+            //TODO : SEND A MESSAGE TO THE PRODUCERS IF THE SIMULATION IS OVER
 
-            if (terminated) {
-                shell.notifySimulationDone();
-            }
+
+            //On verifie que tous les agents ont terminé la simulation.
+            if (consumersTerminated) {
+                boolean terminated = true;
+                for (int i=0;i<this.currentScenario.getAgentsconfiguration().size();i++) {
+                    if(finishedMap.get(this.currentScenario.getAgentsconfiguration().get(i).getName()) != true) {
+                        terminated = false;
+                    }
+                }
+                if (terminated) {
+                    shell.notifySimulationDone();
+                }
+            }           
         } else {
             shell.displayErrorMessage("A simulation done message has been received, but no results logger is available");
         }

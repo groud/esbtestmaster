@@ -14,13 +14,13 @@ import java.util.HashMap;
 public class KPISet {
     private HashMap<String,Integer> numberOfRequestSent;
     private HashMap<String,Integer> numberOfRequestLost;
-    private HashMap<String,Integer> averageResponseTime;
+    private HashMap<String, Long> averageResponseTime;
 
-    public HashMap<String, Integer> getAverageResponseTime() {
+    public HashMap<String, Long> getAverageResponseTime() {
         return averageResponseTime;
     }
 
-    public void setAverageResponseTime(HashMap<String, Integer> averageResponseTime) {
+    public void setAverageResponseTime(HashMap<String, Long> averageResponseTime) {
         this.averageResponseTime = averageResponseTime;
     }
 

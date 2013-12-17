@@ -42,8 +42,8 @@ public class SimulationWS {
         ret = "agentId = " + agentId + "\n";
         ret += "requestId = " + requestId + "\n";
         ret += "requestData = " + requestData + "\n";
-        ret += "requestTime = " + respTime + "\n";
-        ret += "requestSize = " + respSize + "\n";
+        ret += "respTime = " + respTime + "\n";
+        ret += "respSize = " + respSize + "\n";
 
         // TODO : log the request
         
