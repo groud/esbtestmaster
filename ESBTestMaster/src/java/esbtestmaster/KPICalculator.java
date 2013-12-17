@@ -13,6 +13,7 @@ import datas.ResultSimulationEvent;
 import interfaces.KPICalculatorInterface;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.SortedSet;
 
 /**
@@ -25,12 +26,12 @@ public class KPICalculator implements KPICalculatorInterface {
      * @param filename
      * @return
      */
-    public KPISet calculateKPI(ResultSet resultSet) {
-
-        //A modifier le calcul du tps de rep
+    public KPISet calculateKPI(ResultSet resultSet) {     
         
         KPISet kpi = new KPISet();
-        HashMap<Integer,Long> responseTime = new HashMap<Integer,Long>();
+        boolean found = false;
+        HashMap<String,Long> averageResponseTime = new HashMap<String,Long>();
+        HashMap<String,Integer> nbResponseTime = new HashMap<String,Integer>();
         HashMap<String,Integer> numberOfRequestSent = new HashMap<String,Integer>();
         HashMap<String,Integer> numberOfRequestLost = new HashMap<String,Integer>();
 
@@ -39,32 +40,46 @@ public class KPICalculator implements KPICalculatorInterface {
         //On parcourt les événements
         for(Iterator it = events.iterator(); it.hasNext();) {
             //Pour chaque évènement de type REQUEST_SENT on regarde si on a recu une réponse
-             ResultSimulationEvent event = (ResultSimulationEvent) it.next();
-             if(event.getEventType()==EventType.REQUEST_SENT){
-                numberOfRequestSent.put(event.getAgentId(), numberOfRequestSent.get(event.getAgentId())+1);
-                for(Iterator it2 = events.iterator(); it2.hasNext();) {
-                    ResultSimulationEvent event2 = (ResultSimulationEvent)it2.next();
-                    if(event2.getRequestId()==event.getRequestId() && event2.getEventType()==EventType.RESPONSE_RECEIVED){
-                        //Si il y a une réponse on calcule le temps de réponse
-                        responseTime.put(event.getRequestId(), Math.abs(event2.getEventDate()-event.getEventDate()));
-                    }else{
-                        //Si pas de réponse on considére la requête comme perdue
-                        numberOfRequestLost.put(event.getAgentId(), numberOfRequestLost.get(event.getAgentId())+1);
-                    }
-                }
-             } else if (event.getEventType()==EventType.CONNEXION_ERR){
-                 //Si un événement est de type CONNEXION_ERR on considère la requête comme perdue
-                  numberOfRequestLost.put(event.getAgentId(), numberOfRequestLost.get(event.getAgentId())+1);
-             }
+             ResultEvent resultEvent = (ResultEvent) it.next();
+                 if(resultEvent instanceof ResultSimulationEvent){
+                     ResultSimulationEvent event = (ResultSimulationEvent) resultEvent;
+                     if(event.getEventType()==EventType.REQUEST_SENT){
+                        numberOfRequestSent.put(event.getAgentId(), numberOfRequestSent.get(event.getAgentId())==null? 1 : numberOfRequestSent.get(event.getAgentId())+1);
+                        for(Iterator it2 = events.iterator(); it2.hasNext();) {
+                            ResultEvent resultEvent2 = (ResultEvent)it2.next();
+                            if(resultEvent2 instanceof ResultSimulationEvent){
+                                ResultSimulationEvent event2 = (ResultSimulationEvent) resultEvent2;
+                                if(event2.getRequestId()==event.getRequestId() && event2.getEventType()==EventType.RESPONSE_RECEIVED){
+                                    //Si il y a une réponse on calcule le temps de réponse
+                                    averageResponseTime.put(event.getAgentId(), averageResponseTime.get(event.getAgentId())==null? Math.abs(event2.getEventDate()-event.getEventDate()) : averageResponseTime.get(event.getAgentId())+ Math.abs(event2.getEventDate()-event.getEventDate()));
+                                    nbResponseTime.put(event.getAgentId(),nbResponseTime.get(event.getAgentId())==null?1:nbResponseTime.get(event.getAgentId())+1);
+                                    found = true;
+                                }
+                            }
+                        }
+                       if(!found){
+                          //Si pas de réponse on considére la requête comme perdue
+                          numberOfRequestLost.put(event.getAgentId(), numberOfRequestLost.get(event.getAgentId())==null ? 1 : numberOfRequestLost.get(event.getAgentId()) +1);
+                       }
+                       found = false;
+                     } 
+                 }
         }
 
-
-        //Modifier le calcul du temps
-   //     kpi.setAverageResponseTime(responseTime);
+        //Calcul du temps de réponse moyen
+        Iterator it3 = nbResponseTime.entrySet().iterator();
+        while (it3.hasNext()) {
+            Map.Entry entry = (Map.Entry) it3.next();
+            String key = (String)entry.getKey();
+            Integer val = (Integer)entry.getValue();
+            averageResponseTime.put(key,averageResponseTime.get(key)/val);
+        }
+            
+        kpi.setAverageResponseTime(averageResponseTime);
         kpi.setNumberOfRequestLost(numberOfRequestLost);
         kpi.setNumberOfRequestSent(numberOfRequestSent);
 
-        return null;
+        return kpi;
     }
 
     /**
