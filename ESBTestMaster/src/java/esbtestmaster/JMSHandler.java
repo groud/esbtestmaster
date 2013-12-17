@@ -6,6 +6,7 @@
 package esbtestmaster;
 
 import datas.AgentConfiguration;
+import datas.JMSMessages.*;
 import datas.SimulationScenario;
 import interfaces.MonitoringMessageHandler;
 import interfaces.MonitoringMsgListener;
@@ -16,6 +17,9 @@ import interfaces.MonitoringMsgListener;
  */
 public class JMSHandler implements MonitoringMessageHandler, Runnable {
     MonitoringMsgListener mmListener;
+    //public void JMSHandler(){
+    //    MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
+    //}
 
     /**
      * Sets a listener for the monitoring messages
@@ -34,6 +38,9 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
      * @param receiverAgent
      */
     public void startSimulationMessage(AgentConfiguration receiverAgent) {
+        StartJMSMessage startJMSMessage = new StartJMSMessage();
+        MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
+        masterMessageHandler.sendToTopic(startJMSMessage);
         //TODO Start JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -43,9 +50,13 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
      * @param receiverAgent
      */
     public void stopSimulationMessage(AgentConfiguration receiverAgent) {
+     StopJMSMessage stopJMSMessage = new StopJMSMessage();
+     MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
+     masterMessageHandler.sendToTopic(stopJMSMessage);
         //TODO Stop JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
     }
+
 
     /**
      * Asks an agent to self configure withthe given AgentConfiguration
@@ -53,6 +64,12 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
      * @param simulationScenario
      */
     public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
+        ConfigJMSMessage configJMSMessage = new ConfigJMSMessage();
+        configJMSMessage.putAgentConfiguration(receiverAgent);
+        configJMSMessage.putScenario(simulationScenario);
+        MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
+        masterMessageHandler.sendToTopic(configJMSMessage);
+
         //TODO  Configuration JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
     }
