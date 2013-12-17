@@ -39,10 +39,6 @@ public class SimulationScenario {
         this.steps = steps;
     }
 
-    public void addStep(SimulationStep step) {
-        steps.add(step);
-    }
-
         @Override
     public String toString() {
         String str ="\n";

@@ -55,7 +55,6 @@ public class ScenarioReader implements ScenarioReaderInterface {
                     prodConf.setWsAddress(agent.getChildText("address"));
                     prodConf.setMonitoringWSAddress(agent.getChildText("monitoringAddress"));
                     prodConf.setName(agent.getChildText("name"));
-                    prodConf.setResponseTime(Integer.parseInt(agent.getChildText("responsetime")));
                     simulationScenario.getAgentsconfiguration().add(prodConf);
                 } else if (agent.getName().equals("consumer")) {
                     ConsumerConfiguration consConf = new ConsumerConfiguration();
@@ -74,13 +73,14 @@ public class ScenarioReader implements ScenarioReaderInterface {
                 Element burst = (Element) burstslist.get(i);
                 SimulationStep simulationStep = new SimulationStep();
 
-                simulationStep.setConsumerID(burst.getAttributeValue("src"));
-                simulationStep.setProviderID(burst.getAttributeValue("dest"));
+                simulationStep.setSrcID(burst.getAttributeValue("src"));
+                simulationStep.setDestID(burst.getAttributeValue("dest"));
                 simulationStep.setBurstStartDate(Long.parseLong(burst.getAttributeValue("startdate")));
                 simulationStep.setBurstStopDate(Long.parseLong(burst.getAttributeValue("stopdate")));
                 simulationStep.setBurstRate(Float.parseFloat(burst.getChildText("rate")));
-                simulationStep.setDataPayloadSize(Integer.parseInt(burst.getChildText("payloadsize")));
-
+                simulationStep.setRequestPayloadSize(Integer.parseInt(burst.getChildText("requestPayloadSize")));
+                simulationStep.setProcessTime(Long.parseLong(burst.getChildText("processTime")));
+                simulationStep.setResponsePayloadSize(Integer.parseInt(burst.getChildText("responsePayloadSize")));
                 simulationScenario.getSteps().add(simulationStep);
             }
             Debug.info("ScenarioReader : \n" + simulationScenario);

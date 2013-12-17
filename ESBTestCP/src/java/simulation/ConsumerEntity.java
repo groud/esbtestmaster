@@ -114,7 +114,7 @@ public class ConsumerEntity extends SimulationEntity {
                             //writeSimulationEvent(AgentType.CONSUMER , EventType.REQUEST_SENT );
                             // Send the request to the producer
                             // (the response logging is done in the request callback)
-                            sendAsyncRequest(step.getProviderID(), reqId, step.getDataPayloadSize());
+                            sendAsyncRequest(step.getSrcID(), reqId, step.getRequestPayloadSize(), step.getProcessTime(),step.getResponsePayloadSize());
                             reqId++;
                                  
 
@@ -180,7 +180,7 @@ public class ConsumerEntity extends SimulationEntity {
      * @param requestId
      * @param reqPayloadSize
      */
-    private void sendAsyncRequest(String producerId, int requestId, int reqPayloadSize) {
+    private void sendAsyncRequest(String producerId, int requestId, int reqPayloadSize, long processTime, int respPayloadSize) {
         String requestData = null;
         ProducerConfiguration producerConf = null;
         // tempAgentConf used to test if the AgentConfiguration exists and if it's
@@ -193,7 +193,7 @@ public class ConsumerEntity extends SimulationEntity {
         if(tempAgentConf == null) {
             throw new IllegalArgumentException("AgentConfiguration is null");
         }
-        else if(tempAgentConf.getAgentType() == AgentType.PRODUCER) {
+        else if(tempAgentConf instanceof ProducerConfiguration) {
             // To avoid typecasting afterwards
             producerConf = (ProducerConfiguration) tempAgentConf;
         }
@@ -222,7 +222,6 @@ public class ConsumerEntity extends SimulationEntity {
             requestData = Utils.getDummyString(reqPayloadSize, 'A');
 
             // Call web service asynchronously (callback)
-            java.util.concurrent.Future<? extends java.lang.Object> callBackResult = port.requestOperationAsync(producerId, requestId, requestData, producerConf.getResponseTime(), producerConf.getResponseSize(), asyncHandler);
             /*
             while(!callBackResult.isDone()) {
                 // do something                
@@ -252,11 +251,9 @@ public class ConsumerEntity extends SimulationEntity {
         ProducerConfiguration pc = new ProducerConfiguration();
         pc.setName(producerId);
         pc.setWsAddress("http://localhost:8090/ESBTestCompositeService1/casaPort1");
-        pc.setResponseSize(32);
-        pc.setResponseTime(1000);
         ss.getAgentsconfiguration().add(pc);
 
-        ss.addStep(new SimulationStep(consumerId, producerId, 0, 2, 1, 16));
+        ss.getSteps().add(new SimulationStep(consumerId, producerId, 0, 2, 1, 16,1000L,20));
         //ss.addStep(new SimulationStep(consumerId, producerId, 0, 1000, 1, 16));
         //ss.addStep(new SimulationStep(consumerId, producerId, 0, 1000, 1, 16));
         //ss.addStep(new SimulationStep(consumerId, producerId, 0, 1000, 1, 16));

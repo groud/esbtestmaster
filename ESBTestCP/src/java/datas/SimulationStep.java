@@ -2,51 +2,36 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package datas;
-
 
 /**
  *
  * @author gilles
  */
 public class SimulationStep implements Comparable<SimulationStep> {
-    private String ConsumerID;
-    private String ProviderID;
 
+    private String srcID;
+    private String destID;
     private long burstStartDate;
     private long burstStopDate;
-
     private float burstRate;
-    private int dataPayloadSize;
+    private int requestPayloadSize;
+    private long processTime;
+    private int responsePayloadSize;
 
-    public SimulationStep(String ConsumerID, String ProviderID, long burstStartDate, long burstStopDate, float burstRate, int dataPayloadSize) {
-        this.ConsumerID = ConsumerID;
-        this.ProviderID = ProviderID;
-        this.burstStartDate = burstStartDate; //ms
-        this.burstStopDate = burstStopDate; //ms
-        this.burstRate = burstRate; //req/s
-        this.dataPayloadSize = dataPayloadSize; //bytes
+    public SimulationStep(){
     }
-
     
-    // ----------------------------------
-    //   ACCESSORS
-    // ----------------------------------
-    public String getConsumerID() {
-        return ConsumerID;
-    }
+    public SimulationStep(String srcID, String destID, int burstStartDate, int burstStopDate, int burstRate, int requestPayloadSize, long processTime, int responsePayloadSize) {
+        this.srcID = srcID;
+        this.destID = destID;
+        this.burstStartDate = burstStartDate;
+        this.burstStopDate = burstStopDate;
+        this.burstRate = burstRate;
+        this.requestPayloadSize = requestPayloadSize;
+        this.processTime = processTime;
+        this.responsePayloadSize = responsePayloadSize;
 
-    public void setConsumerID(String ConsumerID) {
-        this.ConsumerID = ConsumerID;
-    }
-
-    public String getProviderID() {
-        return ProviderID;
-    }
-
-    public void setProviderID(String ProviderID) {
-        this.ProviderID = ProviderID;
     }
 
     public float getBurstRate() {
@@ -55,7 +40,7 @@ public class SimulationStep implements Comparable<SimulationStep> {
 
     public void setBurstRate(float burstRate) {
         this.burstRate = burstRate;
-    }    
+    }
 
     public long getBurstStartDate() {
         return burstStartDate;
@@ -65,13 +50,6 @@ public class SimulationStep implements Comparable<SimulationStep> {
         this.burstStartDate = burstStartDate;
     }
 
-    public int getDataPayloadSize() {
-        return dataPayloadSize;
-    }
-
-    public void setDataPayloadSize(int dataPayloadSize) {
-        this.dataPayloadSize = dataPayloadSize;
-    }
     public long getBurstStopDate() {
         return burstStopDate;
     }
@@ -80,22 +58,68 @@ public class SimulationStep implements Comparable<SimulationStep> {
         this.burstStopDate = burstStopDate;
     }
 
+    public String getDestID() {
+        return destID;
+    }
+
+    public void setDestID(String destID) {
+        this.destID = destID;
+    }
+
+    public long getProcessTime() {
+        return processTime;
+    }
+
+    public void setProcessTime(long processTime) {
+        this.processTime = processTime;
+    }
+
+    public int getRequestPayloadSize() {
+        return requestPayloadSize;
+    }
+
+    public void setRequestPayloadSize(int requestPayloadSize) {
+        this.requestPayloadSize = requestPayloadSize;
+    }
+
+    public int getResponsePayloadSize() {
+        return responsePayloadSize;
+    }
+
+    public void setResponsePayloadSize(int responsePayloadSize) {
+        this.responsePayloadSize = responsePayloadSize;
+    }
+
+    public String getSrcID() {
+        return srcID;
+    }
+
+    public void setSrcID(String srcID) {
+        this.srcID = srcID;
+    }
+
+    // ----------------------------------
+    //   ACCESSORS
+    // ----------------------------------
     //Other
     public long getBurstDuration() {
         return this.getBurstStopDate() - this.getBurstStartDate();
     }
 
-
     //Comparison method
     public int compareTo(SimulationStep step) {
-        if (this.getBurstStartDate()<step.getBurstStartDate()) return -1;
-        if (this.getBurstStartDate()<step.getBurstStartDate()) return 0;
-        else return 1;
+        if (this.getBurstStartDate() < step.getBurstStartDate()) {
+            return -1;
+        }
+        if (this.getBurstStartDate() < step.getBurstStartDate()) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
     @Override
     public String toString() {
-        return this.getConsumerID()+" -> "+this.getProviderID()+" : "+this.getBurstStartDate()+"-"+this.getBurstStopDate()
-                +" at "+this.getBurstRate()+"req/s\n";
+        return this.getSrcID() + " -> " + this.getDestID() + " : " + this.getBurstStartDate() + "-" + this.getBurstStopDate() + " at " + this.getBurstRate() + "req/s (->"+this.getRequestPayloadSize()+" bytes,"+this.getProcessTime()+"ms,<-"+this.getResponsePayloadSize()+" bytes)\n";
     }
 }

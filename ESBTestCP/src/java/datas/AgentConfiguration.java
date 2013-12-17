@@ -45,8 +45,4 @@ public abstract class AgentConfiguration {
     public String toString() {
         return agentType + " " + this.getName() + "\n";
     }
-
-    public AgentType getAgentType() {
-        return agentType;
-    }
 }

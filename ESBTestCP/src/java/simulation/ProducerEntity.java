@@ -11,10 +11,55 @@ import datas.*;
  * @author mariata
  */
 public class ProducerEntity extends SimulationEntity {
-    private boolean abortSimulation = false;
-    
-    ResultSet resultSet;
+
+    private ResultSet resultSet;
     private ResultEvent currentEvent;
+    private Thread simulationThread;
+
+    /**
+     * A thread listening to events from the simulation
+     */
+    private class SimulationThread extends Thread {
+
+        @Override
+        public void run() {
+            //TODO : Listen request,and grab consumerID, when a request arrive, send response
+        }
+    }
+
+    /**
+     * Start the simulation
+     */
+    public void startSimulation() {
+        resultSet = new ResultSet();
+        simulationThread = new SimulationThread();
+        simulationThread.start();
+    }
+
+    /**
+     * Abort the simulation
+     */
+    public void abortSimulation() {
+        simulationThread.stop();
+    }
+
+    /**
+     * End the simulation and send the results
+     */
+    public void endOfSimlation() {
+        simulationThread.stop();
+        listener.simulationDone(resultSet);
+    }
+
+    /**
+     * Sends a reponse to a consumer
+     * @param consumerID
+     * @param dataPayload
+     */
+    private void sendResponse(String consumerID, float dataPayload) {
+        // TODO : Generate fake payload, send response,
+        writeSimulationEvent(AgentType.PRODUCER, EventType.RESPONSE_SENT);
+    }
 
     /**
      * Log an event
@@ -30,53 +75,5 @@ public class ProducerEntity extends SimulationEntity {
 
         //add in list of events
         resultSet.getEvents().add(currentEvent);
-    }
-
-    /**
-     * Sends a reponse to a consumer
-     * @param consumerID
-     * @param dataPayload
-     */
-    private void sendResponse(String consumerID, float dataPayload) {
-        // TODO : Generate fake payload, send response, 
-        writeSimulationEvent(AgentType.PRODUCER, EventType.RESPONSE_SENT);
-    }
-
-    /**
-     * Start the simulation
-     */
-    public void startSimulation() {
-        String consumerID = null;
-        float dataPayload = 0;
-        if (!abortSimulation) {
-            //TODO : Listen request,and grab consumerID, when a request arrive, send response
-            //Demarrer un thread en ecoute plutôt !!!!
-            sendResponse(consumerID, dataPayload);
-        }
-    }
-
-    /**
-     * Abort the simulation
-     */
-    public void abortSimulation() {
-        //
-        abortSimulation = true;
-    }
-
-    /**
-     * TODO : change return type to byte[] or a Response object
-     * @param reqType
-     * @param reqData
-     * @return
-     */
-    public String processRequest(char reqType, String reqData) {
-        return "DUMMY";
-    }
-
-   //A REVOIR : proposition lever un timer au niveau du controller et dire au producer que c'est fini a la fin de la simulation
-   public void endOfSimlation() {
-
-        //TODO : send the results to the agent controller, wait the end of all thread
-        // listener.simulationDone(resultSet);
     }
 }
