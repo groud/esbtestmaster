@@ -21,7 +21,6 @@ public class ConfigJMSMessage implements Serializable{
     }
 
     public SimulationScenario getScenario(){
-
         return this.scenario;
     }
 

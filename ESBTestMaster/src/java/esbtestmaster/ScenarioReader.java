@@ -81,7 +81,7 @@ public class ScenarioReader implements ScenarioReaderInterface  {
 
                simulationScenario.getSteps().add(simulationStep);
             }
-             Debug.info(simulationScenario);
+             Debug.info("ScenarioReader : \n"+simulationScenario);
         } catch (JDOMException ex) {
             throw new BadXMLException("Bad XML file : \n"+ex.getMessage());
         }

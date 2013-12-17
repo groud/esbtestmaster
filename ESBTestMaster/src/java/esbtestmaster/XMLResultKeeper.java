@@ -42,6 +42,7 @@ public class XMLResultKeeper implements ResultKeeperInterface {
         this.clearLog();
         File xmlFile = new File(XMLfilename);
         xmlFile.createNewFile();
+        Debug.info("ResultKeeper : "+XMLfilename+" initialization done.");
     }
 
     // -------------------------------
@@ -116,9 +117,9 @@ public class XMLResultKeeper implements ResultKeeperInterface {
     public void clearLog() {
         File file = new File(XMLfilename);
         if (file.delete()) {
-            Debug.info("XML file deleted.");
+            Debug.info("ResultKeeper : "+XMLfilename+" deleted (log cleared).");
         } else {
-            Debug.info("The XML result file does not exists.");
+            Debug.info("ResultKeeper : The XML result file does not exists.");
         }
     }
 
@@ -158,9 +159,9 @@ public class XMLResultKeeper implements ResultKeeperInterface {
 
                 resultSet.getEvents().add(resultEvent);
             }
-            Debug.info("Events list :\n" + resultSet);
+            Debug.info("ResultKeeper : Events list :\n" + resultSet);
         } catch (JDOMException ex) {
-            throw new BadXMLException("Bad XML file : \n" + ex.getMessage());
+            throw new BadXMLException("ResultKeeper : Bad XML file : \n" + ex.getMessage());
         }
         return resultSet;
     }
