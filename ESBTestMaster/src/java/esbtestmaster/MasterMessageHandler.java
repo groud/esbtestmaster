@@ -1,18 +1,8 @@
 package esbtestmaster;
 
 import java.io.Serializable;
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageProducer;
-import javax.jms.ObjectMessage;
-import javax.jms.Session;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.jms.*;
+import javax.naming.*;
 import interfaces.MonitoringMsgListener;
 
 /*

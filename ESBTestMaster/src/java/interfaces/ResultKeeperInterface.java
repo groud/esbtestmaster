@@ -13,7 +13,7 @@ import java.io.IOException;
  * @author root
  */
 public interface ResultKeeperInterface {
-    public void addLog(ResultSet resultSet);
+    public void addLog(ResultSet resultSet) throws IOException, BadXMLException;
     public ResultSet getLog() throws IOException, BadXMLException;
     public void clearLog();
 }
