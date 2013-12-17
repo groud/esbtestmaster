@@ -36,17 +36,26 @@ public class XMLResultKeeper implements ResultKeeperInterface {
         this.init();
     }
 
+    /**
+     * Erase the XML results file and create a new one
+     * @throws IOException
+     */
     private void init() throws IOException {
         //TODO : Erase the file if it exists, create the file and put the firsts tags.
         this.clearLog();
         File xmlFile = new File(XMLfilename);
         xmlFile.createNewFile();
-
     }
 
     // -------------------------------
     //   INTERFACES IMPLEMENTATIONS
     // -------------------------------
+    /**
+     * Add a results set to the XML File
+     * @param resultSet
+     * @throws IOException
+     *og @throws BadXMLException
+     */
     public void addLog(ResultSet resultSet) throws IOException, BadXMLException {
         try {
             Document document;
