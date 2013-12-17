@@ -35,7 +35,7 @@ public class KPICalcTester {
                 Map.Entry entry = (Map.Entry) it.next();
                 String key = (String)entry.getKey();
                 Long val = (Long)entry.getValue();
-                System.out.println("agentId,Tps moyen: " + key + "," + val);
+                System.out.println("agentId, averageResponseTime: " + key + "," + val);
             }
 
            Iterator it2 = kpi.getNumberOfRequestLost().entrySet().iterator();

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 
 public class ResultsGen {
@@ -17,33 +18,39 @@ public class ResultsGen {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String[] agenttypes = {"CONSUMER", "PRODUCER"};
-		String[] eventtypes = {"REQUEST_SENT","RESPONSE_RECEIVED", "REQUEST_RECEIVED" , "RESPONSE_SENT"};
-		int i=0, j=0;
+		Scanner in = new Scanner(System.in);
+                int i=0, j=0;
                 long sum = 0;
-		int eventdate;
 		try {
-			PrintWriter writer = new PrintWriter("/home/matthieu/results.xml");
-                        //Les kpis du fichier results xml générés sont stockés dans le fichier kpi, pour pouvoir tester le calcul de ces derniers
-                        PrintWriter writer2 = new PrintWriter("/home/matthieu/kpi");
-			writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?> \n ") ;
-                        writer.println("<results xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"XSD/results.xsd\">");
-                        for (i=0;i<5; i=i+1){
-                            for(j=1;j<6;j++){
-                                if(j==4 || j==5){
-                                   writeEvents(writer, (i*5)+j, i+1, true);
-                                } else {
-                                   sum += (writeEvents(writer, (i*5)+j, i+1, false));
-                                  // System.out.println(respTime[j-1]);
-                                } 
-                            }                            
-                            writer2.println("cons" + (i+1) + " : averageRespTime = " + (sum/3) + " nbReqSent=5 nbReqLost=2");
-                            sum=0;
-                        }
+                        System.out.println("Saisir le chemin ou enregistrer le fichier results.xml et le fichier kpi :  ");
+                        String path = in.nextLine();
+                        File file = new File(path);
+                        if (file.isDirectory()){
+
+                            PrintWriter writer = new PrintWriter(path+ "/results.xml");
+                            //Les kpis du fichier results xml générés sont stockés dans le fichier kpi, pour pouvoir tester le calcul de ces derniers
+                            PrintWriter writer2 = new PrintWriter(path + "/kpi");
+                            writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?> \n ") ;
+                            writer.println("<results xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"XSD/results.xsd\">");
+                            for (i=0;i<5; i=i+1){
+                                for(j=1;j<6;j++){
+                                    if(j==4 || j==5){
+                                       writeEvents(writer, (i*5)+j, i+1, true);
+                                    } else {
+                                       sum += (writeEvents(writer, (i*5)+j, i+1, false));
+                                    }
+                                }
+                                writer2.println("cons" + (i+1) + " : averageRespTime = " + (sum/3) + " nbReqSent=5 nbReqLost=2");
+                                sum=0;
+                            }
+
+                            writer.println("</results>");
+                            writer.close();
+                            writer2.close();
                             
-			writer.println("</results>");
-			writer.close();
-                        writer2.close();
+                        } else {
+                            System.out.println("Chemin saisi innexistant");
+                        }
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -117,7 +124,6 @@ public class ResultsGen {
 
 
 	public static int randInt(int min, int max) {
-
 	    // Usually this can be a field rather than a method variable
 	    Random rand = new Random();
 
