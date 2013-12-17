@@ -65,7 +65,7 @@ public class ConsumerEntity extends SimulationEntity {
         currentEvent.setAgentType(agent);
         // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         Date now =new Date();
-        currentEvent.setEventDate(now.getTime());// TODOOOO
+        currentEvent.setEventDate(0);//now.getTime());// TODOOOO
         currentEvent.setEventType(event);
 
         //add in list of events
