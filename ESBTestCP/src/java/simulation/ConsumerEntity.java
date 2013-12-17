@@ -32,7 +32,6 @@ public class ConsumerEntity extends SimulationEntity {
     public void configureConsumer(String id, SimulationScenario simulationScenario) {
         this.simulationScenario = simulationScenario;
         this.setId(id);
-
         hashAgentsConf = this.initializeAdressesTable();
     }
 
@@ -77,6 +76,7 @@ public class ConsumerEntity extends SimulationEntity {
 
         private Timer timer;
         private SimulationStep step;
+        private int reqId = 0;
 
         public void run() {
             int i;
@@ -93,17 +93,10 @@ public class ConsumerEntity extends SimulationEntity {
                     timer.scheduleAtFixedRate(new TimerTask() {
 
                         public void run() {
-                            //code send request
-                            // ****************************************************
-                            // TODO : store respTime and respSize for each producer
-                            // instead of sending the same values everytime
-                            // ****************************************************
-                            int respTime = 1000; // ms
-                            int respSize = 32; // bytes
-
-                            // TODO : send the request asynchronously
-                            //sendRequest(step.getProviderID(), step.getDataPayloadSize(), respTime, respSize);
-                              //   writeSimulationEvent(AgentType.CONSUMER , EventType.REQUEST_SENT );
+                            
+                            writeSimulationEvent(AgentType.CONSUMER , EventType.REQUEST_SENT );
+                            sendAsyncRequest("id", reqId, step.getDataPayloadSize());
+                            reqId++;
                                  
 
                         }
@@ -126,6 +119,7 @@ public class ConsumerEntity extends SimulationEntity {
         // a ProducerConfiguration without having to cast all the time afterwards
         AgentConfiguration tempAgentConf;
 
+        // Get ProducerConf
         tempAgentConf = this.hashAgentsConf.get(producerId);
 
         if(tempAgentConf == null) {
@@ -146,12 +140,8 @@ public class ConsumerEntity extends SimulationEntity {
             // Dynamic URL binding;
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, producerConf.getWsAddress());
 
-            // Fill the same answer String with reqPayloadSize characters
-            if (reqPayloadSize > 0) {
-                char[] array = new char[reqPayloadSize];
-                Arrays.fill(array, 'A');
-                requestData = new String(array);
-            }
+            // Fill the request payload with reqPayloadSize 'A's
+            requestData = Utils.getDummyString(reqPayloadSize, 'A');
 
             // TODO : log events before and after request
             String result = port.requestOperation(producerId, requestId, requestData,
@@ -161,6 +151,67 @@ public class ConsumerEntity extends SimulationEntity {
             // TODO handle custom exceptions here
         }
     }
+               
+    private void sendAsyncRequest(String producerId, int requestId, int reqPayloadSize) {
+        String requestData = null;
+        ProducerConfiguration producerConf = null;
+        // tempAgentConf used to test if the AgentConfiguration exists and if it's
+        // a ProducerConfiguration without having to cast all the time afterwards
+        AgentConfiguration tempAgentConf;
+
+        // Get the ProducerConf
+        tempAgentConf = this.hashAgentsConf.get(producerId);
+
+        if(tempAgentConf == null) {
+            throw new IllegalArgumentException("AgentConfiguration is null");
+        }
+        else if(tempAgentConf.getAgentType() == AgentType.PRODUCER) {
+            // To avoid typecasting afterwards
+            producerConf = (ProducerConfiguration) tempAgentConf;
+        }
+        else {
+            throw new IllegalArgumentException("Remote agent is not a producer");
+        }
+
+
+        try { // Call Web Service Operation(async. callback)
+            simulationRef.SimulationWSService service = new simulationRef.SimulationWSService();
+            simulationRef.SimulationWS port = service.getSimulationWSPort();
+
+
+            javax.xml.ws.AsyncHandler<simulationRef.RequestOperationResponse> asyncHandler = new javax.xml.ws.AsyncHandler<simulationRef.RequestOperationResponse>() {
+                public void handleResponse(javax.xml.ws.Response<simulationRef.RequestOperationResponse> response) {
+                    try {
+                        //writeSimulationEvent(AgentType.CONSUMER , EventType.RESPONSE_RECEIVED);
+                        System.out.println("Result :\n "+ response.get().getReturn());
+                    } catch(Exception ex) {
+                        // TODO handle exception
+                    }
+                }
+            };
+
+            
+            requestData = Utils.getDummyString(reqPayloadSize, 'A');
+
+            // Call web service asynchronously (callback)
+            java.util.concurrent.Future<? extends java.lang.Object> callBackResult = port.requestOperationAsync(producerId, requestId, requestData, producerConf.getResponseTime(), producerConf.getResponseSize(), asyncHandler);
+            
+             
+
+            /*
+            while(!callBackResult.isDone()) {
+                // do something                
+                Thread.sleep(100);
+            }
+             */
+          
+        } catch (Exception ex) {
+            // TODO handle custom exceptions here
+        }
+
+    }
+
+    
 
     public static void main(String[] args) {
         int requestPayloadSize = 16;
@@ -175,10 +226,15 @@ public class ConsumerEntity extends SimulationEntity {
         pc.setResponseSize(32);
         pc.setResponseTime(1000);
         ss.getAgentsconfiguration().add(pc);
+
+        
         cons.configureConsumer("lol", ss);
 
         cons.initializeAdressesTable();
 
-        cons.sendRequest("id", 0, requestPayloadSize);
+        //cons.sendRequest("id", 0, requestPayloadSize);
+        cons.sendAsyncRequest("id", 0, requestPayloadSize);
+        System.out.println("after\n ");
+        while(true);
     }
 }
