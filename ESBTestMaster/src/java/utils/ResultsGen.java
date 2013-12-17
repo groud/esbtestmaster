@@ -17,7 +17,6 @@ public class ResultsGen {
 	 */
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		Scanner in = new Scanner(System.in);
                 int i=0, j=0;
                 long sum = 0;
@@ -52,7 +51,6 @@ public class ResultsGen {
                             System.out.println("Chemin saisi innexistant");
                         }
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

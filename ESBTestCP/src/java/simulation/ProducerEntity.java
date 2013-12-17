@@ -4,81 +4,63 @@
  */
 package simulation;
 
-import java.util.*;
 import datas.*;
-import interfaces.SimulationMessageListener;
 
 /**
  *
  * @author mariata
  */
 public class ProducerEntity extends SimulationEntity {
-
-    private float responseTime;
-    private float responseSize;
     private boolean abortSimulation = false;
-    //private SortedSet<ResultEvent> events;
+    
     ResultSet resultSet;
     private ResultEvent currentEvent;
 
-
-
-    //constructor
-    public ProducerEntity() {
-    }
-
-    public void configureProducer(int responseTime, int messageLength) {
-        this.responseTime = responseTime;
-        this.responseSize = messageLength;
-    }
-
-
-    public void writeSimulationEvent(AgentType agent, EventType event) {
+    /**
+     * Log an event
+     * @param agent
+     * @param event
+     */
+    private void writeSimulationEvent(AgentType agent, EventType event) {
         currentEvent.setAgentId(this.getid());
         currentEvent.setAgentType(agent);
-        currentEvent.setEventDate(0);//TODOOOOO !!!
+        //TODO: Set the date to current milliseconds
+        currentEvent.setEventDate(0);
         currentEvent.setEventType(event);
 
         //add in list of events
         resultSet.getEvents().add(currentEvent);
     }
 
-    public void sendResponse(String consumerID, float dataPayload) {
-
-        //generate fake payload
-
-        //call web service
-
-        //write simulation event
-
+    /**
+     * Sends a reponse to a consumer
+     * @param consumerID
+     * @param dataPayload
+     */
+    private void sendResponse(String consumerID, float dataPayload) {
+        // TODO : Generate fake payload, send response, 
         writeSimulationEvent(AgentType.PRODUCER, EventType.RESPONSE_SENT);
-
     }
 
+    /**
+     * Start the simulation
+     */
     public void startSimulation() {
-
         String consumerID = null;
-
         float dataPayload = 0;
-
-
-
         if (!abortSimulation) {
-
-            //listen request,and grab consumerID
-
-            //when a request arrive, send response
-
+            //TODO : Listen request,and grab consumerID, when a request arrive, send response
+            //Demarrer un thread en ecoute plutôt !!!!
             sendResponse(consumerID, dataPayload);
-
         }
-
     }
 
+    /**
+     * Abort the simulation
+     */
     public void abortSimulation() {
-
+        //
         abortSimulation = true;
-
     }
 
     /**
@@ -94,7 +76,7 @@ public class ProducerEntity extends SimulationEntity {
    //A REVOIR : proposition lever un timer au niveau du controller et dire au producer que c'est fini a la fin de la simulation
    public void endOfSimlation() {
 
-        //TO DO : send the results to the agent controller, wait the end of all thread
+        //TODO : send the results to the agent controller, wait the end of all thread
         // listener.simulationDone(resultSet);
     }
 }

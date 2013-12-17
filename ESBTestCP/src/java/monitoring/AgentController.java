@@ -1,13 +1,8 @@
 /*
-* To change this template, choose Tools | Templates
-* and open the template in the editor.
-*/
-
-
-
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 // EN stand by, en attente du JMs
-
-
 package monitoring;
 
 import datas.AgentConfiguration;
@@ -19,136 +14,159 @@ import interfaces.MonitoringMessageListener;
 import interfaces.SimulationMessageListener;
 import simulation.*;
 
-
 /**
-*
-* @author BambaLamine
-*/
-
-
-
+ *
+ * @author BambaLamine
+ */
 public class AgentController implements MonitoringMessageListener, SimulationMessageListener {
+
     private SimulationEntity simulationEntity;
     private JMSHandler jms;
 
+    /**
+     * Return a new AgentController entity, and start monitoring message handler.
+     */
     public AgentController() {
         jms = new JMSHandler();
         jms.setListener(this);
 
-        Thread jmsThread = new Thread (jms);
+        Thread jmsThread = new Thread(jms);
         jmsThread.start();
-       
     }
 
-   /* public void actualiserController(interfaceObservableJMS a){
-        if(a instanceof JMSHandler){
-               jms=(JMSHandler) a;
-               MessageFromJMSEntity_TEST mess;
-               mess=jms.getMessageFRomJMS();
-               System.out.println(mess.getMessageType());
-               
-            //if messsadeTYpe=1 ==> configuration of agents
-           if(jms.getMessageFRomJMS().getMessageType()==0)
-            {
-                 if(jms.getMessageFRomJMS().getAgent().getWsAgentType() == jms.getMessageFRomJMS().getAgent().getWsAgentType().CONSUMER)
-                 {
-                      consumer = new  ConsumerEntity();
-
-                       //ICI creer le thread du producteur et enregister son pid
-
-                      consumer.configureConsumer(jms.getMessageFRomJMS().getScenario().getTabScenario());
-                 } else {
-                      producer = new  ProducerEntity();
-
-                      //ICI creer le thread du producteur et enregister son pid
-                     // hMapProducer.put(jms.getMessageFRomJMS().getAgent().getName(), producer);
-
-                      //????? la configuration du provider c'est a dire son temps de reponse et son id,
-                     producer.configureProducer(jms.getMessageFRomJMS().getResponseTime(),jms.getMessageFRomJMS().getResponseSize());
-
-                 }
-
-            }
-             //If we receive a message of startSimulation (messageType = 1)
-            else if(jms.getMessageFRomJMS().getMessageType()==1)
-            {
-
-                  if(jms.getMessageFRomJMS().getAgent().getWsAgentType() == jms.getMessageFRomJMS().getAgent().getWsAgentType().CONSUMER)
-                 {
-                 
-                    String wsAdresse=jms.getMessageFRomJMS().getAgent().getWsAddress();
-                    String monitoringWsAdresse=jms.getMessageFRomJMS().getAgent().getMonitoringWSAddress();
-                    
-                    //recuperer le consumer à demarrer ??
-                    
-                    consumer.startSimulation();
-                 }
-                 else
-                 {
-                    String wsAdresse=jms.getMessageFRomJMS().getAgent().getWsAddress();
-                    String monitoringWsAdresse=jms.getMessageFRomJMS().getAgent().getMonitoringWSAddress();
-                    
-                    //recuperer le provider à demarrer ???
-
-                     producer.startSimulation();
-                }
-            }
-
-           //If we receive a message of abortSimulation (messageType = 2)
-            else if(jms.getMessageFRomJMS().getMessageType()==1)
-            {
-
-                  if(jms.getMessageFRomJMS().getAgent().getWsAgentType() == jms.getMessageFRomJMS().getAgent().getWsAgentType().CONSUMER)
-                 {
-
-                    String wsAdresse=jms.getMessageFRomJMS().getAgent().getWsAddress();
-                    String monitoringWsAdresse=jms.getMessageFRomJMS().getAgent().getMonitoringWSAddress();
-
-                    //recuperer le consumer à ABORTER ??
-
-                    consumer.abortSimulation();
-                 }
-                 else
-                 {
-                    String wsAdresse=jms.getMessageFRomJMS().getAgent().getWsAddress();
-                    String monitoringWsAdresse=jms.getMessageFRomJMS().getAgent().getMonitoringWSAddress();
-
-                    //recuperer le provider à ABORTER ???
-
-                     producer.abortSimulation();
-                }
-             }
-        }
-
-    }
-*/
+    /**
+     * Asks the simulationEntity to start the simulation
+     */
     public void startSimulationMessage() {
         simulationEntity.startSimulation();
     }
 
+    /**
+     * Asks the simulationEntity to abort the simulation
+     */
     public void stopSimulationMessage() {
         simulationEntity.abortSimulation();
     }
 
+    /**
+     * Asks to the simulationEntity (configured as a producer) to end the simulation
+     */
+    public void endSimulationMessage() {
+        if (simulationEntity instanceof ProducerEntity) {
+            ((ProducerEntity) simulationEntity).endOfSimlation();
+        }
+    }
+
+    /**
+     * Configure the simulationEntity
+     */
     public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
         //On crée une simulationEntity correspondant à la configuration reçue
         if (receiverAgent instanceof ConsumerConfiguration) {
             simulationEntity = new ConsumerEntity();
             simulationEntity.setListener(this);
-            //Passer la configuration au simulationEntity
+            ((ConsumerEntity) simulationEntity).configureConsumer(receiverAgent.getName(), simulationScenario);
         } else if (receiverAgent instanceof ProducerConfiguration) {
             simulationEntity = new ProducerEntity();
             simulationEntity.setListener(this);
-            //Passer la configuration au simulationEntity 
         }
         simulationEntity.setId(receiverAgent.getName());
     }
 
+    /**
+     * Send the simulation results to the master
+     * @param resultSet
+     */
     public void simulationDone(ResultSet resultSet) {
         jms.simulationDone(resultSet);
     }
 
+    /**
+     * Notifies the master that a fatal error occured
+     */
     public void fatalErrorOccured() {
-         jms.fatalErrorOccured();
+        jms.fatalErrorOccured();
     }
 }
+/* public void actualiserController(interfaceObservableJMS a){
+if(a instanceof JMSHandler){
+jms=(JMSHandler) a;
+MessageFromJMSEntity_TEST mess;
+mess=jms.getMessageFRomJMS();
+System.out.println(mess.getMessageType());
+
+//if messsadeTYpe=1 ==> configuration of agents
+if(jms.getMessageFRomJMS().getMessageType()==0)
+{
+if(jms.getMessageFRomJMS().getAgent().getWsAgentType() == jms.getMessageFRomJMS().getAgent().getWsAgentType().CONSUMER)
+{
+consumer = new  ConsumerEntity();
+
+//ICI creer le thread du producteur et enregister son pid
+
+consumer.configureConsumer(jms.getMessageFRomJMS().getScenario().getTabScenario());
+} else {
+producer = new  ProducerEntity();
+
+//ICI creer le thread du producteur et enregister son pid
+// hMapProducer.put(jms.getMessageFRomJMS().getAgent().getName(), producer);
+
+//????? la configuration du provider c'est a dire son temps de reponse et son id,
+producer.configureProducer(jms.getMessageFRomJMS().getResponseTime(),jms.getMessageFRomJMS().getResponseSize());
+
+}
+
+}
+//If we receive a message of startSimulation (messageType = 1)
+else if(jms.getMessageFRomJMS().getMessageType()==1)
+{
+
+if(jms.getMessageFRomJMS().getAgent().getWsAgentType() == jms.getMessageFRomJMS().getAgent().getWsAgentType().CONSUMER)
+{
+
+String wsAdresse=jms.getMessageFRomJMS().getAgent().getWsAddress();
+String monitoringWsAdresse=jms.getMessageFRomJMS().getAgent().getMonitoringWSAddress();
+
+//recuperer le consumer à demarrer ??
+
+consumer.startSimulation();
+}
+else
+{
+String wsAdresse=jms.getMessageFRomJMS().getAgent().getWsAddress();
+String monitoringWsAdresse=jms.getMessageFRomJMS().getAgent().getMonitoringWSAddress();
+
+//recuperer le provider à demarrer ???
+
+producer.startSimulation();
+}
+}
+
+//If we receive a message of abortSimulation (messageType = 2)
+else if(jms.getMessageFRomJMS().getMessageType()==1)
+{
+
+if(jms.getMessageFRomJMS().getAgent().getWsAgentType() == jms.getMessageFRomJMS().getAgent().getWsAgentType().CONSUMER)
+{
+
+String wsAdresse=jms.getMessageFRomJMS().getAgent().getWsAddress();
+String monitoringWsAdresse=jms.getMessageFRomJMS().getAgent().getMonitoringWSAddress();
+
+//recuperer le consumer à ABORTER ??
+
+consumer.abortSimulation();
+}
+else
+{
+String wsAdresse=jms.getMessageFRomJMS().getAgent().getWsAddress();
+String monitoringWsAdresse=jms.getMessageFRomJMS().getAgent().getMonitoringWSAddress();
+
+//recuperer le provider à ABORTER ???
+
+producer.abortSimulation();
+}
+}
+}
+
+}
+ */

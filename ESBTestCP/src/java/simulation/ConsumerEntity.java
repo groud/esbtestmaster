@@ -6,35 +6,32 @@ package simulation;
 
 import java.util.*;
 import datas.*;
-import interfaces.SimulationMessageListener;
 import java.util.TimerTask;
-import javax.xml.ws.BindingProvider;
 
 /**
  *
  * @author mariata
  */
 public class ConsumerEntity extends SimulationEntity {
-
     private SimulationScenario simulationScenario = null;
     private Hashtable<String, AgentConfiguration> hashAgentsConf;
     private ResultSet resultSet;
     private SimulationThread simulationThread;
-
-    //SimulationMessageListener listener; already defined in the superclass
-
+    
     /**
      * Configure the simulation scenario and id
      * @param id
      * @param simulationScenario
      */
-
     public void configureConsumer(String id, SimulationScenario simulationScenario) {
         this.simulationScenario = simulationScenario;
         this.setId(id);
         hashAgentsConf = this.initializeAdressesTable();
     }
 
+    /**
+     * Start the simulation
+     */
     @Override
     public void startSimulation() {
         //TODO : add receive response code
@@ -44,12 +41,19 @@ public class ConsumerEntity extends SimulationEntity {
 
     }
 
+    /**
+     * Abort the simulation
+     */
     @Override
     public void abortSimulation() {
         simulationThread.stop();
     }
 
-
+    /**
+     * Get an hashtable of agentconfiguration indexed by agents ids.
+     * Used to find a WS address corresponding to an ID.
+     * @return
+     */
     private Hashtable<String, AgentConfiguration> initializeAdressesTable() {
         Hashtable<String, AgentConfiguration> hashtable = new Hashtable<String, AgentConfiguration>();
         for (int i = 0; i < this.simulationScenario.getAgentsconfiguration().size(); i++) {
@@ -59,6 +63,11 @@ public class ConsumerEntity extends SimulationEntity {
         return hashtable;
     }
 
+    /**
+     * Logs a simulation event
+     * @param agent
+     * @param event
+     */
     private void writeSimulationEvent(AgentType agent, EventType event) {
         ResultEvent currentEvent = new ResultEvent();
         currentEvent.setAgentId(this.getid());
@@ -72,6 +81,9 @@ public class ConsumerEntity extends SimulationEntity {
         resultSet.getEvents().add(currentEvent);
     }
 
+    /**
+     * A Thread used to execute the simulation
+     */
     private class SimulationThread extends Thread {
 
         private Timer timer;
@@ -82,6 +94,7 @@ public class ConsumerEntity extends SimulationEntity {
         // use timer.scheduleAtFixedRate with delay = startDate + step.getBurstStartDate()
         // and period = step.getBurstDuration() / nbRequest
         // and CANCEL timer after the correct number of requests has been sent
+        @Override
         public void run() {
             int i;
             //send request
@@ -155,7 +168,7 @@ public class ConsumerEntity extends SimulationEntity {
                                    producerConf.getResponseTime(), producerConf.getResponseSize());
             System.out.println("Producer response :\n"+result);
         } catch (Exception ex) {
-            // TODO handle custom exceptions here
+            // TO DO handle custom exceptions here
         }
     }
     */
@@ -224,7 +237,10 @@ public class ConsumerEntity extends SimulationEntity {
     }
 
     
-
+    /**
+     * Teste la communication inter-agents.
+     * @param args
+     */
     public static void main(String[] args) {
         int requestPayloadSize = 16;
         String producerId = "producer1";

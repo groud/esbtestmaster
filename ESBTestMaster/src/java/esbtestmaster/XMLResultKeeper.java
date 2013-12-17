@@ -38,11 +38,11 @@ public class XMLResultKeeper implements ResultKeeperInterface {
      * @throws IOException
      */
     private void init() throws IOException {
-        //TODO : Erase the file if it exists, create the file and put the firsts tags.
         this.clearLog();
         File xmlFile = new File(XMLfilename);
         xmlFile.createNewFile();
-        Debug.info("ResultKeeper : "+XMLfilename+" initialization done.");
+        //TODO :Add the firsts tags to the XML
+        Debug.info("ResultKeeper : " + XMLfilename + " initialization done.");
     }
 
     // -------------------------------
@@ -82,7 +82,7 @@ public class XMLResultKeeper implements ResultKeeperInterface {
                 Element child;
                 if (event instanceof ResultSimulationEvent) {
                     child = new Element("simulationEvent");
-                    child.addContent(new Element("requestId").setText(String.valueOf(((ResultSimulationEvent)event).getRequestId())));
+                    child.addContent(new Element("requestId").setText(String.valueOf(((ResultSimulationEvent) event).getRequestId())));
                 } else {
                     child = new Element("event");
                 }
@@ -92,7 +92,7 @@ public class XMLResultKeeper implements ResultKeeperInterface {
                 child.setAttribute("eventType", String.valueOf(event.getAgentType()));
                 root.addContent(child);
             }
-            
+
             document.setContent(root);
 
             //Writes the XMLFile
@@ -107,6 +107,12 @@ public class XMLResultKeeper implements ResultKeeperInterface {
         }
     }
 
+    /**
+     * Return a result set corresponding to the used XML file
+     * @return
+     * @throws IOException
+     * @throws BadXMLException
+     */
     public ResultSet getLog() throws IOException, BadXMLException {
         return getLog(XMLfilename);
     }
@@ -117,7 +123,7 @@ public class XMLResultKeeper implements ResultKeeperInterface {
     public void clearLog() {
         File file = new File(XMLfilename);
         if (file.delete()) {
-            Debug.info("ResultKeeper : "+XMLfilename+" deleted (log cleared).");
+            Debug.info("ResultKeeper : " + XMLfilename + " deleted (log cleared).");
         } else {
             Debug.info("ResultKeeper : The XML result file does not exists.");
         }

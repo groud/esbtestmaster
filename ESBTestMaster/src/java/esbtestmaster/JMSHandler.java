@@ -2,23 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package esbtestmaster;
 
-import datas.AgentConfiguration;
-
 import datas.JMSMessages.*;
-
-import datas.ProducerConfiguration;
-import datas.SimulationScenario;
-import interfaces.MonitoringMessageHandler;
-import interfaces.MonitoringMsgListener;
+import datas.*;
+import interfaces.*;
 
 /**
  *
  * @author gilles
  */
 public class JMSHandler implements MonitoringMessageHandler, Runnable {
+
     MonitoringMsgListener mmListener;
     //public void JMSHandler(){
     //    MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
@@ -31,7 +26,6 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
     public void setListener(MonitoringMsgListener mmListener) {
         this.mmListener = mmListener;
     }
-
 
     // -------------------------------
     //   INTERFACES IMPLEMENTATIONS
@@ -53,14 +47,18 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
      * @param receiverAgent
      */
     public void stopSimulationMessage(AgentConfiguration receiverAgent) {
-     StopJMSMessage stopJMSMessage = new StopJMSMessage();
-     MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
-     masterMessageHandler.sendToTopic(stopJMSMessage);
+        StopJMSMessage stopJMSMessage = new StopJMSMessage();
+        MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
+        masterMessageHandler.sendToTopic(stopJMSMessage);
         //TODO Stop JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
-
+    /**
+     * Sends a message to a producer notifying that the simulation is over.
+     * The producer should then send it results.
+     * @param receiverAgent
+     */
     public void endSimulationMessage(ProducerConfiguration receiverAgent) {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -72,8 +70,8 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
      */
     public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
         ConfigJMSMessage configJMSMessage = new ConfigJMSMessage();
-        configJMSMessage.putAgentConfiguration(receiverAgent);
-        configJMSMessage.putScenario(simulationScenario);
+        configJMSMessage.setAgentConfiguration(receiverAgent);
+        configJMSMessage.setScenario(simulationScenario);
         MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
         masterMessageHandler.sendToTopic(configJMSMessage);
 
@@ -85,13 +83,11 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
     //   RUNNABLE
     // -------------------------------
     /**
-     * Runs a JMS Messages listening thread
+     * Runs a JMS Messages listening thread.
      */
     public void run() {
         //TODO Ecouter les messages et les envoie au MasterController avec :
         //mmListener.simulationDoneForOneAgent(null, null);
         //mmListener.fatalErrorOccured(null, null);
     }
-
-
 }

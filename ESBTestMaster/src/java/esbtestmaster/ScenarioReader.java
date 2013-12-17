@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package esbtestmaster;
 
 import Exceptions.BadXMLException;
@@ -20,7 +19,10 @@ import utils.Debug;
  *
  * @author gilles
  */
-public class ScenarioReader implements ScenarioReaderInterface  {
+public class ScenarioReader implements ScenarioReaderInterface {
+    // -------------------------------
+    //   INTERFACES IMPLEMENTATIONS
+    // -------------------------------
 
     /**
      * Returns a SimulationScenario read from an XML file.
@@ -31,8 +33,8 @@ public class ScenarioReader implements ScenarioReaderInterface  {
      */
     public SimulationScenario readXMLFile(String filename) throws IOException, BadXMLException {
         //Opens and validate the XML file
-	SAXBuilder builder = new SAXBuilder(XMLReaders.XSDVALIDATING);
-	File xmlFile = new File(filename);
+        SAXBuilder builder = new SAXBuilder(XMLReaders.XSDVALIDATING);
+        File xmlFile = new File(filename);
 
         SimulationScenario simulationScenario = new SimulationScenario();
 
@@ -47,21 +49,21 @@ public class ScenarioReader implements ScenarioReaderInterface  {
             List agentslist = configuration.getChildren();//Get the configuration object
 
             for (int i = 0; i < agentslist.size(); i++) {
-               Element agent = (Element) agentslist.get(i);
-               if (agent.getName().equals("provider")) {
-                   ProducerConfiguration prodConf = new ProducerConfiguration();
-                   prodConf.setWsAddress(agent.getChildText("address"));
-                   prodConf.setMonitoringWSAddress(agent.getChildText("monitoringAddress"));
-                   prodConf.setName(agent.getChildText("name"));
-                   prodConf.setResponseTime(Integer.parseInt(agent.getChildText("responsetime")));
-                   simulationScenario.getAgentsconfiguration().add(prodConf);
-               } else if (agent.getName().equals("consumer")) {
-                   ConsumerConfiguration consConf = new ConsumerConfiguration();
-                   consConf.setWsAddress(agent.getChildText("address"));
-                   consConf.setMonitoringWSAddress(agent.getChildText("monitoringAddress"));
-                   consConf.setName(agent.getChildText("name"));
-                   simulationScenario.getAgentsconfiguration().add(consConf);
-              }
+                Element agent = (Element) agentslist.get(i);
+                if (agent.getName().equals("provider")) {
+                    ProducerConfiguration prodConf = new ProducerConfiguration();
+                    prodConf.setWsAddress(agent.getChildText("address"));
+                    prodConf.setMonitoringWSAddress(agent.getChildText("monitoringAddress"));
+                    prodConf.setName(agent.getChildText("name"));
+                    prodConf.setResponseTime(Integer.parseInt(agent.getChildText("responsetime")));
+                    simulationScenario.getAgentsconfiguration().add(prodConf);
+                } else if (agent.getName().equals("consumer")) {
+                    ConsumerConfiguration consConf = new ConsumerConfiguration();
+                    consConf.setWsAddress(agent.getChildText("address"));
+                    consConf.setMonitoringWSAddress(agent.getChildText("monitoringAddress"));
+                    consConf.setName(agent.getChildText("name"));
+                    simulationScenario.getAgentsconfiguration().add(consConf);
+                }
             }
 
             //Run
@@ -69,21 +71,21 @@ public class ScenarioReader implements ScenarioReaderInterface  {
             List burstslist = run.getChildren("burst");//Get the configuration object
 
             for (int i = 0; i < burstslist.size(); i++) {
-               Element burst = (Element) burstslist.get(i);
-               SimulationStep simulationStep = new SimulationStep();
+                Element burst = (Element) burstslist.get(i);
+                SimulationStep simulationStep = new SimulationStep();
 
-               simulationStep.setConsumerID(burst.getAttributeValue("src"));
-               simulationStep.setProviderID(burst.getAttributeValue("dest"));
-               simulationStep.setBurstStartDate(Long.parseLong(burst.getAttributeValue("startdate")));
-               simulationStep.setBurstStopDate(Long.parseLong(burst.getAttributeValue("stopdate")));
-               simulationStep.setBurstRate(Float.parseFloat(burst.getChildText("rate")));
-               simulationStep.setDataPayloadSize(Integer.parseInt(burst.getChildText("payloadsize")));
+                simulationStep.setConsumerID(burst.getAttributeValue("src"));
+                simulationStep.setProviderID(burst.getAttributeValue("dest"));
+                simulationStep.setBurstStartDate(Long.parseLong(burst.getAttributeValue("startdate")));
+                simulationStep.setBurstStopDate(Long.parseLong(burst.getAttributeValue("stopdate")));
+                simulationStep.setBurstRate(Float.parseFloat(burst.getChildText("rate")));
+                simulationStep.setDataPayloadSize(Integer.parseInt(burst.getChildText("payloadsize")));
 
-               simulationScenario.getSteps().add(simulationStep);
+                simulationScenario.getSteps().add(simulationStep);
             }
-             Debug.info("ScenarioReader : \n"+simulationScenario);
+            Debug.info("ScenarioReader : \n" + simulationScenario);
         } catch (JDOMException ex) {
-            throw new BadXMLException("Bad XML file : \n"+ex.getMessage());
+            throw new BadXMLException("Bad XML file : \n" + ex.getMessage());
         }
         return simulationScenario;
     }
