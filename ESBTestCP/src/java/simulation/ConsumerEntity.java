@@ -17,11 +17,11 @@ import javax.xml.ws.BindingProvider;
 public class ConsumerEntity extends SimulationEntity {
 
     private SimulationScenario simulationScenario = null;
-    private Hashtable<String, String> hashWSAddresses;
+    private Hashtable<String, AgentConfiguration> hashAgentsConf;
     private ResultSet resultSet;
     private SimulationThread simulationThread;
 
-    SimulationMessageListener listener;
+    //SimulationMessageListener listener; already defined in the superclass
 
     /**
      * Configure the simulation scenario and id
@@ -33,7 +33,7 @@ public class ConsumerEntity extends SimulationEntity {
         this.simulationScenario = simulationScenario;
         this.setId(id);
 
-        hashWSAddresses = this.initializeAdressesTable();
+        hashAgentsConf = this.initializeAdressesTable();
     }
 
     @Override
@@ -50,10 +50,12 @@ public class ConsumerEntity extends SimulationEntity {
         simulationThread.stop();
     }
 
-    private Hashtable<String, String> initializeAdressesTable() {
-        Hashtable<String, String> hashtable = new Hashtable<String, String>();
+
+    private Hashtable<String, AgentConfiguration> initializeAdressesTable() {
+        Hashtable<String, AgentConfiguration> hashtable = new Hashtable<String, AgentConfiguration>();
         for (int i = 0; i < this.simulationScenario.getAgentsconfiguration().size(); i++) {
-            hashtable.put(this.simulationScenario.getAgentsconfiguration().get(i).getName(), this.simulationScenario.getAgentsconfiguration().get(i).getWsAddress());
+            //hashtable.put(this.simulationScenario.getAgentsconfiguration().get(i).getName(), this.simulationScenario.getAgentsconfiguration().get(i).getWsAddress());
+            hashtable.put(this.simulationScenario.getAgentsconfiguration().get(i).getName(), this.simulationScenario.getAgentsconfiguration().get(i));
         }
         return hashtable;
     }
@@ -99,8 +101,9 @@ public class ConsumerEntity extends SimulationEntity {
                             int respTime = 1000; // ms
                             int respSize = 32; // bytes
 
-                            sendRequest(step.getProviderID(), step.getDataPayloadSize(), respTime, respSize);
-                                 writeSimulationEvent(AgentType.CONSUMER , EventType.REQUEST_SENT );
+                            // TODO : send the request asynchronously
+                            //sendRequest(step.getProviderID(), step.getDataPayloadSize(), respTime, respSize);
+                              //   writeSimulationEvent(AgentType.CONSUMER , EventType.REQUEST_SENT );
                                  
 
                         }
@@ -116,32 +119,52 @@ public class ConsumerEntity extends SimulationEntity {
         }
     }
 
-    private void sendRequest(String producerId, int reqPayloadSize, int respTime, int respSize) {
+    private void sendRequest(String producerId, int reqPayloadSize) {
         String requestData = null;
+        ProducerConfiguration producerConf = null;
+        // tempAgentConf used to test if the AgentConfiguration exists and if it's
+        // a ProducerConfiguration without having to cast all the time afterwards
+        AgentConfiguration tempAgentConf;
+
+        tempAgentConf = this.hashAgentsConf.get(producerId);
+
+        if(tempAgentConf == null) {
+            throw new IllegalArgumentException("AgentConfiguration is null");
+        }
+        else if(tempAgentConf.getAgentType() == AgentType.PRODUCER) {
+            // To avoid typecasting afterwards
+            producerConf = (ProducerConfiguration) tempAgentConf;
+        }
+        else {
+            throw new IllegalArgumentException("Remote agent is not a producer");
+        }
 
         try { // Call Web Service Operation
             simulationRef.SimulationWSService service = new simulationRef.SimulationWSService();
             simulationRef.SimulationWS port = service.getSimulationWSPort();
 
             // Dynamic URL binding;
-            ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, this.hashWSAddresses.get(producerId));
+            ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, producerConf.getWsAddress());
 
             // Fill the same answer String with reqPayloadSize characters
             if (reqPayloadSize > 0) {
-                char[] array = new char[respSize];
+                char[] array = new char[reqPayloadSize];
                 Arrays.fill(array, 'A');
                 requestData = new String(array);
             }
 
             // TODO : log events before and after request
-            //java.lang.String result = port.requestOperation(producerId, requestData, respTime, respSize);
-            //System.out.println("Result = "+result);
+            java.lang.String result = port.requestOperation(producerId, requestData, 
+                                   producerConf.getResponseTime(), producerConf.getResponseSize());
+            System.out.println("Producer response = "+result);
         } catch (Exception ex) {
             // TODO handle custom exceptions here
         }
     }
 
     public static void main(String[] args) {
+        int requestPayloadSize = 16;
+
         // Test ConsumerEntity
         ConsumerEntity cons = new ConsumerEntity();
 
@@ -149,11 +172,13 @@ public class ConsumerEntity extends SimulationEntity {
         ProducerConfiguration pc = new ProducerConfiguration();
         pc.setName("id");
         pc.setWsAddress("http://localhost:8090/ESBTestCompositeService1/casaPort1");
+        pc.setResponseSize(32);
+        pc.setResponseTime(1000);
         ss.getAgentsconfiguration().add(pc);
         cons.configureConsumer("lol", ss);
 
         cons.initializeAdressesTable();
 
-        cons.sendRequest("id", 16, 1000, 32);
+        cons.sendRequest("id", requestPayloadSize);
     }
 }
