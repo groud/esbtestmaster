@@ -6,6 +6,7 @@
 package interfaces;
 
 import datas.AgentConfiguration;
+import datas.ProducerConfiguration;
 import datas.SimulationScenario;
 
 /**
@@ -15,5 +16,6 @@ import datas.SimulationScenario;
 public interface MonitoringMessageHandler {
     public void startSimulationMessage(AgentConfiguration receiverAgent);
     public void stopSimulationMessage(AgentConfiguration receiverAgent);
+    public void endSimulationMessage(ProducerConfiguration receiverAgent);
     public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario);
 }

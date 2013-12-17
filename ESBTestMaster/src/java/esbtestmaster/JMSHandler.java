@@ -6,6 +6,7 @@
 package esbtestmaster;
 
 import datas.AgentConfiguration;
+import datas.ProducerConfiguration;
 import datas.SimulationScenario;
 import interfaces.MonitoringMessageHandler;
 import interfaces.MonitoringMsgListener;
@@ -47,6 +48,10 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    //
+    public void endSimulationMessage(ProducerConfiguration receiverAgent) {
+        //throw new UnsupportedOperationException("Not supported yet.");
+    }
     /**
      * Asks an agent to self configure withthe given AgentConfiguration
      * @param receiverAgent
@@ -68,4 +73,6 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
         //mmListener.simulationDoneForOneAgent(null, null);
         //mmListener.fatalErrorOccured(null, null);
     }
+
+
 }
