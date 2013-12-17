@@ -3,12 +3,13 @@
  * and open the template in the editor.
  */
 
-package esbtestmaster;
+package datas;
 
 /**
  *
  * @author gilles
  */
-public class ResultKeeper {
-
+public enum EventType {
+    REQUEST_SENT, REQUEST_RECEIVED, RESPONSE_SENT, RESPONSE_RECEIVED,
+    CONNEXION_ERR
 }

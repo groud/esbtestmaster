@@ -11,6 +11,8 @@ import datas.SimulationScenario;
 import interfaces.*;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,16 +29,20 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
 
     private HashMap<String,Boolean> finishedMap;
 
+
+
     public MasterController() {
+        //We instanciate the different components.
         shell = new CLI(this);
         scenarioReader = new ScenarioReader();
         kpiCalculator = new KPICalculator();
         monitoringMsgHandler = new JMSHandler();
 
-        //On starte le thread en écoute des messages JMS
-        Thread monitoringThread = new Thread (monitoringMsgHandler);
-        monitoringThread.start();
-        
+        //We start the Thread listening to the JMS messages
+        Thread monitoringMsgThread = new Thread (monitoringMsgHandler);
+        monitoringMsgThread.start();
+
+        //We start the CLI
         shell.launch();
     }
 
@@ -45,13 +51,18 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
      * @param resultsFilename
      */
     public void startSimulation(String resultsFilename) {
-        if (this.currentScenario != null) {
-             resultsKeeper = new XMLResultKeeper(resultsFilename);
-             finishedMap = new HashMap<String,Boolean>();
-            //TODO
-            //throw new UnsupportedOperationException("Not supported yet.");
-        } else {
-            shell.displayErrorMessage("Starting failed : no configuration has been provided.");
+        try {
+            if (this.currentScenario != null) {
+
+                resultsKeeper = new XMLResultKeeper(resultsFilename);
+                finishedMap = new HashMap<String, Boolean>();
+                //TODO
+                //throw new UnsupportedOperationException("Not supported yet.");
+            } else {
+                shell.displayErrorMessage("Starting failed : no configuration has been provided.");
+            }
+        } catch (IOException ex) {
+            shell.displayErrorMessage(ex.getMessage());
         }
     }
 
