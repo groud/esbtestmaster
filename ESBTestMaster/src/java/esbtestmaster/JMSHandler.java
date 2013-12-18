@@ -4,6 +4,8 @@
  */
 package esbtestmaster;
 
+import datas.JMSMessages.StartJMSMessage;
+import datas.JMSMessages.StopJMSMessage;
 import datas.JMSMessages.*;
 import datas.*;
 import interfaces.*;
