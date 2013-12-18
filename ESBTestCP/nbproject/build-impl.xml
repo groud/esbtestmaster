@@ -381,12 +381,12 @@ exists or setup the property manually. For example like this:
                 COMPILATION SECTION
             -->
     <target depends="init" if="no.dist.ear.dir" name="deps-module-jar" unless="no.deps">
-        <ant antfile="${project.ESTTestBeansLibrary}/build.xml" inheritall="false" target="jar">
+        <ant antfile="${project.ESBTestBeans}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
     </target>
     <target depends="init" if="dist.ear.dir" name="deps-ear-jar" unless="no.deps">
-        <ant antfile="${project.ESTTestBeansLibrary}/build.xml" inheritall="false" target="jar">
+        <ant antfile="${project.ESBTestBeans}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
     </target>
@@ -525,14 +525,14 @@ exists or setup the property manually. For example like this:
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,-do-dist-with-manifest,-do-dist-without-manifest" name="do-dist"/>
     <target depends="init" if="dist.ear.dir" name="library-inclusion-in-manifest">
-        <copyfiles files="${reference.ESTTestBeansLibrary.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.reference.ESTTestBeansLibrary.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${reference.ESBTestBeans.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.reference.ESBTestBeans.jar" todir="${dist.ear.dir}"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${manifest.reference.ESTTestBeansLibrary.jar} "/>
+            <attribute name="Class-Path" value="${manifest.reference.ESBTestBeans.jar} "/>
         </manifest>
     </target>
     <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
-        <copyfiles files="${reference.ESTTestBeansLibrary.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${reference.ESBTestBeans.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" if="do.tmp.war.package" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>
@@ -826,7 +826,7 @@ exists or setup the property manually. For example like this:
                 CLEANUP SECTION
             -->
     <target depends="init" if="no.dist.ear.dir" name="deps-clean" unless="no.deps">
-        <ant antfile="${project.ESTTestBeansLibrary}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.ESBTestBeans}/build.xml" inheritall="false" target="clean"/>
     </target>
     <target depends="init" name="do-clean">
         <condition property="build.dir.to.clean" value="${build.web.dir}">

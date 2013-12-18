@@ -13,11 +13,11 @@
             </test-roots>
             <included-library>file.reference.naturalcli-1.2.3.jar</included-library>
             <included-library>file.reference.jdom-2.0.5.jar</included-library>
-            <included-library>reference.ESTTestBeansLibrary.jar</included-library>
+            <included-library>reference.ESBTestBeans.jar</included-library>
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
-                <foreign-project>ESTTestBeansLibrary</foreign-project>
+                <foreign-project>ESBTestBeans</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>

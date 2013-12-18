@@ -387,10 +387,10 @@ exists or setup the property manually. For example like this:
         </fail>
     </target>
     <target depends="init" if="no.dist.ear.dir" name="-deps-module-jar" unless="no.deps">
-        <ant antfile="${project.ESTTestBeansLibrary}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.ESBTestBeans}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-deps-ear-jar" unless="no.deps">
-        <ant antfile="${project.ESTTestBeansLibrary}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.ESBTestBeans}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init, -check-main-class, -deps-module-jar, -deps-ear-jar" name="deps-jar"/>
     <target depends="init,deps-jar" name="-pre-pre-compile">
@@ -404,14 +404,14 @@ exists or setup the property manually. For example like this:
         <mkdir dir="${build.classes.dir}/META-INF/lib"/>
         <copyfiles files="${file.reference.naturalcli-1.2.3.jar}" todir="${build.classes.dir}/META-INF/lib"/>
         <copyfiles files="${file.reference.jdom-2.0.5.jar}" todir="${build.classes.dir}/META-INF/lib"/>
-        <copyfiles files="${reference.ESTTestBeansLibrary.jar}" todir="${build.classes.dir}/META-INF/lib"/>
+        <copyfiles files="${reference.ESBTestBeans.jar}" todir="${build.classes.dir}/META-INF/lib"/>
     </target>
     <target depends="compile" if="dist.ear.dir" name="library-inclusion-in-manifest">
         <copyfiles files="${file.reference.naturalcli-1.2.3.jar}" manifestproperty="manifest.file.reference.naturalcli-1.2.3.jar" todir="${dist.ear.dir}"/>
         <copyfiles files="${file.reference.jdom-2.0.5.jar}" manifestproperty="manifest.file.reference.jdom-2.0.5.jar" todir="${dist.ear.dir}"/>
-        <copyfiles files="${reference.ESTTestBeansLibrary.jar}" manifestproperty="manifest.reference.ESTTestBeansLibrary.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${reference.ESBTestBeans.jar}" manifestproperty="manifest.reference.ESBTestBeans.jar" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${manifest.file.reference.naturalcli-1.2.3.jar} ${manifest.file.reference.jdom-2.0.5.jar} ${manifest.reference.ESTTestBeansLibrary.jar} "/>
+            <attribute name="Class-Path" value="${manifest.file.reference.naturalcli-1.2.3.jar} ${manifest.file.reference.jdom-2.0.5.jar} ${manifest.reference.ESBTestBeans.jar} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">
@@ -833,7 +833,7 @@ exists or setup the property manually. For example like this:
                 ===============
             -->
     <target depends="init" if="no.dist.ear.dir" name="deps-clean" unless="no.deps">
-        <ant antfile="${project.ESTTestBeansLibrary}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.ESBTestBeans}/build.xml" inheritall="false" target="clean"/>
     </target>
     <target depends="init" name="-do-clean">
         <delete dir="${build.dir}"/>
