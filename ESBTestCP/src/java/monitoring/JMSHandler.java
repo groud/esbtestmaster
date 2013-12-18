@@ -22,10 +22,10 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
      * Returns an instance of a JMSHandler, then start a listening thread for JMS messages
      */
     public JMSHandler() {
-        //TODO : Créer un thread en écoute des messages JMS. En fonction de ceux-ci, prévenir le controller à l'aide de :
+        //TODO JMS: Créer un thread en écoute des messages JMS. En fonction de ceux-ci, prévenir le controller à l'aide de :
         //listener.configurationMessage(config, config);
         //listener.startMessage()
-        //listener.stopMessage()
+        //listener.abortMessage()
         //listener.endMessage()
     }
 
@@ -33,7 +33,7 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
      * Listen to the messages then send them to the controller
      */
     public void run() {
-        //TODO Ecouter les messages et les envoie au MasterController avec :
+        //TODO JMS : Ecouter les messages et les envoie au MasterController avec :
         AgentMessageHandler myAgentMsgHandler = new AgentMessageHandler();
         Serializable message;
         message = myAgentMsgHandler.receiveFromTopic();
@@ -43,8 +43,8 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
             listener.configurationMessage(myMessage.getAgentConfiguration(), myMessage.getScenario());
         } else if (message instanceof StartJMSMessage) {
             listener.startSimulationMessage();
-        } else if (message instanceof StopJMSMessage) {
-            listener.stopSimulationMessage();
+        } else if (message instanceof AbortJMSMessage) {
+            listener.abortSimulationMessage();
         } else if (message instanceof EndJMSMessage) {
             listener.endSimulationMessage();
         }
@@ -66,13 +66,13 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
      * @param resultSet
      */
     public void simulationDone(ResultSet resultSet) {
-        //TODO : Envoyer le message JMS au master avec le résultat
+        //TODO JMS: Envoyer le message JMS au master avec le résultat
     }
 
     /**
      * Sends a message to the master notifying that a fatal error occured
      */
     public void fatalErrorOccured() {
-        //TODO : Envoyer le message JMS au master pour indiquer que la simulation n'a pu être terminée
+        //TODO JMS: Envoyer le message JMS au master pour indiquer que la simulation n'a pu être terminée
     }
 }

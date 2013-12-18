@@ -24,6 +24,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
     private SimulationScenario currentScenario;
     private HashMap<String, Boolean> finishedMap;
 
+    private boolean consumersTerminated;
     /**
      * Returns an instance of a master controller then start it.
      */
@@ -54,6 +55,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
             if (this.currentScenario != null) {
                 resultsKeeper = new XMLResultKeeper(resultsFilename);
                 finishedMap = new HashMap<String, Boolean>();
+                this.consumersTerminated = false;
                 //TODO
                 //throw new UnsupportedOperationException("Not supported yet.");
             } else {
@@ -67,13 +69,13 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
     /**
      * Aborts the simulation.
      */
-    public void stopSimulation() {
+    public void abortSimulation() {
         if (this.currentScenario != null) {
-            //On envoie l'ordre à tous les agents de stopper la simulation.
+            //We ask to the agents to abort the simulation.
             for (int i = 0; i < this.currentScenario.getAgentsconfiguration().size(); i++) {
-                monitoringMsgHandler.stopSimulationMessage(this.currentScenario.getAgentsconfiguration().get(i));
+                monitoringMsgHandler.abortSimulationMessage(this.currentScenario.getAgentsconfiguration().get(i));
             }
-            //On notifie l'utilisateur que la simulation a bien été stoppée.
+            //We notify the user that the simulation has been aborted.
             shell.notifySimulationAborted();
         } else {
             shell.displayErrorMessage("Aborting failed : no configuration has been provided.");
@@ -86,20 +88,20 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
      */
     public void loadScenario(String XMLfile) {
         try {
-            //Recupère le scenario depuis un XML
+            //We get the scenario XML
             this.currentScenario = scenarioReader.readXMLFile(XMLfile);
-            //On envoie l'ordre à tous les agents de se configurer
-            for (int i = 0; i < this.currentScenario.getAgentsconfiguration().size(); i++) {
-                monitoringMsgHandler.configurationMessage(this.currentScenario.getAgentsconfiguration().get(i), this.currentScenario);
+            //We the send a configuration message to the agents
+            for (AgentConfiguration agentConfiguration :this.currentScenario.getAgentsconfiguration()){
+                monitoringMsgHandler.configurationMessage(agentConfiguration, this.currentScenario);
             }
-            //On notifie l'utilisateur pour lui indiquer que tout s'est bien passé.
+            //We notify the user that everything happened well.
             shell.notifyConfigurationLoaded(this.currentScenario);
         } catch (IOException ex) {
             shell.displayErrorMessage(ex.getMessage());
-            this.stopSimulation();
+            this.abortSimulation();
         } catch (BadXMLException ex) {
             shell.displayErrorMessage(ex.getMessage());
-            this.stopSimulation();
+            this.abortSimulation();
         }
     }
 
@@ -152,22 +154,28 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
             }
 
             //On verifie que tous les consumers ont terminé la simulation
-            boolean consumersTerminated = true;
-            for (int i = 0; i < this.currentScenario.getAgentsconfiguration().size(); i++) {
-                if (this.currentScenario.getAgentsconfiguration().get(i) instanceof ProducerConfiguration && finishedMap.get(this.currentScenario.getAgentsconfiguration().get(i).getName()) != true) {
-                    consumersTerminated = false;
+            if (this.consumersTerminated == false) {
+                for (AgentConfiguration agentConfiguration:this.currentScenario.getAgentsconfiguration()) {
+                    if (agentConfiguration instanceof ConsumerConfiguration && finishedMap.get(agentConfiguration.getName()) != true) {
+                        consumersTerminated = false;
+                    }
+                }
+                
+                //If the simulation is over for the consumers, we send a message to the producers
+                if(this.consumersTerminated) {
+                    for (AgentConfiguration agentConfiguration:this.currentScenario.getAgentsconfiguration()) {
+                        if (agentConfiguration instanceof ProducerConfiguration) {
+                            monitoringMsgHandler.endSimulationMessage((ProducerConfiguration)agentConfiguration);
+                        }
+                    }
                 }
             }
-
-
-            //TODO : SEND A MESSAGE TO THE PRODUCERS IF THE SIMULATION IS OVER
-
 
             //On verifie que tous les agents ont terminé la simulation.
             if (consumersTerminated) {
                 boolean terminated = true;
-                for (int i = 0; i < this.currentScenario.getAgentsconfiguration().size(); i++) {
-                    if (finishedMap.get(this.currentScenario.getAgentsconfiguration().get(i).getName()) != true) {
+                for (AgentConfiguration agentConfiguration:this.currentScenario.getAgentsconfiguration()) {
+                    if (finishedMap.get(agentConfiguration.getName()) != true) {
                         terminated = false;
                     }
                 }
@@ -187,7 +195,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
      */
     public void fatalErrorOccured(String agentID, String msg) {
         shell.displayErrorMessage("A error on the agent " + agentID + " : " + msg + "\n");
-        this.stopSimulation();
+        this.abortSimulation();
     }
 
     /**

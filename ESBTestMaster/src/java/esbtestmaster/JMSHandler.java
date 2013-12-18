@@ -4,8 +4,6 @@
  */
 package esbtestmaster;
 
-import datas.JMSMessages.StartJMSMessage;
-import datas.JMSMessages.StopJMSMessage;
 import datas.JMSMessages.*;
 import datas.*;
 import interfaces.*;
@@ -40,7 +38,7 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
         StartJMSMessage startJMSMessage = new StartJMSMessage();
         MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
         masterMessageHandler.sendToTopic(startJMSMessage);
-        //TODO Start JMS message to the receiverAgent
+        //TODO JMS : Start JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -48,11 +46,11 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
      * Asks an agent to abort the simulation
      * @param receiverAgent
      */
-    public void stopSimulationMessage(AgentConfiguration receiverAgent) {
-        StopJMSMessage stopJMSMessage = new StopJMSMessage();
+    public void abortSimulationMessage(AgentConfiguration receiverAgent) {
+        AbortJMSMessage abortJMSMessage = new AbortJMSMessage();
         MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
-        masterMessageHandler.sendToTopic(stopJMSMessage);
-        //TODO Stop JMS message to the receiverAgent
+        masterMessageHandler.sendToTopic(abortJMSMessage);
+        //TODO JMS : Abort JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -77,7 +75,7 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
         MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
         masterMessageHandler.sendToTopic(configJMSMessage);
 */
-        //TODO  Configuration JMS message to the receiverAgent
+        //TODO JMS : Configuration JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -88,7 +86,7 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
      * Runs a JMS Messages listening thread.
      */
     public void run() {
-        //TODO Ecouter les messages et les envoie au MasterController avec :
+        //TODO JMS : Ecouter les messages et les envoie au MasterController avec :
         //mmListener.simulationDoneForOneAgent(null, null);
         //mmListener.fatalErrorOccured(null, null);
     }

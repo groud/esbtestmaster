@@ -11,6 +11,6 @@ import java.io.Serializable;
  *
  * @author BambaLamine
  */
-public class StopJMSMessage implements Serializable {
+public class AbortJMSMessage implements Serializable {
 
 }

@@ -15,6 +15,6 @@ import datas.SimulationScenario;
 public interface MonitoringMessageListener {
    public void startSimulationMessage();
    public void endSimulationMessage();
-   public void stopSimulationMessage();
+   public void abortSimulationMessage();
    public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario);
 }

@@ -44,7 +44,7 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
     /**
      * Asks the simulationEntity to abort the simulation
      */
-    public void stopSimulationMessage() {
+    public void abortSimulationMessage() {
         simulationEntity.abortSimulation();
     }
 

@@ -32,10 +32,11 @@ public class ResultSet {
 
     @Override
     public String toString() {
-        String str = "";
+        String str = "-- ResultSet -- \n";
         for(Iterator it = events.iterator(); it.hasNext();) {
-            str = str + it.next();
+            str = str + it.next() +"\n";
         }
+        str = str + "--------------\n";
         return str;
     }
 

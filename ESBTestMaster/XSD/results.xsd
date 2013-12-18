@@ -5,25 +5,27 @@
   <xsd:element name="results">
     <xsd:complexType>
       <xsd:sequence>
-        <xsd:element name="simulationEvent" maxOccurs="unbounded" minOccurs="0">
-          <xsd:complexType>
-		<xsd:sequence>
-			<xsd:element type="xsd:long" name="requestId" minOccurs="1" maxOccurs="2"/>
-		</xsd:sequence>
-		<xsd:attribute type="xsd:string" name="agentType" use="required"/>
-		<xsd:attribute type="xsd:string" name="agentId" use="required"/>
-		<xsd:attribute type="xsd:long" name="eventDate" use="required"/>
-		<xsd:attribute type="xsd:string" name="eventType" use="required"/>
-          </xsd:complexType>
-        </xsd:element>
-	<xsd:element name="event" maxOccurs="unbounded" minOccurs="0">
-          <xsd:complexType>
-            <xsd:attribute type="xsd:string" name="agentType" use="required"/>
-            <xsd:attribute type="xsd:string" name="agentId" use="required"/>
-            <xsd:attribute type="xsd:long" name="eventDate" use="required"/>
-            <xsd:attribute type="xsd:string" name="eventType" use="required"/>
-          </xsd:complexType>
-        </xsd:element>
+	<xsd:choice maxOccurs="unbounded">
+		<xsd:element name="event">
+		  <xsd:complexType>
+		    <xsd:attribute type="xsd:string" name="agentType" use="required"/>
+		    <xsd:attribute type="xsd:string" name="agentId" use="required"/>
+		    <xsd:attribute type="xsd:long" name="eventDate" use="required"/>
+		    <xsd:attribute type="xsd:string" name="eventType" use="required"/>
+		  </xsd:complexType>
+		</xsd:element>
+		<xsd:element name="simulationEvent">
+		  <xsd:complexType>
+			<xsd:sequence>
+				<xsd:element type="xsd:long" name="requestId" minOccurs="1" maxOccurs="2"/>
+			</xsd:sequence>
+			<xsd:attribute type="xsd:string" name="agentType" use="required"/>
+			<xsd:attribute type="xsd:string" name="agentId" use="required"/>
+			<xsd:attribute type="xsd:long" name="eventDate" use="required"/>
+			<xsd:attribute type="xsd:string" name="eventType" use="required"/>
+		  </xsd:complexType>
+		</xsd:element>
+	</xsd:choice>
       </xsd:sequence>
     </xsd:complexType>
   </xsd:element>

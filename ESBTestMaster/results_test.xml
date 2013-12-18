@@ -1,6 +1,8 @@
 <?xml version="1.0"?> 
  
-<results  xsi:noNamespaceSchemaLocation="XSD/results.xsd">
+<results 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="XSD/results.xsd">
       <simulationEvent eventDate="230328169" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons1"> 
         <requestId>1</requestId>
     </simulationEvent>
@@ -109,7 +111,11 @@
       <simulationEvent eventDate="1608992386" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons9"> 
         <requestId>9</requestId>
     </simulationEvent>
-  <event eventDate="2128025054" eventType="CONNEXION_ERR" agentType="CONSUMER" agentId="cons10" /> 
+  
+    <event eventDate="2128025054" eventType="CONNEXION_ERR" agentType="CONSUMER" agentId="cons10" />
+
+
+
       <simulationEvent eventDate="155658421" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons11"> 
         <requestId>11</requestId>
     </simulationEvent>
@@ -218,6 +224,7 @@
       <simulationEvent eventDate="1843521082" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons19"> 
         <requestId>19</requestId>
     </simulationEvent>
+
   <event eventDate="1803166989" eventType="CONNEXION_ERR" agentType="CONSUMER" agentId="cons20" /> 
       <simulationEvent eventDate="340184100" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons21"> 
         <requestId>21</requestId>
@@ -436,8 +443,11 @@
       <simulationEvent eventDate="2080496048" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons39"> 
         <requestId>39</requestId>
     </simulationEvent>
-  <event eventDate="500170212" eventType="CONNEXION_ERR" agentType="CONSUMER" agentId="cons40" /> 
-      <simulationEvent eventDate="280244537" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons41"> 
+
+    <event eventDate="500170212" eventType="CONNEXION_ERR" agentType="CONSUMER" agentId="cons40"/>
+
+
+    <simulationEvent eventDate="280244537" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons41"> 
         <requestId>41</requestId>
     </simulationEvent>
       <simulationEvent eventDate="786825764" eventType="REQUEST_RECEIVED" agentType="PRODUCER" agentId="prod41"> 
@@ -542,8 +552,7 @@
       <simulationEvent eventDate="1469215776" eventType="RESPONSE_SENT" agentType="PRODUCER" agentId="prod49"> 
         <requestId>49</requestId>
     </simulationEvent>
-      <simulationEvent eventDate="2121874824" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons49"> 
+    <simulationEvent eventDate="2121874824" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons49"> 
         <requestId>49</requestId>
     </simulationEvent>
-  <event eventDate="533813839" eventType="CONNEXION_ERR" agentType="CONSUMER" agentId="cons50" /> 
 </results>

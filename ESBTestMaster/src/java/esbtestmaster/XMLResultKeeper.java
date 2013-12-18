@@ -13,6 +13,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jdom2.*;
 import org.jdom2.input.*;
 import org.jdom2.input.sax.XMLReaders;
@@ -26,6 +28,8 @@ import utils.Debug;
  */
 public class XMLResultKeeper implements ResultKeeperInterface {
 
+    public static final String XSD_RESULTS = "XSD/results.xsd";
+
     private String XMLfilename;
 
     public XMLResultKeeper(String filename) throws IOException {
@@ -38,10 +42,8 @@ public class XMLResultKeeper implements ResultKeeperInterface {
      * @throws IOException
      */
     private void init() throws IOException {
+        //Delete the old file
         this.clearLog();
-        File xmlFile = new File(XMLfilename);
-        xmlFile.createNewFile();
-        //TODO :Add the firsts tags to the XML
         Debug.info("ResultKeeper : " + XMLfilename + " initialization done.");
     }
 
@@ -61,9 +63,11 @@ public class XMLResultKeeper implements ResultKeeperInterface {
 
             //Opens the XML File
             File xmlFile = new File(XMLfilename);
+
             if (xmlFile.exists()) {
                 FileInputStream fis = new FileInputStream(xmlFile);
-                SAXBuilder builder = new SAXBuilder(XMLReaders.XSDVALIDATING);
+                SAXBuilder builder = new SAXBuilder();//XMLReaders.XSDVALIDATING);
+                
                 // parse the xml content provided by the file input stream and create a Document object
                 document = (Document) builder.build(xmlFile);
 
@@ -74,6 +78,11 @@ public class XMLResultKeeper implements ResultKeeperInterface {
                 // if it does not exist create a new document and new root
                 document = new Document();
                 root = new Element("results");
+                Namespace ns = Namespace.getNamespace("xsi","http://www.w3.org/2001/XMLSchema-instance");
+                root.addNamespaceDeclaration(ns);
+                root.removeNamespaceDeclaration(ns);
+                //root.
+                root.setAttribute("noNamespaceSchemaLocation",XSD_RESULTS,ns);
             }
 
             //Add the resultset to the document
@@ -89,7 +98,7 @@ public class XMLResultKeeper implements ResultKeeperInterface {
                 child.setAttribute("agentType", event.getAgentType().toString());
                 child.setAttribute("agentId", event.getAgentId());
                 child.setAttribute("eventDate", String.valueOf(event.getEventDate()));
-                child.setAttribute("eventType", String.valueOf(event.getAgentType()));
+                child.setAttribute("eventType", event.getEventType().toString());
                 root.addContent(child);
             }
 
@@ -100,10 +109,9 @@ public class XMLResultKeeper implements ResultKeeperInterface {
             XMLOutputter outputter = new XMLOutputter();
             outputter.setFormat(Format.getPrettyFormat());
             outputter.output(document, writer);
-            outputter.output(document, System.out);
             writer.close();
         } catch (JDOMException ex) {
-            throw new BadXMLException();
+            throw new BadXMLException(ex.getMessage());
         }
     }
 
@@ -171,4 +179,25 @@ public class XMLResultKeeper implements ResultKeeperInterface {
         }
         return resultSet;
     }
+
+    /**
+     * Un test
+     * @param args
+     */
+    public static void main(String args[]) {
+        try {
+            ResultSet resultSet = XMLResultKeeper.getLog("results_test.xml");
+            System.out.println(resultSet);
+            XMLResultKeeper xmlResultKeeper = new XMLResultKeeper("results_test_regenerated.xml");
+            xmlResultKeeper.addLog(resultSet);
+            xmlResultKeeper.addLog(resultSet);
+            System.out.println(XMLResultKeeper.getLog("results_test_regenerated.xml"));
+        } catch (BadXMLException ex) {
+            Logger.getLogger(XMLResultKeeper.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(XMLResultKeeper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
 }

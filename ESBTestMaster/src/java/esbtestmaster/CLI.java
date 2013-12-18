@@ -119,7 +119,7 @@ public class CLI implements UserOutputsInterface {
 
                 public void execute(ParseResult pr) {
                     System.out.println("Aborting simulation.");
-                    listener.stopSimulation();
+                    listener.abortSimulation();
                 }
             });
 
@@ -138,7 +138,7 @@ public class CLI implements UserOutputsInterface {
             });
 
             //exit command
-            Command exit = new Command("exit", "Exits the ESB qualification tool (and stops the simulation).", new ICommandExecutor() {
+            Command exit = new Command("exit", "Exits the ESB qualification tool (and abort the simulation).", new ICommandExecutor() {
 
                 public void execute(ParseResult pr) {
                     //EXECUTION

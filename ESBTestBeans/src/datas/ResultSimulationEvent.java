@@ -24,6 +24,6 @@ public class ResultSimulationEvent extends ResultEvent {
 
     @Override
     public String toString() {
-        return "Event from "+this.getAgentType()+" "+this.getAgentId()+" - "+this.getEventType()+" at "+this.getEventDate()+" (RequestId="+this.getRequestId();
+        return "Event from "+this.getAgentType()+" "+this.getAgentId()+" - "+this.getEventType()+" at "+this.getEventDate()+" (RequestId="+this.getRequestId()+")";
     }
 }
