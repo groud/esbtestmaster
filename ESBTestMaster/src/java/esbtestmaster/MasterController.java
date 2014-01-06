@@ -9,6 +9,7 @@ import datas.*;
 import interfaces.*;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  *
@@ -56,8 +57,11 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
                 resultsKeeper = new XMLResultKeeper(resultsFilename);
                 finishedMap = new HashMap<String, Boolean>();
                 this.consumersTerminated = false;
-                //TODO
-                //throw new UnsupportedOperationException("Not supported yet.");
+
+                for (Iterator<AgentConfiguration> i = this.currentScenario.getAgentsconfiguration().iterator(); i.hasNext();) {
+                    AgentConfiguration agentConfiguration = i.next();
+                    monitoringMsgHandler.startSimulationMessage(agentConfiguration);
+                }
             } else {
                 shell.displayErrorMessage("Starting failed : no configuration has been provided.");
             }

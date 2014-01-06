@@ -9,7 +9,7 @@
 <xs:element name="agentId" type="xs:string" minOccurs="0"></xs:element>
 <xs:element name="requestId" type="xs:int"></xs:element>
 <xs:element name="requestData" type="xs:string" minOccurs="0"></xs:element>
-<xs:element name="respTime" type="xs:int"></xs:element>
+<xs:element name="respTime" type="xs:long"></xs:element>
 <xs:element name="respSize" type="xs:int"></xs:element>
 </xs:sequence>
 </xs:complexType>

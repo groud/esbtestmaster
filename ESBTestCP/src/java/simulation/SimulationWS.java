@@ -33,7 +33,7 @@ public class SimulationWS {
     String agentId, @WebParam(name = "requestId")
     int requestId, @WebParam(name = "requestData")
     String requestData, @WebParam(name = "respTime")
-    int respTime, @WebParam(name = "respSize")
+    long respTime, @WebParam(name = "respSize")
     int respSize) {
 
         String ret;
