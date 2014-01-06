@@ -18,8 +18,8 @@ public class Utils {
 
             // Fill the same answer String with reqPayloadSize characters
             if (size > 0) {
-                char[] array = new char[character];
-                Arrays.fill(array, 'A');
+                char[] array = new char[size];
+                Arrays.fill(array, character);
                 ret = new String(array);
             }
 

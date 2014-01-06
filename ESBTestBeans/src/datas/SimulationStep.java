@@ -14,9 +14,9 @@ public class SimulationStep implements Comparable<SimulationStep> {
 
     private String srcID;
     private String destID;
-    private long burstStartDate;
-    private long burstStopDate;
-    private float burstRate;
+    private long burstStartDate;    //ms from simulation start
+    private long burstStopDate;     //ms from simulation start
+    private float burstRate;        // number of requests per second
     private int requestPayloadSize;
     private long processTime;
     private int responsePayloadSize;

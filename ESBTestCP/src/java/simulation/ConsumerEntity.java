@@ -9,6 +9,7 @@ import datas.*;
 import java.util.TimerTask;
 import javax.xml.ws.BindingProvider;
 
+
 /**
  *
  * @author mariata
@@ -40,6 +41,10 @@ public class ConsumerEntity extends SimulationEntity {
         resultSet = new ResultSet();
         simulationThread = new SimulationThread();
         simulationThread.start();
+
+        //TODO : warn master when the consumer has finished its scenario
+
+        //TODO : wait for the master to ask the consumer to send its results back
     }
 
     /**
@@ -89,40 +94,55 @@ public class ConsumerEntity extends SimulationEntity {
         private Timer timer;
         private SimulationStep step;
         private int reqId = 0;
+        private int nbRequest = 0;
+        private Date startDate;
 
-        // TODO (Samy) : save the simulation start date in startSimulation() (System.currentTimeMillis)
-        // use timer.scheduleAtFixedRate with delay = startDate + step.getBurstStartDate()
-        // and period = step.getBurstDuration() / nbRequest
-        // and CANCEL timer after the correct number of requests has been sent
+        //TODO : tests foireux pour vérifier la précision des envois de requêtes
+        // (en écrivant la date d'envoi de chaque requête pour vérifier)
         @Override
         public void run() {
             int i;
             //send request
             if (simulationScenario != null) {
+                // Store simulation start date
+                startDate = new Date();
                 for (i = 0; i < simulationScenario.getSteps().size(); i++) {
                     step = simulationScenario.getSteps().get(i);
                     timer = new Timer();
-                    long nbRequest = (long) (step.getBurstDuration() * step.getBurstRate());
-                    //interval between two request
-                    long period = (long) (step.getBurstDuration() / nbRequest);
+                    // duration converted in seconds from ms
+                    double stepDuration = (double) step.getBurstDuration() / 1000.0;
+                    System.out.println("stepduration="+stepDuration);
+                    nbRequest = (int) (stepDuration * step.getBurstRate());
+                    System.out.println("nbRequest="+nbRequest);
 
-                    //configure timer,and start senario
+                    // Make sure at least one request is sent
+                    if(nbRequest <= 0) {
+                        nbRequest = 0;
+                    }
+                    //interval between two request in ms
+                    long period = (long) ((stepDuration / (float)nbRequest) *1000);
+
+                    //configure timer,and start scenario
                     timer.scheduleAtFixedRate(new TimerTask() {
-
+                        int nbReqSent = 0;
+                        
                         public void run() {
-
+                            
                             //writeSimulationEvent(AgentType.CONSUMER, EventType.REQUEST_SENT);
                             // Send the request to the producer
                             // (the response logging is done in the request callback)
                             sendAsyncRequest(step.getDestID(), reqId, step.getRequestPayloadSize(), step.getProcessTime(), step.getResponsePayloadSize());
                             reqId++;
+                            nbReqSent++;
+                            
+                            if(nbReqSent==nbRequest) {
+                                this.cancel();
+                            }
+                            
 
-
-                        }
-                    }, step.getBurstStartDate(), period);
-                }
-                //TO DO : send the results to the agent controller, wait the end of all thread
-                //listener.simulationDone(resultSet);
+                        }                    
+                    }, new Date(startDate.getTime() + step.getBurstStartDate()) , period);
+                }          
 
             } else {
                 System.out.println("steps have not been configured");
@@ -204,7 +224,8 @@ public class ConsumerEntity extends SimulationEntity {
         pc.setWsAddress("http://localhost:8090/ESBTestCompositeService1/casaPort1");
         ss.getAgentsconfiguration().add(pc);
 
-        ss.getSteps().add(new SimulationStep(consumerId, producerId, 0, 2, 1, 16, 1000L, 20));
+        ss.addStep(new SimulationStep(consumerId, producerId, 0, 3000, 1, 16, 1000L, 20));
+        ss.addStep(new SimulationStep(consumerId, producerId, 3000, 4500, 2, 16, 1000L, 20));
 
         cons.configureConsumer(consumerId, ss);
         cons.startSimulation();
