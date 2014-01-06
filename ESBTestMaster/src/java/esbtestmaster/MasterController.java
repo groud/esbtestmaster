@@ -125,8 +125,8 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
      */
     public void calculateKPI(String inXMLfile, String outXMLfile) {
         try {
-            kpiCalculator.calculateKPI(XMLResultKeeper.getLog(inXMLfile));
-            kpiCalculator.saveKPItoXMLFile(outXMLfile);
+            KPISet kpiSet = kpiCalculator.calculateKPI(XMLResultKeeper.getLog(inXMLfile));
+            kpiCalculator.saveKPItoXMLFile(kpiSet, outXMLfile);
         } catch (BadXMLException ex) {
             shell.displayErrorMessage(ex.getMessage());
         } catch (IOException ex) {

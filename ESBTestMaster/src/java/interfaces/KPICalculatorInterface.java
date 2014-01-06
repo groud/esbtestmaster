@@ -14,5 +14,5 @@ import java.io.IOException;
  */
 public interface KPICalculatorInterface {
     public KPISet calculateKPI(ResultSet resultSet);
-    public void saveKPItoXMLFile(String filename) throws IOException;
+    public void saveKPItoXMLFile(KPISet kpiSet, String filename) throws IOException;
 }

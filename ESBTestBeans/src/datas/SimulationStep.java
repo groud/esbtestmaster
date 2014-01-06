@@ -33,7 +33,6 @@ public class SimulationStep implements Comparable<SimulationStep> {
         this.requestPayloadSize = requestPayloadSize;
         this.processTime = processTime;
         this.responsePayloadSize = responsePayloadSize;
-
     }
 
     public float getBurstRate() {

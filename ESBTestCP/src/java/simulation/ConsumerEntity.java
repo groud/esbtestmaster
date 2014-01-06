@@ -13,11 +13,12 @@ import java.util.TimerTask;
  * @author mariata
  */
 public class ConsumerEntity extends SimulationEntity {
+
     private SimulationScenario simulationScenario = null;
     private Hashtable<String, AgentConfiguration> hashAgentsConf;
     private ResultSet resultSet;
     private SimulationThread simulationThread;
-    
+
     /**
      * Configure the simulation scenario and id
      * @param id
@@ -38,7 +39,6 @@ public class ConsumerEntity extends SimulationEntity {
         resultSet = new ResultSet();
         simulationThread = new SimulationThread();
         simulationThread.start();
-
     }
 
     /**
@@ -56,9 +56,8 @@ public class ConsumerEntity extends SimulationEntity {
      */
     private Hashtable<String, AgentConfiguration> initializeAdressesTable() {
         Hashtable<String, AgentConfiguration> hashtable = new Hashtable<String, AgentConfiguration>();
-        for (int i = 0; i < this.simulationScenario.getAgentsconfiguration().size(); i++) {
-            //hashtable.put(this.simulationScenario.getAgentsconfiguration().get(i).getName(), this.simulationScenario.getAgentsconfiguration().get(i).getWsAddress());
-            hashtable.put(this.simulationScenario.getAgentsconfiguration().get(i).getName(), this.simulationScenario.getAgentsconfiguration().get(i));
+        for (AgentConfiguration agentConfiguration :this.simulationScenario.getAgentsconfiguration()) {
+             hashtable.put(agentConfiguration.getName(), agentConfiguration);
         }
         return hashtable;
     }
@@ -73,7 +72,7 @@ public class ConsumerEntity extends SimulationEntity {
         currentEvent.setAgentId(this.getid());
         currentEvent.setAgentType(agent);
         // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-        Date now =new Date();
+        Date now = new Date();
         currentEvent.setEventDate(0);//now.getTime());// TODOOOO
         currentEvent.setEventType(event);
 
@@ -110,69 +109,68 @@ public class ConsumerEntity extends SimulationEntity {
                     timer.scheduleAtFixedRate(new TimerTask() {
 
                         public void run() {
-                            
-                            //writeSimulationEvent(AgentType.CONSUMER , EventType.REQUEST_SENT );
+
+                            //writeSimulationEvent(AgentType.CONSUMER, EventType.REQUEST_SENT);
                             // Send the request to the producer
                             // (the response logging is done in the request callback)
-                            sendAsyncRequest(step.getSrcID(), reqId, step.getRequestPayloadSize(), step.getProcessTime(),step.getResponsePayloadSize());
+                            sendAsyncRequest(step.getDestID(), reqId, step.getRequestPayloadSize(), step.getProcessTime(), step.getResponsePayloadSize());
                             reqId++;
-                                 
+
 
                         }
                     }, step.getBurstStartDate(), period);
                 }
                 //TO DO : send the results to the agent controller, wait the end of all thread
-               //listener.simulationDone(resultSet);
+                //listener.simulationDone(resultSet);
 
             } else {
                 System.out.println("steps have not been configured");
             }
-            
+
         }
     }
 
     /* Synchronous -> not used
     private void sendRequest(String producerId, int requestId, int reqPayloadSize) {
-        String requestData = null;
-        ProducerConfiguration producerConf = null;
-        // tempAgentConf used to test if the AgentConfiguration exists and if it's
-        // a ProducerConfiguration without having to cast all the time afterwards
-        AgentConfiguration tempAgentConf;
+    String requestData = null;
+    ProducerConfiguration producerConf = null;
+    // tempAgentConf used to test if the AgentConfiguration exists and if it's
+    // a ProducerConfiguration without having to cast all the time afterwards
+    AgentConfiguration tempAgentConf;
 
-        // Get ProducerConf
-        tempAgentConf = this.hashAgentsConf.get(producerId);
+    // Get ProducerConf
+    tempAgentConf = this.hashAgentsConf.get(producerId);
 
-        if(tempAgentConf == null) {
-            throw new IllegalArgumentException("AgentConfiguration is null");
-        }
-        else if(tempAgentConf.getAgentType() == AgentType.PRODUCER) {
-            // To avoid typecasting afterwards
-            producerConf = (ProducerConfiguration) tempAgentConf;
-        }
-        else {
-            throw new IllegalArgumentException("Remote agent is not a producer");
-        }
-
-        try { // Call Web Service Operation
-            simulationRef.SimulationWSService service = new simulationRef.SimulationWSService();
-            simulationRef.SimulationWS port = service.getSimulationWSPort();
-
-            // Dynamic URL binding;
-            ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, producerConf.getWsAddress());
-
-            // Fill the request payload with reqPayloadSize 'A's
-            requestData = Utils.getDummyString(reqPayloadSize, 'A');
-
-            // TODO : log events before and after request
-            String result = port.requestOperation(producerId, requestId, requestData,
-                                   producerConf.getResponseTime(), producerConf.getResponseSize());
-            System.out.println("Producer response :\n"+result);
-        } catch (Exception ex) {
-            // TO DO handle custom exceptions here
-        }
+    if(tempAgentConf == null) {
+    throw new IllegalArgumentException("AgentConfiguration is null");
     }
-    */
+    else if(tempAgentConf.getAgentType() == AgentType.PRODUCER) {
+    // To avoid typecasting afterwards
+    producerConf = (ProducerConfiguration) tempAgentConf;
+    }
+    else {
+    throw new IllegalArgumentException("Remote agent is not a producer");
+    }
 
+    try { // Call Web Service Operation
+    simulationRef.SimulationWSService service = new simulationRef.SimulationWSService();
+    simulationRef.SimulationWS port = service.getSimulationWSPort();
+
+    // Dynamic URL binding;
+    ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, producerConf.getWsAddress());
+
+    // Fill the request payload with reqPayloadSize 'A's
+    requestData = Utils.getDummyString(reqPayloadSize, 'A');
+
+    // log events before and after request
+    String result = port.requestOperation(producerId, requestId, requestData,
+    producerConf.getResponseTime(), producerConf.getResponseSize());
+    System.out.println("Producer response :\n"+result);
+    } catch (Exception ex) {
+    // TO DO handle custom exceptions here
+    }
+    }
+     */
     /**
      * Sends an asynchronous request to the WS whose ID is producerID.
      * The request callback handler logs the response when it is received
@@ -189,15 +187,13 @@ public class ConsumerEntity extends SimulationEntity {
 
         // Get the ProducerConf
         tempAgentConf = this.hashAgentsConf.get(producerId);
-
-        if(tempAgentConf == null) {
+        
+        if (tempAgentConf == null) {
             throw new IllegalArgumentException("AgentConfiguration is null");
-        }
-        else if(tempAgentConf instanceof ProducerConfiguration) {
+        } else if (tempAgentConf instanceof ProducerConfiguration) {
             // To avoid typecasting afterwards
             producerConf = (ProducerConfiguration) tempAgentConf;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Remote agent is not a producer");
         }
 
@@ -208,40 +204,40 @@ public class ConsumerEntity extends SimulationEntity {
 
 
             javax.xml.ws.AsyncHandler<simulationRef.RequestOperationResponse> asyncHandler = new javax.xml.ws.AsyncHandler<simulationRef.RequestOperationResponse>() {
+
                 public void handleResponse(javax.xml.ws.Response<simulationRef.RequestOperationResponse> response) {
                     try {
                         // TODO : log response
                         //writeSimulationEvent(AgentType.CONSUMER , EventType.RESPONSE_RECEIVED);
-                        System.out.println("Result :\n "+ response.get().getReturn());
-                    } catch(Exception ex) {
+                        System.out.println("Result :\n " + response.get().getReturn());
+                    } catch (Exception ex) {
                         // TODO handle exception
                     }
                 }
             };
-            
+
             requestData = Utils.getDummyString(reqPayloadSize, 'A');
 
             // Call web service asynchronously (callback)
             /*
             while(!callBackResult.isDone()) {
-                // do something                
-                Thread.sleep(100);
+            // do something
+            Thread.sleep(100);
             }
              */
-          
+
         } catch (Exception ex) {
             // TODO handle custom exceptions here
         }
 
     }
 
-    
     /**
      * Teste la communication inter-agents.
      * @param args
      */
     public static void main(String[] args) {
-        int requestPayloadSize = 16;
+
         String producerId = "producer1";
         String consumerId = "consumer1";
         // Test ConsumerEntity
@@ -253,7 +249,10 @@ public class ConsumerEntity extends SimulationEntity {
         pc.setWsAddress("http://localhost:8090/ESBTestCompositeService1/casaPort1");
         ss.getAgentsconfiguration().add(pc);
 
-        ss.getSteps().add(new SimulationStep(consumerId, producerId, 0, 2, 1, 16,1000L,20));
+
+
+        ss.getSteps().add(new SimulationStep(consumerId, producerId, 0, 2, 1, 16, 1000L, 20));
+        
         //ss.addStep(new SimulationStep(consumerId, producerId, 0, 1000, 1, 16));
         //ss.addStep(new SimulationStep(consumerId, producerId, 0, 1000, 1, 16));
         //ss.addStep(new SimulationStep(consumerId, producerId, 0, 1000, 1, 16));

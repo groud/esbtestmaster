@@ -12,4 +12,7 @@ package datas;
  * @author gilles
  */
 public class ProducerConfiguration extends AgentConfiguration {
+    public ProducerConfiguration(){
+        this.agentType = AgentType.PRODUCER;
+    }
 }

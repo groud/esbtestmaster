@@ -84,8 +84,8 @@ public class KPICalculator implements KPICalculatorInterface {
      * Saves a KPISet as an XML file
      * @param filename
      */
-    public void saveKPItoXMLFile(String filename) {
-        //TODO : Implement KPI saving as an XML File
+    public void saveKPItoXMLFile(KPISet kpiSet, String filename) {
+        //TODO : Implement KPI saving as an XML File, ADD a KPISet as an Argument
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 }
