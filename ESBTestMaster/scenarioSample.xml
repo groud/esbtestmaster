@@ -8,6 +8,11 @@ xsi:noNamespaceSchemaLocation="XSD/simulationScenario.xsd">
 			<address>http://lol.com:6666</address>
 			<monitoringAddress>http://lol.com:6667</monitoringAddress>
 		</provider>
+		<provider>
+			<name>prov2</name> 
+			<address>http://lol.com:6666</address>
+			<monitoringAddress>http://lol.com:6667</monitoringAddress>
+		</provider>
 		<consumer>
 			<name>cons1</name> 
 			<address>http://lol.com:6668</address>

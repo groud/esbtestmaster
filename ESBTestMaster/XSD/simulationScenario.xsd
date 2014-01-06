@@ -7,8 +7,8 @@
       <xsd:sequence>
         <xsd:element name="configuration">
           <xsd:complexType>
-            <xsd:sequence>
-		<xsd:choice>
+	     <xsd:sequence maxOccurs="unbounded">
+            	<xsd:choice>
 		      <xsd:element name="provider">
 			<xsd:complexType>
 			  <xsd:sequence>
@@ -27,8 +27,8 @@
 			  </xsd:sequence>
 			</xsd:complexType>
 		      </xsd:element>
-		</xsd:choice>
-            </xsd:sequence>
+            	</xsd:choice>
+	    </xsd:sequence>
           </xsd:complexType>
         </xsd:element>
         <xsd:element name="run">
