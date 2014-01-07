@@ -63,6 +63,9 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      */
     public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
         //On crée une simulationEntity correspondant à la configuration reçue
+        System.out.println("Agent configuration - Name: "+receiverAgent.getName());
+        System.out.println("Agent configuration - Monitoring WS Address: "+ receiverAgent.getMonitoringWSAddress());
+        System.out.println("Agent configuration - WS address: "+ receiverAgent.getWsAddress());
         if (receiverAgent instanceof ConsumerConfiguration) {
             simulationEntity = new ConsumerEntity();
             simulationEntity.setListener(this);

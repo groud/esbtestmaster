@@ -35,19 +35,25 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
     public void run() {
         //TODO JMS : Ecouter les messages et les envoie au MasterController avec :
         AgentMessageHandler myAgentMsgHandler = new AgentMessageHandler();
+        while(true){
+        
         Serializable message;
         message = myAgentMsgHandler.receiveFromTopic();
 
         if (message instanceof ConfigJMSMessage) {
+            System.out.println("JMSHandler: Received a configJMSMessage");
             ConfigJMSMessage myMessage = (ConfigJMSMessage) message;
             listener.configurationMessage(myMessage.getAgentConfiguration(), myMessage.getScenario());
         } else if (message instanceof StartJMSMessage) {
+            System.out.println("JMSHandler: Received a startJMSMessage");
             listener.startSimulationMessage();
         } else if (message instanceof AbortJMSMessage) {
+            System.out.println("JMSHandler: Received an abortSimulationMessage");
             listener.abortSimulationMessage();
         } else if (message instanceof EndJMSMessage) {
+            System.out.println("JMSHandler: Received an endSimulaitonMessage");
             listener.endSimulationMessage();
-        }
+        }}
     }
 
     /**

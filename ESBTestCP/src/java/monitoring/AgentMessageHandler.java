@@ -73,9 +73,11 @@ public class AgentMessageHandler {
         Serializable result = null;
         try {
             Message message = receiver.receive();
+            System.out.println("Message object received1");
             if (message instanceof ObjectMessage) {
                 ObjectMessage object = (ObjectMessage) message;
                 result = object.getObject();
+                System.out.println("Message object received2");
             }
         } catch (Exception e) {
             e.printStackTrace();
