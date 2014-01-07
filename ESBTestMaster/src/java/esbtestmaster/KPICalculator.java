@@ -10,6 +10,7 @@ import interfaces.KPICalculatorInterface;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -19,6 +20,8 @@ import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.*;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 /**
  *
@@ -95,14 +98,12 @@ public class KPICalculator implements KPICalculatorInterface {
      * Saves a KPISet as an XML file
      * @param filename
      */
-    public void saveKPItoXMLFile(KPISet kpiSet, String filename) {
+    public void saveKPItoXMLFile(KPISet kpiSet, String filename) throws IOException {
         //TODO : Implement KPI saving as an XML File, ADD a KPISet as an Argument
         //throw new UnsupportedOperationException("Not supported yet.");
         Document document;
         Element root;
 
-        //Opens the XML File
-        File xmlFile = new File(filename);
         document = new Document();
         root = new Element("kpis");
         Namespace ns = Namespace.getNamespace("xsi","http://www.w3.org/2001/XMLSchema-instance");
@@ -111,35 +112,45 @@ public class KPICalculator implements KPICalculatorInterface {
          //root.
         root.setAttribute("noNamespaceSchemaLocation",XSD_KPIS,ns);
         
-        Element child;
-        child = new Element("simulationEvent");
-        child = new Element("event");
-        child.setAttribute("agentType", "ok");
-        root.addContent(child);
+        Element child, child1, child2, child3;
 
-        Iterator it = kpiSet.getAverageResponseTime().entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry entry = (Map.Entry) it.next();
-                String key = (String)entry.getKey();
-                Long val = (Long)entry.getValue();
-                System.out.println("agentId, averageResponseTime: " + key + "," + val);
-            }
+        Iterator it = kpiSet.getNumberOfRequestSent().entrySet().iterator();
 
-       Iterator it2 = kpiSet.getNumberOfRequestLost().entrySet().iterator();
-            while (it2.hasNext()) {
-                Map.Entry entry = (Map.Entry) it2.next();
-                String key = (String)entry.getKey();
-                Integer val = (Integer)entry.getValue();
-                System.out.println("agentId, reqLost: " + key + "," + val);
+        while (it.hasNext()) {
+            Map.Entry entry = (Map.Entry) it.next();
+            String key = (String)entry.getKey();
+            Integer val = (Integer)entry.getValue();
+            child = new Element("kpiEntry");
+            child.setAttribute("agentId", key);
+            child1 = new Element("nbReqSent");
+            child1.addContent(String.valueOf(val));
+            child.addContent(child1);
+            child2 = new Element("nbReqLost");
+            if(kpiSet.getNumberOfRequestLost().containsKey(key)){                
+                child2.addContent(String.valueOf(kpiSet.getNumberOfRequestLost().get(key)));
+            } else {
+                child2.addContent("Undefined");
             }
+            child.addContent(child2);
+            child3=new Element("averageRespTime");
+           if(kpiSet.getAverageResponseTime().containsKey(key)){
+                child3.addContent(String.valueOf(kpiSet.getAverageResponseTime().get(key)));
+            } else {
+                child3.addContent("Undefined");
+            }
+            child.addContent(child3);
+             root.addContent(child);
+       }
 
-        Iterator it3 = kpiSet.getNumberOfRequestSent().entrySet().iterator();
-            while (it3.hasNext()) {
-                Map.Entry entry = (Map.Entry) it3.next();
-                String key = (String)entry.getKey();
-                Integer val = (Integer)entry.getValue();
-                System.out.println("agentId, reqSent: " + key + "," + val);
-            }
+        document.setContent(root);
+
+     //Writes the XMLFile
+        FileWriter writer = new FileWriter(filename);
+        XMLOutputter outputter = new XMLOutputter();
+        outputter.setFormat(Format.getPrettyFormat());
+        outputter.output(document, writer);
+        writer.close();      
+
 
     }
 }

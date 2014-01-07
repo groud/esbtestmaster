@@ -7,13 +7,14 @@ package datas;
 
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author gilles
  */
-public class SimulationScenario {
+public class SimulationScenario implements Serializable{
     private ArrayList<AgentConfiguration> agentsconfiguration;
     private ArrayList<SimulationStep> steps;
 

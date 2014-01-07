@@ -1,5 +1,7 @@
 package datas;
 
+import java.io.Serializable;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -11,7 +13,7 @@ package datas;
  *
  * @author gilles
  */
-public abstract class AgentConfiguration {
+public abstract class AgentConfiguration implements Serializable {
     protected AgentType agentType;
 
     private String name;
