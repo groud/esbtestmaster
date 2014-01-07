@@ -5,75 +5,68 @@
 package simulation;
 
 import datas.*;
+import interfaces.ProducerWSListener;
 
 /**
  *
  * @author mariata
  */
-public class ProducerEntity extends SimulationEntity {
+public class ProducerEntity extends SimulationEntity implements ProducerWSListener {
 
     private ResultSet resultSet;
-    private ResultEvent currentEvent;
-    private Thread simulationThread;
-
-    /**
-     * A thread listening to events from the simulation
-     */
-    private class SimulationThread extends Thread {
-
-        @Override
-        public void run() {
-            //TODO : Listen request,and grab consumerID, when a request arrive, send response
-        }
-    }
+    private boolean simulationDone = true;
 
     /**
      * Start the simulation
      */
     public void startSimulation() {
         resultSet = new ResultSet();
-        simulationThread = new SimulationThread();
-        simulationThread.start();
+        SimulationWS.setListener(this);
+        simulationDone = false;
     }
 
     /**
      * Abort the simulation
      */
     public void abortSimulation() {
-        simulationThread.stop();
+        simulationDone = true;
     }
 
     /**
      * End the simulation and send the results
      */
     public void endOfSimlation() {
-        simulationThread.stop();
+        simulationDone = true;
         listener.simulationDone(resultSet);
     }
 
     /**
-     * Sends a reponse to a consumer
-     * @param consumerID
-     * @param dataPayload
+     * Log a requestReceived event
+     * @param requestId
      */
-    private void sendResponse(String consumerID, float dataPayload) {
-        // TODO : Generate fake payload, send response,
-        writeSimulationEvent(AgentType.PRODUCER, EventType.RESPONSE_SENT);
+    public void requestReceived(int requestId, String requestData, long respTime, int respSize) {
+        if(!simulationDone) {
+            ResultSimulationEvent event = new ResultSimulationEvent();
+            event.setAgentId(this.getid());
+            event.setAgentType(AgentType.PRODUCER);
+            event.setEventDate(0);//TODO Modify to the real date
+            event.setEventType(EventType.REQUEST_RECEIVED);
+            resultSet.getEvents().add(event);
+        }
     }
 
     /**
-     * Log an event
-     * @param agent
-     * @param event
+     * Log a responseSent event
+     * @param requestId
      */
-    private void writeSimulationEvent(AgentType agent, EventType event) {
-        currentEvent.setAgentId(this.getid());
-        currentEvent.setAgentType(agent);
-        //TODO: Set the date to current milliseconds
-        currentEvent.setEventDate(0);
-        currentEvent.setEventType(event);
-
-        //add in list of events
-        resultSet.getEvents().add(currentEvent);
+    public void responseSent(int requestId) {
+        if(!simulationDone) {
+            ResultSimulationEvent event = new ResultSimulationEvent();
+            event.setAgentId(this.getid());
+            event.setAgentType(AgentType.PRODUCER);
+            event.setEventDate(0);//TODO Modify to the real date
+            event.setEventType(EventType.RESPONSE_SENT);
+            resultSet.getEvents().add(event);
+        }
     }
 }
