@@ -12,7 +12,12 @@ import java.util.Arrays;
  * @author samy
  */
 public class Utils {
-
+    /**
+     * get a dummy string
+     * @param size
+     * @param character
+     * @return  string
+     */
     public static String getDummyString(int size, char character) {
             String ret = null;
 
