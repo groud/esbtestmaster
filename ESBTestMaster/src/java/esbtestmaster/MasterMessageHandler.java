@@ -38,27 +38,31 @@ public class MasterMessageHandler {
     public MasterMessageHandler() {
         try {
             //To get to JNDI context
+            
             context = new InitialContext();
-
+            
             //To get a ConnectionFactory from JNDI
             factory = (ConnectionFactory) context.lookup("TopicConnectionFactory");
-
+            
             //Creating a connection from the factory
             connection = factory.createConnection();
-
+           
             //Creating a session from the connection
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
+            
             //Creating a producer to send config objects
             toTopic = (Destination) context.lookup("config"); //Topic named "config"
+            
             sender = session.createProducer(toTopic);
-
+          
             //Creating a consumer to receive results objects
             fromTopic = (Destination) context.lookup("results"); //Topic named "results"
+            
             receiver = session.createConsumer(fromTopic);
-
+       
             //Starting the connection
             connection.start();
+           
         } catch (Exception e) {
             e.printStackTrace();
             finalize();
@@ -68,9 +72,11 @@ public class MasterMessageHandler {
     //send an object to the topic
     public boolean sendToTopic(Serializable objectToSend) {
         try {
+         
             final ObjectMessage message = session.createObjectMessage();
             message.setObject(objectToSend);
             sender.send(message);
+            System.out.println("Message Sent");
         } catch (Exception e) {
             e.printStackTrace();
             finalize();
