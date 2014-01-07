@@ -30,6 +30,10 @@ public class ResultSet {
         this.events = events;
     }
 
+    public void addEvent(ResultEvent event) {
+        events.add(event);
+    }
+
     @Override
     public String toString() {
         String str = "-- ResultSet -- \n";

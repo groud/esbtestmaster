@@ -7,6 +7,8 @@ package simulation;
 import java.util.*;
 import datas.*;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.ws.BindingProvider;
 
 
@@ -17,9 +19,10 @@ import javax.xml.ws.BindingProvider;
 public class ConsumerEntity extends SimulationEntity {
 
     private SimulationScenario simulationScenario = null;
-    private Hashtable<String, AgentConfiguration> hashAgentsConf;
-    private ResultSet resultSet;
+    private Hashtable<String, AgentConfiguration> hashAgentsConf;    
     private SimulationThread simulationThread;
+    private Date startDate;
+    private ResultsLogger logger;
 
     /**
      * Configure the simulation scenario and id
@@ -29,7 +32,8 @@ public class ConsumerEntity extends SimulationEntity {
     public void configureConsumer(String id, SimulationScenario simulationScenario) {
         this.simulationScenario = simulationScenario;
         this.setId(id);
-        hashAgentsConf = this.initializeAdressesTable();
+        hashAgentsConf = this.initializeAgentsTable();
+        logger = new ResultsLogger(this.getid());
     }
 
     /**
@@ -37,11 +41,19 @@ public class ConsumerEntity extends SimulationEntity {
      */
     @Override
     public void startSimulation() {
-        //TODO : add receive response code
-        resultSet = new ResultSet();
+        //TODO : add receive response code        
         simulationThread = new SimulationThread();
         simulationThread.start();
+        
+        try {
+            simulationThread.join();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("***************\nSimulation thread ended");
 
+        System.out.println(logger.getResultSet().toString());
+        
         //TODO : warn master when the consumer has finished its scenario
 
         //TODO : wait for the master to ask the consumer to send its results back
@@ -60,30 +72,12 @@ public class ConsumerEntity extends SimulationEntity {
      * Used to find a WS address corresponding to an ID.
      * @return
      */
-    private Hashtable<String, AgentConfiguration> initializeAdressesTable() {
+    private Hashtable<String, AgentConfiguration> initializeAgentsTable() {
         Hashtable<String, AgentConfiguration> hashtable = new Hashtable<String, AgentConfiguration>();
         for (AgentConfiguration agentConfiguration :this.simulationScenario.getAgentsconfiguration()) {
              hashtable.put(agentConfiguration.getName(), agentConfiguration);
         }
         return hashtable;
-    }
-
-    /**
-     * Logs a simulation event
-     * @param agent
-     * @param event
-     */
-    private void writeSimulationEvent(AgentType agent, EventType event) {
-        ResultEvent currentEvent = new ResultEvent();
-        currentEvent.setAgentId(this.getid());
-        currentEvent.setAgentType(agent);
-        // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-        Date now = new Date();
-        currentEvent.setEventDate(0);//now.getTime());// TODOOOO
-        currentEvent.setEventType(event);
-
-        //add in list of events
-        resultSet.getEvents().add(currentEvent);
     }
 
     /**
@@ -95,7 +89,7 @@ public class ConsumerEntity extends SimulationEntity {
         private SimulationStep step;
         private int reqId = 0;
         private int nbRequest = 0;
-        private Date startDate;
+        
 
         //TODO : tests foireux pour vérifier la précision des envois de requêtes
         // (en écrivant la date d'envoi de chaque requête pour vérifier)
@@ -106,6 +100,7 @@ public class ConsumerEntity extends SimulationEntity {
             if (simulationScenario != null) {
                 // Store simulation start date
                 startDate = new Date();
+                logger.setStartDate(startDate);
                 for (i = 0; i < simulationScenario.getSteps().size(); i++) {
                     step = simulationScenario.getSteps().get(i);
                     timer = new Timer();
@@ -127,8 +122,11 @@ public class ConsumerEntity extends SimulationEntity {
                         int nbReqSent = 0;
                         
                         public void run() {
-                            
-                            //writeSimulationEvent(AgentType.CONSUMER, EventType.REQUEST_SENT);
+                            try {
+                                logger.writeSimulationEvent(AgentType.CONSUMER, EventType.REQUEST_SENT);
+                            } catch (Exception ex) {
+                                Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                             // Send the request to the producer
                             // (the response logging is done in the request callback)
                             sendAsyncRequest(step.getDestID(), reqId, step.getRequestPayloadSize(), step.getProcessTime(), step.getResponsePayloadSize());
@@ -187,9 +185,8 @@ public class ConsumerEntity extends SimulationEntity {
             javax.xml.ws.AsyncHandler<simulationRef.RequestOperationResponse> asyncHandler = new javax.xml.ws.AsyncHandler<simulationRef.RequestOperationResponse>() {
 
                 public void handleResponse(javax.xml.ws.Response<simulationRef.RequestOperationResponse> response) {
-                    try {
-                        // TODO : log response
-                        //writeSimulationEvent(AgentType.CONSUMER , EventType.RESPONSE_RECEIVED);
+                    try {                        
+                        logger.writeSimulationEvent(AgentType.CONSUMER , EventType.RESPONSE_RECEIVED);
 
                         System.out.println("Result :\n " + response.get().getReturn());
                     } catch (Exception ex) {
@@ -213,6 +210,7 @@ public class ConsumerEntity extends SimulationEntity {
      */
     public static void main(String[] args) {
 
+        
         String producerId = "producer1";
         String consumerId = "consumer1";
         // Test ConsumerEntity
@@ -225,9 +223,10 @@ public class ConsumerEntity extends SimulationEntity {
         ss.getAgentsconfiguration().add(pc);
 
         ss.addStep(new SimulationStep(consumerId, producerId, 0, 3000, 1, 16, 1000L, 20));
-        ss.addStep(new SimulationStep(consumerId, producerId, 3000, 4500, 2, 16, 1000L, 20));
+        //ss.addStep(new SimulationStep(consumerId, producerId, 3000, 4500, 2, 16, 1000L, 20));
 
         cons.configureConsumer(consumerId, ss);
         cons.startSimulation();
+         
     }
 }

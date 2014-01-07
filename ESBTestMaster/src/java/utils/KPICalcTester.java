@@ -13,6 +13,7 @@ import esbtestmaster.XMLResultKeeper;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,8 +26,12 @@ public class KPICalcTester {
     public static void main(String[] args) {
         try {
             //Remplacer par le chemin du fichier resultats
-            XMLResultKeeper xml = new XMLResultKeeper("/home/matthieu/results.xml");
-            ResultSet results = xml.getLog("/home/matthieu/results.xml");
+          // XMLResultKeeper xml = new XMLResultKeeper("/home/matthieu/results.xml");
+            Scanner in = new Scanner(System.in);
+            System.out.println("Saisir le chemin du fichier résultat :   ");
+            String path = in.nextLine();
+            
+            ResultSet results = XMLResultKeeper.getLog(path);
             KPICalculator calc = new KPICalculator();
             KPISet kpi = calc.calculateKPI(results);
 
