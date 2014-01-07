@@ -5,6 +5,8 @@
 
 package simulation;
 
+import datas.AgentType;
+import datas.EventType;
 import datas.ProducerConfiguration;
 import datas.SimulationScenario;
 import datas.SimulationStep;
@@ -84,7 +86,7 @@ public class ConsumerEntityTest {
         instance.abortSimulation();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
-    }
+    }    
 
     /**
      * Test of main method, of class ConsumerEntity.
