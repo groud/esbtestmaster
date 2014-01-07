@@ -35,9 +35,11 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
      * @param receiverAgent
      */
     public void startSimulationMessage(AgentConfiguration receiverAgent) {
+        System.out.println("-----------startSimulationMessage-----------");
         StartJMSMessage startJMSMessage = new StartJMSMessage();
         MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
         masterMessageHandler.sendToTopic(startJMSMessage);
+        System.out.println("-----------startSimulationMessage-----------2");
         //TODO JMS : Start JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
     }
