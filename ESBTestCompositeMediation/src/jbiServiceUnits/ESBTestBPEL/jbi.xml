@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jbi xmlns="http://java.sun.com/xml/ns/jbi" xmlns:ns0="http://enterprise.netbeans.org/bpel/ESBTestBPEL/ESBTestBPEL" xmlns:ns1="http://simulation/" xmlns:ns2="http://www.sun.com/jbi/descriptor/service-unit" version="1.0">
+    <services binding-component="false">
+        <provides endpoint-name="BPELSimulationWSRole_myRole" interface-name="ns1:SimulationWS" service-name="ns0:PartnerLinkBPEL">
+            <ns2:display-name>PartnerLinkBPEL</ns2:display-name>
+            <ns2:process-name>ESBTestBPEL</ns2:process-name>
+            <ns2:file-path>ESBTestBPEL.bpel</ns2:file-path>
+        </provides>
+        <consumes endpoint-name="SimulationWSRole_partnerRole" interface-name="ns1:SimulationWS" service-name="ns0:PartnerLinkWS">
+            <ns2:display-name>PartnerLinkWS</ns2:display-name>
+            <ns2:process-name>ESBTestBPEL</ns2:process-name>
+            <ns2:file-path>ESBTestBPEL.bpel</ns2:file-path>
+        </consumes>
+    </services>
+</jbi>

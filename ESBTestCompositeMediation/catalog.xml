@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://localhost:8080/ESBTestCP/SimulationWSService?wsdl" uri="src/jbiasa/localhost_8080/ESBTestCP/SimulationWSService.wsdl"/>
+    <system systemId="http://localhost:8080/ESBTestCP/SimulationWSService?xsd=1" uri="src/jbiasa/localhost_8080/ESBTestCP/SimulationWSService.xsd_1.xsd"/>
+<nextCatalog catalog="src/jbiServiceUnits/META-INF/ESBTestBPEL/catalog.xml"/></catalog>
