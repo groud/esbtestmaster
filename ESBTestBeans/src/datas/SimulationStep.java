@@ -1,5 +1,7 @@
 package datas;
 
+import java.io.Serializable;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -10,7 +12,7 @@ package datas;
  *
  * @author gilles
  */
-public class SimulationStep implements Comparable<SimulationStep> {
+public class SimulationStep implements Comparable<SimulationStep>, Serializable {
 
     private String srcID;
     private String destID;
