@@ -21,14 +21,17 @@ public class ResultsLogger {
     private String agentID;
 
     /**
-     *
-     * @param agentID ID of the local agent logging the results
+     *create a ResultSet to save simulation events, and attribute a agent id to this resultsLogger
+     * @param agentID, ID of the local agent logging the results
      */
     public ResultsLogger(String agentID) {
         resultSet = new ResultSet();
         this.agentID = agentID;
     }
-
+     /**
+      * set simulation start date
+      * @param date
+      */
     public void setStartDate(Date date) {
         startDate = date;
     }
@@ -58,7 +61,10 @@ public class ResultsLogger {
         //TODO : write results to file after X events and clear ResultSet
         //*************************
     }
-
+    /**
+     * grab resultSet
+     * @return ResultSet
+     */
     public ResultSet getResultSet() {
         return resultSet;
     }
