@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<process
+    name="ESBTestBPEL"
+    targetNamespace="http://enterprise.netbeans.org/bpel/ESBTestBPEL/ESBTestBPEL"
+    xmlns:tns="http://enterprise.netbeans.org/bpel/ESBTestBPEL/ESBTestBPEL"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+    xmlns:sxt="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Trace" 
+    xmlns:sxed="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor"
+    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling" xmlns:sxed2="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2">
+    <import namespace="http://enterprise.netbeans.org/bpel/WSSimulationWSServiceWrapper" location="WSSimulationWSServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://simulation/" location="SimulationWSService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://enterprise.netbeans.org/bpel/BPELSimulationWSServiceWrapper" location="BPELSimulationWSServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <partnerLinks>
+        <partnerLink name="PartnerLinkBPEL" xmlns:tns="http://enterprise.netbeans.org/bpel/BPELSimulationWSServiceWrapper" partnerLinkType="tns:SimulationWSLinkType" myRole="BPELSimulationWSRole"/>
+        <partnerLink name="PartnerLinkWS" xmlns:tns="http://enterprise.netbeans.org/bpel/WSSimulationWSServiceWrapper" partnerLinkType="tns:SimulationWSLinkType" partnerRole="SimulationWSRole"/>
+    </partnerLinks>
+    <variables>
+        <variable name="RequestOperationOutBPEL" xmlns:tns="http://simulation/" messageType="tns:requestOperationResponse"/>
+        <variable name="RequestOperationInBPEL" xmlns:tns="http://simulation/" messageType="tns:requestOperation"/>
+        <variable name="RequestOperationOut" xmlns:tns="http://simulation/" messageType="tns:requestOperationResponse"/>
+        <variable name="RequestOperationIn" xmlns:tns="http://simulation/" messageType="tns:requestOperation"/>
+    </variables>
+    <sequence>
+        <receive name="ReceiveExternalRequest" createInstance="yes" partnerLink="PartnerLinkBPEL" operation="requestOperation" xmlns:tns="http://simulation/" portType="tns:SimulationWS" variable="RequestOperationInBPEL"/>
+        <assign name="Assign1">
+            <copy>
+                <from>$RequestOperationInBPEL.parameters/id</from>
+                <to>$RequestOperationIn.parameters/id</to>
+            </copy>
+            <copy>
+                <from>$RequestOperationInBPEL.parameters/requestData</from>
+                <to>$RequestOperationIn.parameters/requestData</to>
+            </copy>
+            <copy>
+                <from>$RequestOperationInBPEL.parameters/respTime</from>
+                <to>$RequestOperationIn.parameters/respTime</to>
+            </copy>
+            <copy>
+                <from>$RequestOperationInBPEL.parameters/respSize</from>
+                <to>$RequestOperationIn.parameters/respSize</to>
+            </copy>
+        </assign>
+        <invoke name="InvokeSimulation" partnerLink="PartnerLinkWS" operation="requestOperation" xmlns:tns="http://simulation/" portType="tns:SimulationWS" inputVariable="RequestOperationIn" outputVariable="RequestOperationOut"/>
+        <assign name="Assign2">
+            <copy>
+                <from>$RequestOperationOut.parameters/return</from>
+                <to>$RequestOperationOutBPEL.parameters/return</to>
+            </copy>
+        </assign>
+        <reply name="ReplyExternalRequest" partnerLink="PartnerLinkBPEL" operation="requestOperation" xmlns:tns="http://simulation/" portType="tns:SimulationWS" variable="RequestOperationOutBPEL"/>
+    </sequence>
+</process>
+

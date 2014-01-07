@@ -41,7 +41,7 @@ public class ResultsLogger {
      * @param agent
      * @param event
      */
-    public void writeSimulationEvent(AgentType agent, EventType event) throws Exception {
+    public void writeSimulationEvent(int reqId, AgentType agent, EventType event) throws Exception {
         if(startDate == null) {
             throw new Exception("The simulation start date was not saved");
         }
@@ -53,6 +53,7 @@ public class ResultsLogger {
         Date now = new Date();
         currentEvent.setEventDate(now.getTime() - startDate.getTime());
         currentEvent.setEventType(event);
+        currentEvent.setReqId(reqId);
 
         //add in list of events
         resultSet.addEvent(currentEvent);

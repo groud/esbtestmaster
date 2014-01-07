@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" targetNamespace="http://simulation/" xmlns:tns="http://simulation/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="requestOperation" type="tns:requestOperation"/>
+
+  <xs:element name="requestOperationResponse" type="tns:requestOperationResponse"/>
+
+  <xs:complexType name="requestOperation">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string" minOccurs="0"/>
+      <xs:element name="requestData" type="xs:string" minOccurs="0"/>
+      <xs:element name="respTime" type="xs:int"/>
+      <xs:element name="respSize" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="requestOperationResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+

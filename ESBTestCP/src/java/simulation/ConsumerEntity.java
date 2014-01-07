@@ -23,7 +23,11 @@ public class ConsumerEntity extends SimulationEntity {
     private SimulationThread simulationThread;
     private Date startDate;
     private ResultsLogger logger;
+    private int nbSteps;
+    
 
+    private int reqId = 0;  // Don't change manually because of concurrency issues
+    private int stepsDone = 0; // Don't change manually because of concurrency issues
     /**
      * Configure the simulation scenario and id
      * @param id
@@ -34,6 +38,7 @@ public class ConsumerEntity extends SimulationEntity {
         this.setId(id);
         hashAgentsConf = this.initializeAgentsTable();
         logger = new ResultsLogger(this.getid());
+        nbSteps = simulationScenario.getSteps().size();
     }
 
     /**
@@ -86,9 +91,8 @@ public class ConsumerEntity extends SimulationEntity {
     private class SimulationThread extends Thread {
 
         private Timer timer;
-        private SimulationStep step;
-        private int reqId = 0;
-        private int nbRequest = 0;
+        private SimulationStep step;        
+        private volatile int nbRequest = 0;
         
 
         //TODO : tests foireux pour vérifier la précision des envois de requêtes
@@ -96,12 +100,16 @@ public class ConsumerEntity extends SimulationEntity {
         @Override
         public void run() {
             int i;
+            
+            reqId = 0;
+            stepsDone = 0;
+
             //send request
             if (simulationScenario != null) {
                 // Store simulation start date
                 startDate = new Date();
                 logger.setStartDate(startDate);
-                for (i = 0; i < simulationScenario.getSteps().size(); i++) {
+                for (i = 0; i < nbSteps; i++) {
                     step = simulationScenario.getSteps().get(i);
                     timer = new Timer();
                     // duration converted in seconds from ms
@@ -123,21 +131,25 @@ public class ConsumerEntity extends SimulationEntity {
                         
                         public void run() {
                             try {
-                                logger.writeSimulationEvent(AgentType.CONSUMER, EventType.REQUEST_SENT);
+                                logger.writeSimulationEvent(reqId,AgentType.CONSUMER, EventType.REQUEST_SENT);
                             } catch (Exception ex) {
                                 Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
                             }
                             // Send the request to the producer
                             // (the response logging is done in the request callback)
                             sendAsyncRequest(step.getDestID(), reqId, step.getRequestPayloadSize(), step.getProcessTime(), step.getResponsePayloadSize());
-                            reqId++;
+                            incrementRequestID(); // synchronized method
                             nbReqSent++;
-                            
-                            if(nbReqSent==nbRequest) {
+
+                            // When all requests for the step have been sent
+                            if(nbReqSent==nbRequest) {                                
+                                // Notify the ConsumerEntity that a step is done
+                                stepDone();
+                                // Cancel the timer task
                                 this.cancel();
                             }
                             
-
+                            
                         }                    
                     }, new Date(startDate.getTime() + step.getBurstStartDate()) , period);
                 }          
@@ -146,8 +158,34 @@ public class ConsumerEntity extends SimulationEntity {
                 System.out.println("steps have not been configured");
             }
 
+            // Waits for all steps to be done
+            //*********************************************************
+            //TODO : ***WILL*** hang if a step is not finished correctly
+            // -> need for a timeout somewhere
+            // TODO : some results may come back after this thead ends
+            // -> possible problem
+            //*********************************************************
+           
+            while(stepsDone < nbSteps) {                
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
+                }                                         
+            }            
+
         }
     }
+
+    synchronized private void incrementRequestID() {
+        reqId++;
+    }
+
+    synchronized private void stepDone() {
+        stepsDone++;        
+    }
+
+    
 
     /**
      * Sends an asynchronous request to the WS whose ID is producerID.
@@ -162,6 +200,7 @@ public class ConsumerEntity extends SimulationEntity {
         // tempAgentConf used to test if the AgentConfiguration exists and if it's
         // a ProducerConfiguration without having to cast all the time afterwards
         AgentConfiguration tempAgentConf;
+        final int reqId = requestId;    // to be accessed in the inner class handler
 
         // Get the ProducerConf
         tempAgentConf = this.hashAgentsConf.get(producerId);
@@ -186,7 +225,7 @@ public class ConsumerEntity extends SimulationEntity {
 
                 public void handleResponse(javax.xml.ws.Response<simulationRef.RequestOperationResponse> response) {
                     try {                        
-                        logger.writeSimulationEvent(AgentType.CONSUMER , EventType.RESPONSE_RECEIVED);
+                        logger.writeSimulationEvent(reqId, AgentType.CONSUMER , EventType.RESPONSE_RECEIVED);
 
                         System.out.println("Result :\n " + response.get().getReturn());
                     } catch (Exception ex) {
@@ -223,7 +262,7 @@ public class ConsumerEntity extends SimulationEntity {
         ss.getAgentsconfiguration().add(pc);
 
         ss.addStep(new SimulationStep(consumerId, producerId, 0, 3000, 1, 16, 1000L, 20));
-        //ss.addStep(new SimulationStep(consumerId, producerId, 3000, 4500, 2, 16, 1000L, 20));
+        ss.addStep(new SimulationStep(consumerId, producerId, 3000, 5000, 2, 16, 1000L, 20));
 
         cons.configureConsumer(consumerId, ss);
         cons.startSimulation();

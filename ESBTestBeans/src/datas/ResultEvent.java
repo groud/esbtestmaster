@@ -17,6 +17,7 @@ public class ResultEvent implements Comparable<ResultEvent>{
     private EventType eventType;
     private AgentType agentType;
     private String agentId;
+    private int reqId;
 
 
     // ----------------------------------
@@ -54,6 +55,9 @@ public class ResultEvent implements Comparable<ResultEvent>{
         this.eventType = eventType;
     }
 
+    public void setReqId(int id) {
+        reqId = id;
+    }
 
     //Comparison method
     public int compareTo(ResultEvent event) {
@@ -64,6 +68,7 @@ public class ResultEvent implements Comparable<ResultEvent>{
 
     @Override
     public String toString() {
-        return "Event from "+this.getAgentType()+" "+this.getAgentId()+" - "+this.getEventType()+" at "+this.getEventDate();
+        return "Event from "+this.getAgentType()+" "+this.getAgentId()+" - "+this.getEventType()+" at "+this.getEventDate()
+                + " (Request ID : " + reqId + ")";
     }
 }
