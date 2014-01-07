@@ -8,6 +8,8 @@ package datas;
 
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  *
@@ -41,5 +43,31 @@ public class KPISet {
     public void setNumberOfRequestSent(HashMap<String, Integer> numberOfRequestSent) {
         this.numberOfRequestSent = numberOfRequestSent;
     }
+
+    @Override
+    public String toString(){
+        String resultat = new String("");
+        Iterator it = numberOfRequestSent.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry entry = (Map.Entry) it.next();
+            String key = (String)entry.getKey();
+            Integer val = (Integer)entry.getValue();
+            resultat += "Id Agent = " + key + "\n";
+            resultat+= "\t Nombre de requêtes envoyées: " + val + "\n";
+            if(numberOfRequestLost.containsKey(key)){
+                resultat+= "\t Nombre de requêtes perdues : " + numberOfRequestLost.get(key) + "\n";
+            } else {
+                resultat+= "\t Nombre de requêtes perdues : Undefined \n";
+            }
+           if(averageResponseTime.containsKey(key)){
+                resultat+= "\t Temps de réponse moyen : " + numberOfRequestLost.get(key) + "\n";
+            } else {
+                resultat+= "\t Temps de réponse moyen : Undefined \n";
+            }
+       }
+
+       return resultat;
+   }
 
 }

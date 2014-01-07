@@ -25,8 +25,8 @@ public class KPICalcTester {
     public static void main(String[] args) {
         try {
             //Remplacer par le chemin du fichier resultats
-            XMLResultKeeper xml = new XMLResultKeeper("/home/matthieu/results.xml");
-            ResultSet results = xml.getLog("/home/matthieu/results.xml");
+            XMLResultKeeper xml = new XMLResultKeeper("/home/matthieu/results_test.xml");
+            ResultSet results = xml.getLog("/home/matthieu/results_test.xml");
             KPICalculator calc = new KPICalculator();
             KPISet kpi = calc.calculateKPI(results);
 

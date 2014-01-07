@@ -4,18 +4,29 @@
  */
 package esbtestmaster;
 
+import Exceptions.BadXMLException;
 import datas.*;
 import interfaces.KPICalculatorInterface;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedSet;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.*;
 
 /**
  *
  * @author gilles
  */
 public class KPICalculator implements KPICalculatorInterface {
+
+        public static final String XSD_KPIS = "XSD/kpis.xsd";
     // -------------------------------
     //   INTERFACES IMPLEMENTATIONS
     // -------------------------------
@@ -87,5 +98,48 @@ public class KPICalculator implements KPICalculatorInterface {
     public void saveKPItoXMLFile(KPISet kpiSet, String filename) {
         //TODO : Implement KPI saving as an XML File, ADD a KPISet as an Argument
         //throw new UnsupportedOperationException("Not supported yet.");
+        Document document;
+        Element root;
+
+        //Opens the XML File
+        File xmlFile = new File(filename);
+        document = new Document();
+        root = new Element("kpis");
+        Namespace ns = Namespace.getNamespace("xsi","http://www.w3.org/2001/XMLSchema-instance");
+        root.addNamespaceDeclaration(ns);
+        root.removeNamespaceDeclaration(ns);
+         //root.
+        root.setAttribute("noNamespaceSchemaLocation",XSD_KPIS,ns);
+        
+        Element child;
+        child = new Element("simulationEvent");
+        child = new Element("event");
+        child.setAttribute("agentType", "ok");
+        root.addContent(child);
+
+        Iterator it = kpiSet.getAverageResponseTime().entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry entry = (Map.Entry) it.next();
+                String key = (String)entry.getKey();
+                Long val = (Long)entry.getValue();
+                System.out.println("agentId, averageResponseTime: " + key + "," + val);
+            }
+
+       Iterator it2 = kpiSet.getNumberOfRequestLost().entrySet().iterator();
+            while (it2.hasNext()) {
+                Map.Entry entry = (Map.Entry) it2.next();
+                String key = (String)entry.getKey();
+                Integer val = (Integer)entry.getValue();
+                System.out.println("agentId, reqLost: " + key + "," + val);
+            }
+
+        Iterator it3 = kpiSet.getNumberOfRequestSent().entrySet().iterator();
+            while (it3.hasNext()) {
+                Map.Entry entry = (Map.Entry) it3.next();
+                String key = (String)entry.getKey();
+                Integer val = (Integer)entry.getValue();
+                System.out.println("agentId, reqSent: " + key + "," + val);
+            }
+
     }
 }
