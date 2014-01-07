@@ -162,6 +162,8 @@ public class ConsumerEntity extends SimulationEntity {
             //*********************************************************
             //TODO : ***WILL*** hang if a step is not finished correctly
             // -> need for a timeout somewhere
+            // TODO : some results may come back after this thead ends
+            // -> possible problem
             //*********************************************************
            
             while(stepsDone < nbSteps) {                
