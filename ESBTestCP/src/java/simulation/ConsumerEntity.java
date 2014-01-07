@@ -20,6 +20,7 @@ public class ConsumerEntity extends SimulationEntity {
     private Hashtable<String, AgentConfiguration> hashAgentsConf;
     private ResultSet resultSet;
     private SimulationThread simulationThread;
+    private Date startDate;
 
     /**
      * Configure the simulation scenario and id
@@ -29,7 +30,7 @@ public class ConsumerEntity extends SimulationEntity {
     public void configureConsumer(String id, SimulationScenario simulationScenario) {
         this.simulationScenario = simulationScenario;
         this.setId(id);
-        hashAgentsConf = this.initializeAdressesTable();
+        hashAgentsConf = this.initializeAgentsTable();
     }
 
     /**
@@ -60,7 +61,7 @@ public class ConsumerEntity extends SimulationEntity {
      * Used to find a WS address corresponding to an ID.
      * @return
      */
-    private Hashtable<String, AgentConfiguration> initializeAdressesTable() {
+    private Hashtable<String, AgentConfiguration> initializeAgentsTable() {
         Hashtable<String, AgentConfiguration> hashtable = new Hashtable<String, AgentConfiguration>();
         for (AgentConfiguration agentConfiguration :this.simulationScenario.getAgentsconfiguration()) {
              hashtable.put(agentConfiguration.getName(), agentConfiguration);
@@ -79,11 +80,11 @@ public class ConsumerEntity extends SimulationEntity {
         currentEvent.setAgentType(agent);
         // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         Date now = new Date();
-        currentEvent.setEventDate(0);//now.getTime());// TODOOOO
+        currentEvent.setEventDate(now.getTime() - startDate.getTime());
         currentEvent.setEventType(event);
 
         //add in list of events
-        resultSet.getEvents().add(currentEvent);
+        resultSet.addEvent(currentEvent);
     }
 
     /**
@@ -95,7 +96,7 @@ public class ConsumerEntity extends SimulationEntity {
         private SimulationStep step;
         private int reqId = 0;
         private int nbRequest = 0;
-        private Date startDate;
+        
 
         //TODO : tests foireux pour vérifier la précision des envois de requêtes
         // (en écrivant la date d'envoi de chaque requête pour vérifier)
@@ -128,7 +129,7 @@ public class ConsumerEntity extends SimulationEntity {
                         
                         public void run() {
                             
-                            //writeSimulationEvent(AgentType.CONSUMER, EventType.REQUEST_SENT);
+                            writeSimulationEvent(AgentType.CONSUMER, EventType.REQUEST_SENT);
                             // Send the request to the producer
                             // (the response logging is done in the request callback)
                             sendAsyncRequest(step.getDestID(), reqId, step.getRequestPayloadSize(), step.getProcessTime(), step.getResponsePayloadSize());
@@ -225,7 +226,7 @@ public class ConsumerEntity extends SimulationEntity {
         ss.getAgentsconfiguration().add(pc);
 
         ss.addStep(new SimulationStep(consumerId, producerId, 0, 3000, 1, 16, 1000L, 20));
-        ss.addStep(new SimulationStep(consumerId, producerId, 3000, 4500, 2, 16, 1000L, 20));
+        //ss.addStep(new SimulationStep(consumerId, producerId, 3000, 4500, 2, 16, 1000L, 20));
 
         cons.configureConsumer(consumerId, ss);
         cons.startSimulation();
