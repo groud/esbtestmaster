@@ -17,6 +17,9 @@ import javax.xml.ws.BindingProvider;
  * @author mariata
  */
 public class ConsumerEntity extends SimulationEntity {
+    // time in ms to wait for all the timers to be set
+    private final int INIT_TIME = 1000;
+
 
     private SimulationScenario simulationScenario = null;
     private Hashtable<String, AgentConfiguration> hashAgentsConf;    
@@ -107,8 +110,10 @@ public class ConsumerEntity extends SimulationEntity {
             //send request
             if (simulationScenario != null) {
                 // Store simulation start date
-                startDate = new Date();
+
+                startDate = new Date(INIT_TIME + System.currentTimeMillis());
                 logger.setStartDate(startDate);
+
                 for (i = 0; i < nbSteps; i++) {
                     step = simulationScenario.getSteps().get(i);
                     timer = new Timer();
@@ -129,7 +134,7 @@ public class ConsumerEntity extends SimulationEntity {
                     timer.scheduleAtFixedRate(new TimerTask() {
                         int nbReqSent = 0;
                         
-                        public void run() {
+                        public void run() {                           
                             try {
                                 logger.writeSimulationEvent(reqId,AgentType.CONSUMER, EventType.REQUEST_SENT);
                             } catch (Exception ex) {
