@@ -12,13 +12,14 @@ import datas.ResultSet;
 import datas.SimulationScenario;
 import interfaces.MonitoringMessageListener;
 import interfaces.SimulationMessageListener;
+import javax.servlet.ServletContextEvent;
 import simulation.*;
 
 /**
  *
  * @author BambaLamine
  */
-public class AgentController implements MonitoringMessageListener, SimulationMessageListener {
+public class AgentController implements MonitoringMessageListener, SimulationMessageListener, javax.servlet.ServletContextListener {
 
     private SimulationEntity simulationEntity;
     private JMSHandler jms;
@@ -86,6 +87,14 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      */
     public void fatalErrorOccured() {
         jms.fatalErrorOccured();
+    }
+
+    public void contextInitialized(ServletContextEvent sce) {
+        System.out.println("-- Agent started --");
+    }
+
+    public void contextDestroyed(ServletContextEvent sce) {
+        System.out.println("-- Agent stopped --");
     }
 }
 /* public void actualiserController(interfaceObservableJMS a){
