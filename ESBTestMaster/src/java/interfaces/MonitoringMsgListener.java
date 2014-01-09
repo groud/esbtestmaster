@@ -13,7 +13,8 @@ import datas.ResultSet;
  */
 public interface MonitoringMsgListener {
     //--->Les types sont à mettre à jour
-    //il doit recevoir le fichier depuis le JMS 
+    //il doit recevoir le fichier depuis le JMS
+    public void configurationDoneForOneAgent(String agentID);
     public void simulationDoneForOneAgent(String agentID, ResultSet resultSet);
     public void fatalErrorOccured(String agentID, String msg);
 
