@@ -66,8 +66,8 @@ public class ConsumerEntityTest {
         pc.setWsAddress("http://localhost:8090/ESBTestCompositeService1/casaPort1");
         ss.getAgentsconfiguration().add(pc);
 
-        ss.addStep(new SimulationStep(consumerId, producerId, 0, 3000, 1, 16, 1000L, 20));
-        ss.addStep(new SimulationStep(consumerId, producerId, 3000, 4500, 2, 16, 1000L, 20));
+        ss.addStep(new SimulationStep(consumerId, producerId, 0, 5000, 1, 16, 1000L, 20));
+        //ss.addStep(new SimulationStep(consumerId, producerId, 3000, 4500, 2, 16, 1000L, 20));
 
         instance.configureConsumer(consumerId, ss);
         instance.startSimulation();
@@ -88,16 +88,6 @@ public class ConsumerEntityTest {
         fail("The test case is a prototype.");
     }    
 
-    /**
-     * Test of main method, of class ConsumerEntity.
-     */
-    @Test
-    public void testMain() {
-        System.out.println("main");
-        String[] args = null;
-        ConsumerEntity.main(args);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+   
 
 }

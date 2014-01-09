@@ -7,6 +7,10 @@ package simulation;
 import java.util.*;
 import datas.*;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.ws.BindingProvider;
@@ -29,7 +33,7 @@ public class ConsumerEntity extends SimulationEntity {
     private int nbSteps;
     
 
-    private int reqId = 0;  // Don't change manually because of concurrency issues
+    private static int reqId = 0;  // Don't change manually because of concurrency issues
     private int stepsDone = 0; // Don't change manually because of concurrency issues
     /**
      * Configure the simulation scenario and id
@@ -49,6 +53,95 @@ public class ConsumerEntity extends SimulationEntity {
      */
     @Override
     public void startSimulation() {
+        final ScheduledExecutorService scheduler =
+            Executors.newScheduledThreadPool(5);
+        SimulationStep step;
+        int i;
+        
+
+        for (i = 0; i < nbSteps; i++) {
+            long taskDelay, taskEnd;
+            int nbRequest = 0;
+            Date stepStartDate;
+            step = simulationScenario.getSteps().get(i);
+
+            // parameters for the scheduledExecutor run() method
+            final String destId = step.getDestID();
+            final String wsUrl = hashAgentsConf.get(destId).getWsAddress();
+            final int reqPayloadSize = step.getRequestPayloadSize();
+            final long processTime =  step.getProcessTime();
+            final int respPayloadSize = step.getResponsePayloadSize();
+
+            // duration converted in seconds from ms
+            double stepDuration = (double) step.getBurstDuration() / 1000.0;
+            System.out.println("stepduration="+stepDuration);
+            nbRequest = (int) (stepDuration * step.getBurstRate());
+            System.out.println("nbRequest="+nbRequest);
+
+            // Make sure at least one request is sent
+            if(nbRequest <= 0) {
+                nbRequest = 0;
+            }
+            //interval between two request in ms
+            long period = (long) ((stepDuration / (float)nbRequest) *1000);
+
+            startDate = new Date(INIT_TIME + System.currentTimeMillis());
+            logger.setStartDate(startDate);
+            stepStartDate = new Date(startDate.getTime() + step.getBurstStartDate());
+             final Runnable stepTask = new Runnable() {
+                 int nbReqSent = 0;
+                        public void run() {                            
+                            
+                            //System.out.println("*********************************");
+                            //System.out.println("Run "+nbReqSent+" start date : " + System.currentTimeMillis());
+                            //System.out.println("Run "+nbReqSent+" bf log : " + System.currentTimeMillis());
+                            try {
+                                logger.writeSimulationEvent(reqId,AgentType.CONSUMER, EventType.REQUEST_SENT);
+                            } catch (Exception ex) {
+                                Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            //System.out.println("Run "+nbReqSent+" af log : " + System.currentTimeMillis());
+                            // Send the request to the producer
+                            // (the response logging is done in the request callback)
+                            //System.out.println("Run "+nbReqSent+" bf async req : " + System.currentTimeMillis());
+                            sendAsyncRequest(wsUrl, destId, reqId, reqPayloadSize, processTime, respPayloadSize);
+                            //System.out.println("Run "+nbReqSent+" af async req : " + System.currentTimeMillis());
+                            //System.out.println("Run "+nbReqSent+" bf increment : " + System.currentTimeMillis());
+                            incrementRequestID(); // synchronized method
+                            //System.out.println("Run "+nbReqSent+" af increment : " + System.currentTimeMillis());
+                            nbReqSent++;                            
+                        }
+                    };
+                // schedule the task
+                taskDelay = stepStartDate.getTime()- System.currentTimeMillis();
+                final ScheduledFuture<?> stepTaskHandle =
+                    scheduler.scheduleAtFixedRate(stepTask, taskDelay, period, TimeUnit.MILLISECONDS);
+            System.out.println("delay :"+taskDelay);
+            System.out.println("period :"+period);
+            //TODO : cancel
+
+            taskEnd = step.getBurstStopDate() + startDate.getTime();
+            scheduler.schedule(new Runnable() {
+                    public void run() { stepTaskHandle.cancel(true); }
+                }, taskEnd, TimeUnit.SECONDS);
+            
+        }
+
+        try {
+            //TODO : Wait for end properly
+            Thread.sleep(20000);
+            //System.out.println("***************\nEnd of startSimulation ended");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("***************\nEnd of startSimulation ended");
+        System.out.println(logger.getResultSet().toString());
+    }
+
+
+    /*
+    
+    public void startSimulation() {
         //TODO : add receive response code        
         simulationThread = new SimulationThread();
         simulationThread.start();
@@ -66,7 +159,7 @@ public class ConsumerEntity extends SimulationEntity {
 
         //TODO : wait for the master to ask the consumer to send its results back
     }
-
+    */
     /**
      * Abort the simulation
      */
@@ -96,12 +189,19 @@ public class ConsumerEntity extends SimulationEntity {
         private Timer timer;
         private SimulationStep step;        
         private volatile int nbRequest = 0;
+
         
 
         //TODO : tests foireux pour vérifier la précision des envois de requêtes
         // (en écrivant la date d'envoi de chaque requête pour vérifier)
         @Override
         public void run() {
+            
+           
+            
+
+
+            /*
             int i;
             
             reqId = 0;
@@ -110,12 +210,15 @@ public class ConsumerEntity extends SimulationEntity {
             //send request
             if (simulationScenario != null) {
                 // Store simulation start date
-
+                
                 startDate = new Date(INIT_TIME + System.currentTimeMillis());
                 logger.setStartDate(startDate);
 
-                for (i = 0; i < nbSteps; i++) {
+                System.out.println("simulation start date : "+startDate.getTime());
+
+                for (i = 0; i < nbSteps; i++) {                    
                     step = simulationScenario.getSteps().get(i);
+                    final String wsUrl = hashAgentsConf.get(step.getDestID()).getWsAddress();
                     timer = new Timer();
                     // duration converted in seconds from ms
                     double stepDuration = (double) step.getBurstDuration() / 1000.0;
@@ -130,22 +233,35 @@ public class ConsumerEntity extends SimulationEntity {
                     //interval between two request in ms
                     long period = (long) ((stepDuration / (float)nbRequest) *1000);
 
+                    Date timerTaskStart = new Date(startDate.getTime() + step.getBurstStartDate());
+                    System.out.println("step start : "+timerTaskStart.getTime());
+                    System.out.println("step period : "+period);
+
                     //configure timer,and start scenario
                     timer.scheduleAtFixedRate(new TimerTask() {
-                        int nbReqSent = 0;
+                        int nbReqSent = 0;                        
                         
-                        public void run() {                           
+                        public void run() {
+                            System.out.println("*********************************");
+                            
+                            System.out.println("Run "+nbReqSent+" start date : " + System.currentTimeMillis());
+                            System.out.println("Run "+nbReqSent+" bf log : " + System.currentTimeMillis());
                             try {
                                 logger.writeSimulationEvent(reqId,AgentType.CONSUMER, EventType.REQUEST_SENT);
                             } catch (Exception ex) {
                                 Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+                            }System.out.println("Run "+nbReqSent+" af log : " + System.currentTimeMillis());
                             // Send the request to the producer
                             // (the response logging is done in the request callback)
-                            sendAsyncRequest(step.getDestID(), reqId, step.getRequestPayloadSize(), step.getProcessTime(), step.getResponsePayloadSize());
+                            System.out.println("Run "+nbReqSent+" bf async req : " + System.currentTimeMillis());
+                            sendAsyncRequest(wsUrl, step.getDestID(), reqId, step.getRequestPayloadSize(), step.getProcessTime(), step.getResponsePayloadSize());
+                            System.out.println("Run "+nbReqSent+" af async req : " + System.currentTimeMillis());
+                            System.out.println("Run "+nbReqSent+" bf increment : " + System.currentTimeMillis());
                             incrementRequestID(); // synchronized method
+                            System.out.println("Run "+nbReqSent+" af increment : " + System.currentTimeMillis());
                             nbReqSent++;
 
+                            System.out.println("Run "+nbReqSent+" end date : " + System.currentTimeMillis());
                             // When all requests for the step have been sent
                             if(nbReqSent==nbRequest) {                                
                                 // Notify the ConsumerEntity that a step is done
@@ -156,7 +272,7 @@ public class ConsumerEntity extends SimulationEntity {
                             
                             
                         }                    
-                    }, new Date(startDate.getTime() + step.getBurstStartDate()) , period);
+                    }, timerTaskStart , period);
                 }          
 
             } else {
@@ -178,8 +294,8 @@ public class ConsumerEntity extends SimulationEntity {
                     Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
                 }                                         
             }            
-
-        }
+            */
+        }             
     }
 
     synchronized private void incrementRequestID() {
@@ -199,38 +315,21 @@ public class ConsumerEntity extends SimulationEntity {
      * @param requestId
      * @param reqPayloadSize
      */
-    private void sendAsyncRequest(String producerId, int requestId, int reqPayloadSize, long processTime, int respPayloadSize) {
-        String requestData = null;
-        ProducerConfiguration producerConf = null;
-        // tempAgentConf used to test if the AgentConfiguration exists and if it's
-        // a ProducerConfiguration without having to cast all the time afterwards
-        AgentConfiguration tempAgentConf;
-        final int reqId = requestId;    // to be accessed in the inner class handler
-
-        // Get the ProducerConf
-        tempAgentConf = this.hashAgentsConf.get(producerId);
-        
-        if (tempAgentConf == null) {
-            throw new IllegalArgumentException("AgentConfiguration is null");
-        } else if (tempAgentConf instanceof ProducerConfiguration) {
-            // To avoid typecasting afterwards
-            producerConf = (ProducerConfiguration) tempAgentConf;
-        } else {
-            throw new IllegalArgumentException("Remote agent is not a producer");
-        }
-
+    private void sendAsyncRequest(String wsAddress, String producerId, int requestId, int reqPayloadSize, long processTime, int respPayloadSize) {
+        String requestData = null;        
+       
 
         try { // Call Web Service Operation(async. callback)
             simulationRef.SimulationWSService service = new simulationRef.SimulationWSService();
             simulationRef.SimulationWS port = service.getSimulationWSPort();
 
-            ((BindingProvider)port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,producerConf.getWsAddress());
+            ((BindingProvider)port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsAddress);
 
             javax.xml.ws.AsyncHandler<simulationRef.RequestOperationResponse> asyncHandler = new javax.xml.ws.AsyncHandler<simulationRef.RequestOperationResponse>() {
 
                 public void handleResponse(javax.xml.ws.Response<simulationRef.RequestOperationResponse> response) {
                     try {                        
-                        logger.writeSimulationEvent(reqId, AgentType.CONSUMER , EventType.RESPONSE_RECEIVED);
+                        //logger.writeSimulationEvent(reqId, AgentType.CONSUMER , EventType.RESPONSE_RECEIVED);
 
                         System.out.println("Result :\n " + response.get().getReturn());
                     } catch (Exception ex) {
@@ -248,29 +347,8 @@ public class ConsumerEntity extends SimulationEntity {
         }
     }
 
-    /**
-     * Teste la communication inter-agents.
-     * @param args
-     */
-    public static void main(String[] args) {
-
-        
-        String producerId = "producer1";
-        String consumerId = "consumer1";
-        // Test ConsumerEntity
-        ConsumerEntity cons = new ConsumerEntity();
-
-        SimulationScenario ss = new SimulationScenario();
-        ProducerConfiguration pc = new ProducerConfiguration();
-        pc.setName(producerId);
-        pc.setWsAddress("http://localhost:8090/ESBTestCompositeService1/casaPort1");
-        ss.getAgentsconfiguration().add(pc);
-
-        ss.addStep(new SimulationStep(consumerId, producerId, 0, 3000, 1, 16, 1000L, 20));
-        ss.addStep(new SimulationStep(consumerId, producerId, 3000, 5000, 2, 16, 1000L, 20));
-
-        cons.configureConsumer(consumerId, ss);
-        cons.startSimulation();
-         
+    public ResultsLogger getLogger() {
+        return logger;
     }
+    
 }

@@ -50,12 +50,13 @@ public class ResultsLoggerTest {
     @Test
     public void testWriteSimulationEvent() throws Exception {
         System.out.println("writeSimulationEvent");
+        int reqId = 0;
         AgentType agent = AgentType.CONSUMER;
         EventType event = EventType.REQUEST_SENT;
         ResultsLogger instance = new ResultsLogger("agentID");
         instance.setStartDate(new Date());
         
-        instance.writeSimulationEvent(agent, event);
+        instance.writeSimulationEvent(reqId, agent, event);
         // TODO review the generated test code and remove the default call to fail.
         
         System.out.println(instance.getResultSet().toString());
