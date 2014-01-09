@@ -16,6 +16,10 @@ public class ProducerEntity extends SimulationEntity implements ProducerWSListen
     private ResultSet resultSet;
     private boolean simulationDone = true;
 
+    public ProducerEntity(String agentId) {
+        super(agentId);
+    }
+
     /**
      * Start the simulation
      */

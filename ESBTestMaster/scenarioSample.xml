@@ -3,20 +3,14 @@
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:noNamespaceSchemaLocation="XSD/simulationScenario.xsd">
 	<configuration>
-		<provider>
-			<name>prov1</name> 
+		<producer agentId="prov1">
 			<address>http://lol.com:6666</address>
-			<monitoringAddress>http://lol.com:6667</monitoringAddress>
-		</provider>
-		<provider>
-			<name>prov2</name> 
+		</producer>
+		<producer agentId="prov2">
 			<address>http://lol.com:6666</address>
-			<monitoringAddress>http://lol.com:6667</monitoringAddress>
-		</provider>
-		<consumer>
-			<name>cons1</name> 
+		</producer>
+		<consumer agentId="cons1">
 			<address>http://lol.com:6668</address>
-			<monitoringAddress>http://lol.com:6669</monitoringAddress>
 		</consumer>
 	</configuration>
 	<run>

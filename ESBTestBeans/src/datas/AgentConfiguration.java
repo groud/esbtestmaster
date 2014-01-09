@@ -16,25 +16,16 @@ import java.io.Serializable;
 public abstract class AgentConfiguration implements Serializable {
     protected AgentType agentType;
 
-    private String name;
+    private String agentId;
     private String wsAddress;
-    private String monitoringWSAddress;
 
 
-    public String getName() {
-        return name;
+    public String getAgentId() {
+        return agentId;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public String getMonitoringWSAddress() {
-        return monitoringWSAddress;
-    }
-
-    public void setMonitoringWSAddress(String monitoringWSAddress) {
-        this.monitoringWSAddress = monitoringWSAddress;
+    public void setAgentId(String name) {
+        this.agentId = name;
     }
 
     public String getWsAddress() {
@@ -47,6 +38,6 @@ public abstract class AgentConfiguration implements Serializable {
 
     @Override
     public String toString() {
-        return agentType + " " + this.getName() + "\n";
+        return agentType + " " + this.getAgentId() + "\n";
     }
 }

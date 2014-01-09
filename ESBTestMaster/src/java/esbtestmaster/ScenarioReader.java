@@ -53,14 +53,12 @@ public class ScenarioReader implements ScenarioReaderInterface {
                 if (agent.getName().equals("provider")) {
                     ProducerConfiguration prodConf = new ProducerConfiguration();
                     prodConf.setWsAddress(agent.getChildText("address"));
-                    prodConf.setMonitoringWSAddress(agent.getChildText("monitoringAddress"));
-                    prodConf.setName(agent.getChildText("name"));
+                    prodConf.setAgentId(agent.getAttributeValue("name"));
                     simulationScenario.getAgentsconfiguration().add(prodConf);
                 } else if (agent.getName().equals("consumer")) {
                     ConsumerConfiguration consConf = new ConsumerConfiguration();
                     consConf.setWsAddress(agent.getChildText("address"));
-                    consConf.setMonitoringWSAddress(agent.getChildText("monitoringAddress"));
-                    consConf.setName(agent.getChildText("name"));
+                    consConf.setAgentId(agent.getAttributeValue("name"));
                     simulationScenario.getAgentsconfiguration().add(consConf);
                 }
             }

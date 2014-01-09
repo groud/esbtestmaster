@@ -27,18 +27,21 @@ public class ConsumerEntity extends SimulationEntity {
     private Date startDate;
     private ResultsLogger logger;
     private int nbSteps;
-    
-
+   
     private int reqId = 0;  // Don't change manually because of concurrency issues
     private int stepsDone = 0; // Don't change manually because of concurrency issues
+
+    public ConsumerEntity(String agentId) {
+        super(agentId);
+    }
+
     /**
      * Configure the simulation scenario and id
      * @param id
      * @param simulationScenario
      */
-    public void configureConsumer(String id, SimulationScenario simulationScenario) {
+    public void configureConsumer(SimulationScenario simulationScenario) {
         this.simulationScenario = simulationScenario;
-        this.setId(id);
         hashAgentsConf = this.initializeAgentsTable();
         logger = new ResultsLogger(this.getid());
         nbSteps = simulationScenario.getSteps().size();
@@ -83,7 +86,7 @@ public class ConsumerEntity extends SimulationEntity {
     private Hashtable<String, AgentConfiguration> initializeAgentsTable() {
         Hashtable<String, AgentConfiguration> hashtable = new Hashtable<String, AgentConfiguration>();
         for (AgentConfiguration agentConfiguration :this.simulationScenario.getAgentsconfiguration()) {
-             hashtable.put(agentConfiguration.getName(), agentConfiguration);
+             hashtable.put(agentConfiguration.getAgentId(), agentConfiguration);
         }
         return hashtable;
     }
@@ -258,18 +261,18 @@ public class ConsumerEntity extends SimulationEntity {
         String producerId = "producer1";
         String consumerId = "consumer1";
         // Test ConsumerEntity
-        ConsumerEntity cons = new ConsumerEntity();
+        ConsumerEntity cons = new ConsumerEntity("cons1");
 
         SimulationScenario ss = new SimulationScenario();
         ProducerConfiguration pc = new ProducerConfiguration();
-        pc.setName(producerId);
+        pc.setAgentId(producerId);
         pc.setWsAddress("http://localhost:8090/ESBTestCompositeService1/casaPort1");
         ss.getAgentsconfiguration().add(pc);
 
         ss.addStep(new SimulationStep(consumerId, producerId, 0, 3000, 1, 16, 1000L, 20));
         ss.addStep(new SimulationStep(consumerId, producerId, 3000, 5000, 2, 16, 1000L, 20));
 
-        cons.configureConsumer(consumerId, ss);
+        cons.configureConsumer(ss);
         cons.startSimulation();
          
     }

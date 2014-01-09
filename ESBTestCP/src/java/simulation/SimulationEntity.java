@@ -14,6 +14,10 @@ public abstract class SimulationEntity {
     private String id;
     SimulationMessageListener listener;
 
+    public SimulationEntity(String id) {
+
+    }
+
     /**
      * Set the listener for the simulation events
      * @param listener

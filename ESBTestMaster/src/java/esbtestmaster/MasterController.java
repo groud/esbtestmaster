@@ -161,7 +161,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
             //On verifie que tous les consumers ont terminé la simulation
             if (this.consumersTerminated == false) {
                 for (AgentConfiguration agentConfiguration:this.currentScenario.getAgentsconfiguration()) {
-                    if (agentConfiguration instanceof ConsumerConfiguration && finishedMap.get(agentConfiguration.getName()) != true) {
+                    if (agentConfiguration instanceof ConsumerConfiguration && finishedMap.get(agentConfiguration.getAgentId()) != true) {
                         consumersTerminated = false;
                     }
                 }
@@ -180,7 +180,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
             if (consumersTerminated) {
                 boolean terminated = true;
                 for (AgentConfiguration agentConfiguration:this.currentScenario.getAgentsconfiguration()) {
-                    if (finishedMap.get(agentConfiguration.getName()) != true) {
+                    if (finishedMap.get(agentConfiguration.getAgentId()) != true) {
                         terminated = false;
                     }
                 }
