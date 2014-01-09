@@ -75,7 +75,7 @@ public class ConsumerEntity extends SimulationEntity {
      */
     @Override
     public void abortSimulation() {
-        simulationThread.stop();
+        if (simulationThread instanceof SimulationThread) simulationThread.stop();
     }
 
     /**

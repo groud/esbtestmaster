@@ -18,8 +18,10 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
     MonitoringMsgListener mmListener;
     private MasterMessageHandler msgHandler;
 
-    public void JMSHandler(){
-        
+    public JMSHandler(MonitoringMsgListener mmListener) {
+        msgHandler = new MasterMessageHandler();
+
+        this.mmListener = mmListener;
     }
 
     /**
@@ -77,7 +79,7 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
         configJMSMessage.setScenario(simulationScenario);
         msgHandler.sendToTopic(configJMSMessage);
 
-        
+
         //TODO JMS : Configuration JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -92,26 +94,19 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
         //TODO JMS : Ecouter les messages et les envoie au MasterController avec :
         //mmListener.simulationDoneForOneAgent(null, null);
         //mmListener.fatalErrorOccured(null, null);
-        msgHandler = new MasterMessageHandler();
+        
 
-        while (true)
-        {
+        while (true) {
             Serializable message;
-            System.out.println(msgHandler);
             message = msgHandler.receiveFromTopic();
 
-            if (message instanceof ConfigDoneJMSMessage)
-            {
+            if (message instanceof ConfigDoneJMSMessage) {
                 ConfigDoneJMSMessage myMessage = (ConfigDoneJMSMessage) message;
                 mmListener.configurationDoneForOneAgent(myMessage.getAgentId());
-            }
-            else if (message instanceof SimulationDoneJMSMessage)
-            {
+            } else if (message instanceof SimulationDoneJMSMessage) {
                 SimulationDoneJMSMessage myMessage = (SimulationDoneJMSMessage) message;
                 mmListener.simulationDoneForOneAgent(myMessage.getAgentId(), myMessage.getResultSet());
-            }
-            else if (message instanceof FatalErrorOccuredJMSMessage)
-            {
+            } else if (message instanceof FatalErrorOccuredJMSMessage) {
                 FatalErrorOccuredJMSMessage myMessage = (FatalErrorOccuredJMSMessage) message;
                 mmListener.fatalErrorOccured(myMessage.getAgentId(), myMessage.getMessage());
             }

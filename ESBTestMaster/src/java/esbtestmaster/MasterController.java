@@ -20,7 +20,6 @@ import java.util.TimerTask;
 public class MasterController implements UserInputsListener, MonitoringMsgListener {
 
     private static int CONFIGURATION_TIMOUT = 10; //seconds
-
     private CLI shell;
     private ScenarioReaderInterface scenarioReader;
     private KPICalculatorInterface kpiCalculator;
@@ -30,6 +29,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
     private HashMap<String, Boolean> finishedMap;
     private HashMap<String, Boolean> finishedConfigMap;
     private boolean consumersTerminated;
+    private boolean configDone;
 
     /**
      * Returns an instance of a master controller then start it.
@@ -39,14 +39,25 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
         shell = new CLI(this);
         scenarioReader = new ScenarioReader();
         kpiCalculator = new KPICalculator();
-        monitoringMsgHandler = new JMSHandler();
+        monitoringMsgHandler = new JMSHandler(this);
+        clearSimulationState();
+
+        //We start the CLI
+        shell.launch();
 
         //We start the Thread listening to the JMS messages
         Thread monitoringMsgThread = new Thread(monitoringMsgHandler);
         monitoringMsgThread.start();
+    }
 
-        //We start the CLI
-        shell.launch();
+    /**
+     * Clear the simuation state
+     */
+    private void clearSimulationState() {
+        finishedMap = new HashMap<String, Boolean>();
+        finishedConfigMap = new HashMap<String, Boolean>();
+        this.consumersTerminated = false;
+        this.configDone = false;
     }
 
     // -------------------------------
@@ -57,35 +68,23 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
      * @param resultsFilename
      */
     public void startSimulation(String resultsFilename) {
-        try {
-            if (this.currentScenario != null) {
+        if (this.currentScenario != null) {
+            try {
+                clearSimulationState();
                 resultsKeeper = new XMLResultKeeper(resultsFilename);
-                this.finishedMap = new HashMap<String, Boolean>();
-                this.finishedConfigMap = new HashMap<String, Boolean>();
-                this.consumersTerminated = false;
-
-                for (Iterator<AgentConfiguration> i = this.currentScenario.getAgentsconfiguration().iterator(); i.hasNext();) {
-                    AgentConfiguration agentConfiguration = i.next();
-                    monitoringMsgHandler.startSimulationMessage(agentConfiguration);
-                    this.finishedMap.put(agentConfiguration.getAgentId(), false);
-                    this.finishedConfigMap.put(agentConfiguration.getAgentId(), false);
-
-                    //TODO : Schedule a timeout
-                    Timer timer = new Timer();
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            shell.displayErrorMessage("Configuration failed : 10 seconds timeout");
-                            abortSimulation();
-                        }
-                    },CONFIGURATION_TIMOUT*1000);
-                }
-            } else {
-                shell.displayErrorMessage("Starting failed : no configuration has been provided.");
+            } catch (IOException ex) {
+                shell.displayErrorMessage(ex.getMessage());
             }
-        } catch (IOException ex) {
-            shell.displayErrorMessage(ex.getMessage());
+            for (Iterator<AgentConfiguration> i = this.currentScenario.getAgentsconfiguration().iterator(); i.hasNext();) {
+                AgentConfiguration agentConfiguration = i.next();
+                monitoringMsgHandler.startSimulationMessage(agentConfiguration);
+                finishedMap.put(agentConfiguration.getAgentId(), false);
+                finishedConfigMap.put(agentConfiguration.getAgentId(), false);
+            }
+        } else {
+            shell.displayErrorMessage("Starting failed : no configuration has been provided.");
         }
+
     }
 
     /**
@@ -97,6 +96,8 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
             for (int i = 0; i < this.currentScenario.getAgentsconfiguration().size(); i++) {
                 this.monitoringMsgHandler.abortSimulationMessage(this.currentScenario.getAgentsconfiguration().get(i));
             }
+            //We clear the simulation state
+            clearSimulationState();
             //We notify the user that the simulation has been aborted.
             this.shell.notifySimulationAborted();
         } else {
@@ -116,7 +117,17 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
             for (AgentConfiguration agentConfiguration : this.currentScenario.getAgentsconfiguration()) {
                 monitoringMsgHandler.configurationMessage(agentConfiguration, this.currentScenario);
             }
-            //We notify the user that everything happened well.
+            //We create a timer for timeout problems
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (!configDone) {
+                        shell.displayErrorMessage("Configuration failed : 10 seconds timeout");
+                        abortSimulation();
+                    }
+                }
+            }, CONFIGURATION_TIMOUT * 1000);
         } catch (IOException ex) {
             shell.displayErrorMessage(ex.getMessage());
             this.abortSimulation();
@@ -185,7 +196,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
                     }
                 }
             }
-            
+
             //If the simulation is over for the consumers, we send a message to the producers
             if (this.consumersTerminated) {
                 for (AgentConfiguration agentConfiguration : this.currentScenario.getAgentsconfiguration()) {
@@ -194,7 +205,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
                     }
                 }
             }
-            
+
 
             //On verifie que tous les agents ont terminé la simulation.
             if (consumersTerminated) {
@@ -216,13 +227,16 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
     public void configurationDoneForOneAgent(String agentID) {
         if (finishedConfigMap.get(agentID) != true) {
             finishedConfigMap.put(agentID, true);
-            boolean configDone = true;
+            boolean configDoneTemp = true;
             for (AgentConfiguration agentConfiguration : this.currentScenario.getAgentsconfiguration()) {
                 if (agentConfiguration instanceof ConsumerConfiguration && finishedConfigMap.get(agentConfiguration.getAgentId()) != true) {
-                    configDone = false;
+                    configDoneTemp = false;
                 }
             }
-            if (configDone) shell.notifyConfigurationLoaded(currentScenario);
+            configDone = configDoneTemp;
+            if (configDone) {
+                shell.notifyConfigurationLoaded(currentScenario);
+            }
         }
     }
 
@@ -243,5 +257,4 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
     public static void main(String[] args) {
         MasterController masterController = new MasterController();
     }
-
 }

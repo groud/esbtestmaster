@@ -44,7 +44,7 @@ public class CLI implements UserOutputsInterface {
                 cmd = input.nextLine();
                 new NaturalCLI(cs).execute(cmd);
             } catch (ExecutionException ex) {
-                System.out.println("Invalid command, run \"help\" for usage.");
+                if (!cmd.trim().isEmpty()) System.out.println("Invalid command, run \"help\" for usage.");
             }
         }
     }

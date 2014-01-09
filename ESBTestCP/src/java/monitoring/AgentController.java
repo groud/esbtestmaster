@@ -34,14 +34,15 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
         jms = new JMSHandler();
         jms.setListener(this);
 
-        /*Thread jmsThread = new Thread(jms);
-        jmsThread.start();*/
+        Thread jmsThread = new Thread(jms);
+        jmsThread.start();
     }
 
     /**
      * Asks the simulationEntity to start the simulation
      */
     public void startSimulationMessage() {
+        System.out.println("Starting");
         simulationEntity.startSimulation();
     }
 
@@ -49,6 +50,7 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      * Asks the simulationEntity to abort the simulation
      */
     public void abortSimulationMessage() {
+        System.out.println("Aborting");
         simulationEntity.abortSimulation();
     }
 
@@ -56,6 +58,7 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      * Asks to the simulationEntity (configured as a producer) to end the simulation
      */
     public void endSimulationMessage() {
+        System.out.println("Stopping");
         if (simulationEntity instanceof ProducerEntity) {
             ((ProducerEntity) simulationEntity).endOfSimlation();
         }
@@ -66,8 +69,9 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      */
     public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
         //On crée une simulationEntity correspondant à la configuration reçue
-        System.out.println("Agent configuration - Name: "+receiverAgent.getAgentId());
-        System.out.println("Agent configuration - WS address: "+ receiverAgent.getWsAddress());
+        System.out.println("Configuration received :");
+        System.out.println("Id : "+receiverAgent.getAgentId());
+        System.out.println("WS address: "+ receiverAgent.getWsAddress());
         if (receiverAgent instanceof ConsumerConfiguration) {
             simulationEntity = new ConsumerEntity(this.agentId);
             simulationEntity.setListener(this);
