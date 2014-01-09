@@ -5,11 +5,13 @@
 
 package datas.JMSMessages;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Adrien
  */
-public class ConfigDoneJMSMessage {
+public class ConfigDoneJMSMessage implements Serializable{
     private String agentId;
 
     /**

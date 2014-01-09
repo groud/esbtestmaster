@@ -7,6 +7,7 @@ package esbtestmaster;
 import datas.JMSMessages.*;
 import datas.*;
 import interfaces.*;
+import java.io.Serializable;
 
 /**
  *
@@ -15,9 +16,11 @@ import interfaces.*;
 public class JMSHandler implements MonitoringMessageHandler, Runnable {
 
     MonitoringMsgListener mmListener;
-    //public void JMSHandler(){
-    //    MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
-    //}
+    private MasterMessageHandler msgHandler;
+
+    public void JMSHandler(){
+        
+    }
 
     /**
      * Sets a listener for the monitoring messages
@@ -37,8 +40,7 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
     public void startSimulationMessage(AgentConfiguration receiverAgent) {
         System.out.println("-----------startSimulationMessage-----------");
         StartJMSMessage startJMSMessage = new StartJMSMessage();
-        MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
-        masterMessageHandler.sendToTopic(startJMSMessage);
+        msgHandler.sendToTopic(startJMSMessage);
         System.out.println("-----------startSimulationMessage-----------2");
         //TODO JMS : Start JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
@@ -50,8 +52,7 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
      */
     public void abortSimulationMessage(AgentConfiguration receiverAgent) {
         AbortJMSMessage abortJMSMessage = new AbortJMSMessage();
-        MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
-        masterMessageHandler.sendToTopic(abortJMSMessage);
+        msgHandler.sendToTopic(abortJMSMessage);
         //TODO JMS : Abort JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -74,9 +75,9 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
         ConfigJMSMessage configJMSMessage = new ConfigJMSMessage();
         configJMSMessage.setAgentConfiguration(receiverAgent);
         configJMSMessage.setScenario(simulationScenario);
-        MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
-        masterMessageHandler.sendToTopic(configJMSMessage);
+        msgHandler.sendToTopic(configJMSMessage);
 
+        
         //TODO JMS : Configuration JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -91,5 +92,29 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
         //TODO JMS : Ecouter les messages et les envoie au MasterController avec :
         //mmListener.simulationDoneForOneAgent(null, null);
         //mmListener.fatalErrorOccured(null, null);
+        msgHandler = new MasterMessageHandler();
+
+        while (true)
+        {
+            Serializable message;
+            System.out.println(msgHandler);
+            message = msgHandler.receiveFromTopic();
+
+            if (message instanceof ConfigDoneJMSMessage)
+            {
+                ConfigDoneJMSMessage myMessage = (ConfigDoneJMSMessage) message;
+                mmListener.configurationDoneForOneAgent(myMessage.getAgentId());
+            }
+            else if (message instanceof SimulationDoneJMSMessage)
+            {
+                SimulationDoneJMSMessage myMessage = (SimulationDoneJMSMessage) message;
+                mmListener.simulationDoneForOneAgent(myMessage.getAgentId(), myMessage.getResultSet());
+            }
+            else if (message instanceof FatalErrorOccuredJMSMessage)
+            {
+                FatalErrorOccuredJMSMessage myMessage = (FatalErrorOccuredJMSMessage) message;
+                mmListener.fatalErrorOccured(myMessage.getAgentId(), myMessage.getMessage());
+            }
+        }
     }
 }

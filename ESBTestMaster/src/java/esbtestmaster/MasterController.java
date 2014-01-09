@@ -117,7 +117,6 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
                 monitoringMsgHandler.configurationMessage(agentConfiguration, this.currentScenario);
             }
             //We notify the user that everything happened well.
-            shell.notifyConfigurationLoaded(this.currentScenario);
         } catch (IOException ex) {
             shell.displayErrorMessage(ex.getMessage());
             this.abortSimulation();

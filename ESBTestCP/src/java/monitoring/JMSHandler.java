@@ -69,9 +69,14 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
     // -------------------------------
     //   INTERFACES IMPLEMENTATIONS
     // -------------------------------
+
+    /**
+     * Send a configuration done message to the master
+     * @param agentId
+     */
     public void configurationDone(String agentId)
     {
-        msgHandler.sendToTopic(agentId);
+        msgHandler.sendToTopic(new ConfigDoneJMSMessage(agentId));
     }
 
 
@@ -79,9 +84,9 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
      * Sends a message to the master with the simulation results.
      * @param resultSet
      */
-    public void simulationDone(ResultSet resultSet) {
+    public void simulationDone(String agentId, ResultSet resultSet) {
         //TODO JMS: Envoyer le message JMS au master avec le résultat
-        if (msgHandler.sendToTopic(resultSet))
+        if (msgHandler.sendToTopic(new SimulationDoneJMSMessage(resultSet, agentId)))
             System.out.println("Results sent!");
         else
             System.out.println("Error while sending results to the master");
@@ -90,8 +95,8 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
     /**
      * Sends a message to the master notifying that a fatal error occured
      */
-    public void fatalErrorOccured() {
+    public void fatalErrorOccured(String agentId, String message) {
         //TODO JMS: Envoyer le message JMS au master pour indiquer que la simulation n'a pu être terminée
-        msgHandler.sendToTopic(new FatalErrorOccuredJMSMessage());
+        msgHandler.sendToTopic(new FatalErrorOccuredJMSMessage(agentId, message));
     }
 }

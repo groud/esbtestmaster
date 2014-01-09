@@ -92,14 +92,14 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      * @param resultSet
      */
     public void simulationDone(ResultSet resultSet) {
-        jms.simulationDone(resultSet);
+        jms.simulationDone(this.agentId, resultSet);
     }
 
     /**
      * Notifies the master that a fatal error occured
      */
-    public void fatalErrorOccured() {
-        jms.fatalErrorOccured();
+    public void fatalErrorOccured(String message) {
+        jms.fatalErrorOccured(this.agentId, message);
     }
 
     public void contextInitialized(ServletContextEvent sce) {

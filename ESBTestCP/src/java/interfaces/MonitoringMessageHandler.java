@@ -15,6 +15,6 @@ import datas.ResultSet;
  * @author root
  */
 public interface MonitoringMessageHandler {
-    public void simulationDone(ResultSet resultSet);
-    public void fatalErrorOccured();
+    public void simulationDone(String agentId, ResultSet resultSet);
+    public void fatalErrorOccured(String agentId, String message);
 }

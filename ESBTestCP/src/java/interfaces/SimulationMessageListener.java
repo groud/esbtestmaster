@@ -13,5 +13,5 @@ import datas.ResultSet;
  */
 public interface SimulationMessageListener {
     public void simulationDone(ResultSet resultSet);
-    public void fatalErrorOccured();
+    public void fatalErrorOccured(String message);
 }
