@@ -71,12 +71,12 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
      * @param simulationScenario
      */
     public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
-        /*ConfigJMSMessage configJMSMessage = new ConfigJMSMessage();
+        ConfigJMSMessage configJMSMessage = new ConfigJMSMessage();
         configJMSMessage.setAgentConfiguration(receiverAgent);
         configJMSMessage.setScenario(simulationScenario);
         MasterMessageHandler masterMessageHandler = new MasterMessageHandler();
         masterMessageHandler.sendToTopic(configJMSMessage);
-*/
+
         //TODO JMS : Configuration JMS message to the receiverAgent
         //throw new UnsupportedOperationException("Not supported yet.");
     }

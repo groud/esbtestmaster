@@ -31,7 +31,7 @@ public class AgentMessageHandler {
             context = new InitialContext();
 
             //To get a ConnectionFactory from JNDI
-            factory = (ConnectionFactory) context.lookup("TopicConnectionFactory");
+            factory = (ConnectionFactory) context.lookup(destination.DestinationName.CONNECTION_FACTORY);
 
             //Creating a connection from the factory
             connection = factory.createConnection();
@@ -40,11 +40,11 @@ public class AgentMessageHandler {
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
             //Creating a producer to send config objects
-            toTopic = (Destination) context.lookup("results"); //Topic named "results"
+            toTopic = (Destination) context.lookup(destination.DestinationName.RESULTS_DESTINATION); //Topic named "results"
             sender = session.createProducer(toTopic);
 
             //Creating a consumer to receive results objects
-            fromTopic = (Destination) context.lookup("config"); //Topic named "config"
+            fromTopic = (Destination) context.lookup(destination.DestinationName.CONFIG_DESTINATION); //Topic named "config"
             receiver = session.createConsumer(fromTopic);
 
             //Starting the connection

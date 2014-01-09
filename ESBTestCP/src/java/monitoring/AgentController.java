@@ -76,6 +76,15 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
             simulationEntity = new ProducerEntity(this.agentId);
             simulationEntity.setListener(this);
         }
+        configurationDone();
+    }
+
+    /**
+     * Notifies the master that the configuration is done. 
+     */
+    public void configurationDone()
+    {
+        jms.configurationDone(this.agentId);
     }
 
     /**
