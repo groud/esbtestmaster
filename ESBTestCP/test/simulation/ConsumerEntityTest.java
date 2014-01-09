@@ -42,8 +42,8 @@ public class ConsumerEntityTest {
         System.out.println("configureConsumer");
         String id = "";
         SimulationScenario simulationScenario = null;
-        ConsumerEntity instance = new ConsumerEntity();
-        instance.configureConsumer(id, simulationScenario);
+        ConsumerEntity instance = new ConsumerEntity(id);
+        instance.configureConsumer(simulationScenario);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -58,18 +58,18 @@ public class ConsumerEntityTest {
         String producerId = "producer1";
         String consumerId = "consumer1";
         // Test ConsumerEntity
-        ConsumerEntity instance = new ConsumerEntity();
+        ConsumerEntity instance = new ConsumerEntity(consumerId);
 
         SimulationScenario ss = new SimulationScenario();
         ProducerConfiguration pc = new ProducerConfiguration();
-        pc.setName(producerId);
+        pc.setAgentId(producerId);
         pc.setWsAddress("http://localhost:8090/ESBTestCompositeService1/casaPort1");
         ss.getAgentsconfiguration().add(pc);
 
         ss.addStep(new SimulationStep(consumerId, producerId, 0, 5000, 1, 16, 1000L, 20));
         //ss.addStep(new SimulationStep(consumerId, producerId, 3000, 4500, 2, 16, 1000L, 20));
 
-        instance.configureConsumer(consumerId, ss);
+        instance.configureConsumer(ss);
         instance.startSimulation();
         
         
@@ -82,7 +82,7 @@ public class ConsumerEntityTest {
     @Test
     public void testAbortSimulation() {
         System.out.println("abortSimulation");
-        ConsumerEntity instance = new ConsumerEntity();
+        ConsumerEntity instance = new ConsumerEntity("consumerId");
         instance.abortSimulation();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

@@ -12,6 +12,7 @@ import datas.ResultSet;
 import datas.SimulationScenario;
 import interfaces.MonitoringMessageListener;
 import interfaces.SimulationMessageListener;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import simulation.*;
 
@@ -23,6 +24,8 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
 
     private SimulationEntity simulationEntity;
     private JMSHandler jms;
+    
+    private String agentId;
 
     /**
      * Return a new AgentController entity, and start monitoring message handler.
@@ -31,8 +34,8 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
         jms = new JMSHandler();
         jms.setListener(this);
 
-        Thread jmsThread = new Thread(jms);
-        jmsThread.start();
+        /*Thread jmsThread = new Thread(jms);
+        jmsThread.start();*/
     }
 
     /**
@@ -63,18 +66,25 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      */
     public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
         //On crée une simulationEntity correspondant à la configuration reçue
-        System.out.println("Agent configuration - Name: "+receiverAgent.getName());
-        System.out.println("Agent configuration - Monitoring WS Address: "+ receiverAgent.getMonitoringWSAddress());
+        System.out.println("Agent configuration - Name: "+receiverAgent.getAgentId());
         System.out.println("Agent configuration - WS address: "+ receiverAgent.getWsAddress());
         if (receiverAgent instanceof ConsumerConfiguration) {
-            simulationEntity = new ConsumerEntity();
+            simulationEntity = new ConsumerEntity(this.agentId);
             simulationEntity.setListener(this);
-            ((ConsumerEntity) simulationEntity).configureConsumer(receiverAgent.getName(), simulationScenario);
+            ((ConsumerEntity) simulationEntity).configureConsumer(simulationScenario);
         } else if (receiverAgent instanceof ProducerConfiguration) {
-            simulationEntity = new ProducerEntity();
+            simulationEntity = new ProducerEntity(this.agentId);
             simulationEntity.setListener(this);
         }
-        simulationEntity.setId(receiverAgent.getName());
+        configurationDone();
+    }
+
+    /**
+     * Notifies the master that the configuration is done. 
+     */
+    public void configurationDone()
+    {
+        jms.configurationDone(this.agentId);
     }
 
     /**
@@ -93,7 +103,8 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
     }
 
     public void contextInitialized(ServletContextEvent sce) {
-        System.out.println("-- Agent started --");
+        this.agentId = sce.getServletContext().getInitParameter("agentId");
+       System.out.println("-- Agent started with id : "+this.agentId+" --");
     }
 
     public void contextDestroyed(ServletContextEvent sce) {

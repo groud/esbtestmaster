@@ -17,6 +17,7 @@ import java.io.Serializable;
 public class JMSHandler implements MonitoringMessageHandler, Runnable {
 
     MonitoringMessageListener listener;
+    private AgentMessageHandler msgHandler;
 
     /**
      * Returns an instance of a JMSHandler, then start a listening thread for JMS messages
@@ -27,6 +28,7 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
         //listener.startMessage()
         //listener.abortMessage()
         //listener.endMessage()
+        msgHandler = new AgentMessageHandler();
     }
 
     /**
@@ -34,11 +36,11 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
      */
     public void run() {
         //TODO JMS : Ecouter les messages et les envoie au MasterController avec :
-        AgentMessageHandler myAgentMsgHandler = new AgentMessageHandler();
+        
         while(true){
         
         Serializable message;
-        message = myAgentMsgHandler.receiveFromTopic();
+        message = msgHandler.receiveFromTopic();
 
         if (message instanceof ConfigJMSMessage) {
             System.out.println("JMSHandler: Received a configJMSMessage");
@@ -67,12 +69,22 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
     // -------------------------------
     //   INTERFACES IMPLEMENTATIONS
     // -------------------------------
+    public void configurationDone(String agentId)
+    {
+        msgHandler.sendToTopic(agentId);
+    }
+
+
     /**
      * Sends a message to the master with the simulation results.
      * @param resultSet
      */
     public void simulationDone(ResultSet resultSet) {
         //TODO JMS: Envoyer le message JMS au master avec le résultat
+        if (msgHandler.sendToTopic(resultSet))
+            System.out.println("Results sent!");
+        else
+            System.out.println("Error while sending results to the master");
     }
 
     /**
@@ -80,5 +92,6 @@ public class JMSHandler implements MonitoringMessageHandler, Runnable {
      */
     public void fatalErrorOccured() {
         //TODO JMS: Envoyer le message JMS au master pour indiquer que la simulation n'a pu être terminée
+        msgHandler.sendToTopic(new FatalErrorOccuredJMSMessage());
     }
 }

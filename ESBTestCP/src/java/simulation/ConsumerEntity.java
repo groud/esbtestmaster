@@ -27,22 +27,25 @@ public class ConsumerEntity extends SimulationEntity {
 
     private SimulationScenario simulationScenario = null;
     private Hashtable<String, AgentConfiguration> hashAgentsConf;    
-    private SimulationThread simulationThread;
     private Date startDate;
     private ResultsLogger logger;
     private int nbSteps;
     
 
-    private static int reqId = 0;  // Don't change manually because of concurrency issues
+    private int reqId = 0;  // Don't change manually because of concurrency issues
     private int stepsDone = 0; // Don't change manually because of concurrency issues
+
+    public ConsumerEntity(String agentId) {
+        super(agentId);
+    }
+
     /**
      * Configure the simulation scenario and id
      * @param id
      * @param simulationScenario
      */
-    public void configureConsumer(String id, SimulationScenario simulationScenario) {
-        this.simulationScenario = simulationScenario;
-        this.setId(id);
+    public void configureConsumer(SimulationScenario simulationScenario) {
+        this.simulationScenario = simulationScenario;       
         hashAgentsConf = this.initializeAgentsTable();
         logger = new ResultsLogger(this.getid());
         nbSteps = simulationScenario.getSteps().size();
@@ -165,7 +168,7 @@ public class ConsumerEntity extends SimulationEntity {
      */
     @Override
     public void abortSimulation() {
-        simulationThread.stop();
+        
     }
 
     /**
@@ -176,127 +179,12 @@ public class ConsumerEntity extends SimulationEntity {
     private Hashtable<String, AgentConfiguration> initializeAgentsTable() {
         Hashtable<String, AgentConfiguration> hashtable = new Hashtable<String, AgentConfiguration>();
         for (AgentConfiguration agentConfiguration :this.simulationScenario.getAgentsconfiguration()) {
-             hashtable.put(agentConfiguration.getName(), agentConfiguration);
+             hashtable.put(agentConfiguration.getAgentId(), agentConfiguration);
         }
         return hashtable;
     }
 
-    /**
-     * A Thread used to execute the simulation
-     */
-    private class SimulationThread extends Thread {
-
-        private Timer timer;
-        private SimulationStep step;        
-        private volatile int nbRequest = 0;
-
-        
-
-        //TODO : tests foireux pour vérifier la précision des envois de requêtes
-        // (en écrivant la date d'envoi de chaque requête pour vérifier)
-        @Override
-        public void run() {
-            
-           
-            
-
-
-            /*
-            int i;
-            
-            reqId = 0;
-            stepsDone = 0;
-
-            //send request
-            if (simulationScenario != null) {
-                // Store simulation start date
-                
-                startDate = new Date(INIT_TIME + System.currentTimeMillis());
-                logger.setStartDate(startDate);
-
-                System.out.println("simulation start date : "+startDate.getTime());
-
-                for (i = 0; i < nbSteps; i++) {                    
-                    step = simulationScenario.getSteps().get(i);
-                    final String wsUrl = hashAgentsConf.get(step.getDestID()).getWsAddress();
-                    timer = new Timer();
-                    // duration converted in seconds from ms
-                    double stepDuration = (double) step.getBurstDuration() / 1000.0;
-                    System.out.println("stepduration="+stepDuration);
-                    nbRequest = (int) (stepDuration * step.getBurstRate());
-                    System.out.println("nbRequest="+nbRequest);
-
-                    // Make sure at least one request is sent
-                    if(nbRequest <= 0) {
-                        nbRequest = 0;
-                    }
-                    //interval between two request in ms
-                    long period = (long) ((stepDuration / (float)nbRequest) *1000);
-
-                    Date timerTaskStart = new Date(startDate.getTime() + step.getBurstStartDate());
-                    System.out.println("step start : "+timerTaskStart.getTime());
-                    System.out.println("step period : "+period);
-
-                    //configure timer,and start scenario
-                    timer.scheduleAtFixedRate(new TimerTask() {
-                        int nbReqSent = 0;                        
-                        
-                        public void run() {
-                            System.out.println("*********************************");
-                            
-                            System.out.println("Run "+nbReqSent+" start date : " + System.currentTimeMillis());
-                            System.out.println("Run "+nbReqSent+" bf log : " + System.currentTimeMillis());
-                            try {
-                                logger.writeSimulationEvent(reqId,AgentType.CONSUMER, EventType.REQUEST_SENT);
-                            } catch (Exception ex) {
-                                Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
-                            }System.out.println("Run "+nbReqSent+" af log : " + System.currentTimeMillis());
-                            // Send the request to the producer
-                            // (the response logging is done in the request callback)
-                            System.out.println("Run "+nbReqSent+" bf async req : " + System.currentTimeMillis());
-                            sendAsyncRequest(wsUrl, step.getDestID(), reqId, step.getRequestPayloadSize(), step.getProcessTime(), step.getResponsePayloadSize());
-                            System.out.println("Run "+nbReqSent+" af async req : " + System.currentTimeMillis());
-                            System.out.println("Run "+nbReqSent+" bf increment : " + System.currentTimeMillis());
-                            incrementRequestID(); // synchronized method
-                            System.out.println("Run "+nbReqSent+" af increment : " + System.currentTimeMillis());
-                            nbReqSent++;
-
-                            System.out.println("Run "+nbReqSent+" end date : " + System.currentTimeMillis());
-                            // When all requests for the step have been sent
-                            if(nbReqSent==nbRequest) {                                
-                                // Notify the ConsumerEntity that a step is done
-                                stepDone();
-                                // Cancel the timer task
-                                this.cancel();
-                            }
-                            
-                            
-                        }                    
-                    }, timerTaskStart , period);
-                }          
-
-            } else {
-                System.out.println("steps have not been configured");
-            }
-
-            // Waits for all steps to be done
-            //*********************************************************
-            //TODO : ***WILL*** hang if a step is not finished correctly
-            // -> need for a timeout somewhere
-            // TODO : some results may come back after this thead ends
-            // -> possible problem
-            //*********************************************************
-           
-            while(stepsDone < nbSteps) {                
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
-                }                                         
-            }            
-            */
-        }             
-    }
+    
 
     synchronized private void incrementRequestID() {
         reqId++;
@@ -329,7 +217,7 @@ public class ConsumerEntity extends SimulationEntity {
 
                 public void handleResponse(javax.xml.ws.Response<simulationRef.RequestOperationResponse> response) {
                     try {                        
-                        //logger.writeSimulationEvent(reqId, AgentType.CONSUMER , EventType.RESPONSE_RECEIVED);
+                        logger.writeSimulationEvent(reqId, AgentType.CONSUMER , EventType.RESPONSE_RECEIVED);
 
                         System.out.println("Result :\n " + response.get().getReturn());
                     } catch (Exception ex) {
@@ -350,5 +238,4 @@ public class ConsumerEntity extends SimulationEntity {
     public ResultsLogger getLogger() {
         return logger;
     }
-    
 }

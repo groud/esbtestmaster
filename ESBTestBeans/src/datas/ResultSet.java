@@ -7,6 +7,7 @@ package datas;
 
 
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -15,7 +16,7 @@ import java.util.TreeSet;
  *
  * @author gilles
  */
-public class ResultSet {
+public class ResultSet implements Serializable {
     private SortedSet<ResultEvent> events;
 
     public ResultSet() {
