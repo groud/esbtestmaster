@@ -40,24 +40,20 @@ public class MasterMessageHandler implements MonitoringMessageHandler, Runnable 
      * Asks an agent to start the simulation
      * @param receiverAgent
      */
-    public void startSimulationMessage(AgentConfiguration receiverAgent) {
-        System.out.println("-----------startSimulationMessage-----------");
+    public void startSimulationMessage(String receiverId) {
         StartJMSMessage startJMSMessage = new StartJMSMessage();
+        startJMSMessage.setReceiver(receiverId);
         jms.send(startJMSMessage);
-        System.out.println("-----------startSimulationMessage-----------2");
-        //TODO JMS : Start JMS message to the receiverAgent
-        //throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
      * Asks an agent to abort the simulation
      * @param receiverAgent
      */
-    public void abortSimulationMessage(AgentConfiguration receiverAgent) {
+    public void abortSimulationMessage(String receiverId) {
         AbortJMSMessage abortJMSMessage = new AbortJMSMessage();
+        abortJMSMessage.setReceiver(receiverId);
         jms.send(abortJMSMessage);
-        //TODO JMS : Abort JMS message to the receiverAgent
-        //throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
@@ -65,7 +61,8 @@ public class MasterMessageHandler implements MonitoringMessageHandler, Runnable 
      * The producer should then send it results.
      * @param receiverAgent
      */
-    public void endSimulationMessage(ProducerConfiguration receiverAgent) {
+    public void endSimulationMessage(String receiverId) {
+        // TODO
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -74,15 +71,12 @@ public class MasterMessageHandler implements MonitoringMessageHandler, Runnable 
      * @param receiverAgent
      * @param simulationScenario
      */
-    public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
+    public void configurationMessage(String receiver, AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
         ConfigJMSMessage configJMSMessage = new ConfigJMSMessage();
         configJMSMessage.setAgentConfiguration(receiverAgent);
         configJMSMessage.setScenario(simulationScenario);
+        configJMSMessage.setReceiver(receiver);
         jms.send(configJMSMessage);
-
-
-        //TODO JMS : Configuration JMS message to the receiverAgent
-        //throw new UnsupportedOperationException("Not supported yet.");
     }
 
     // -------------------------------
@@ -92,15 +86,11 @@ public class MasterMessageHandler implements MonitoringMessageHandler, Runnable 
      * Runs a JMS Messages listening thread.
      */
     public void run() {
-        //TODO JMS : Ecouter les messages et les envoie au MasterController avec :
-        //mmListener.simulationDoneForOneAgent(null, null);
-        //mmListener.fatalErrorOccured(null, null);
-        
         while (true) {
             Serializable message;
             message = jms.receive();
             if (message instanceof ConfigDoneJMSMessage) {
-                System.out.println("JMSHandler : Received a ConfigDoneJMSMessage");
+                //System.out.println("JMSHandler : Received a ConfigDoneJMSMessage");
                 ConfigDoneJMSMessage myMessage = (ConfigDoneJMSMessage) message;
                 mmListener.configurationDoneForOneAgent(myMessage.getAgentId());
             } else if (message instanceof SimulationDoneJMSMessage) {

@@ -12,7 +12,6 @@ import datas.ResultSet;
 import datas.SimulationScenario;
 import interfaces.MonitoringMessageListener;
 import interfaces.SimulationMessageListener;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import simulation.*;
 
@@ -24,25 +23,15 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
 
     private SimulationEntity simulationEntity;
     private AgentMessageHandler msgHandler;
-    
+    private Thread jmsThread;
+
     private String agentId;
-
-    /**
-     * Return a new AgentController entity, and start monitoring message handler.
-     */
-    public AgentController() {
-        msgHandler = new AgentMessageHandler();
-        msgHandler.setListener(this);
-
-        Thread jmsThread = new Thread(msgHandler);
-        jmsThread.start();
-    }
 
     /**
      * Asks the simulationEntity to start the simulation
      */
     public void startSimulationMessage() {
-        System.out.println("Starting");
+        System.out.println("-- "+ agentId + " starting --");
         simulationEntity.startSimulation();
     }
 
@@ -50,7 +39,7 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      * Asks the simulationEntity to abort the simulation
      */
     public void abortSimulationMessage() {
-        System.out.println("Aborting");
+        System.out.println("-- "+ agentId + " aborting --");
         simulationEntity.abortSimulation();
     }
 
@@ -58,10 +47,10 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      * Asks to the simulationEntity (configured as a producer) to end the simulation
      */
     public void endSimulationMessage() {
-        System.out.println("Stopping");
+        System.out.println("-- "+ agentId + " stopping --");
         if (simulationEntity instanceof ProducerEntity) {
             ((ProducerEntity) simulationEntity).endOfSimlation();
-        }
+        } 
     }
 
     /**
@@ -69,11 +58,10 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      */
     public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
         //On crée une simulationEntity correspondant à la configuration reçue
-        System.out.println("Configuration received :");
-        System.out.println("Id : "+receiverAgent.getAgentId());
-        System.out.println("WS address: "+ receiverAgent.getWsAddress());
-        if (this.agentId.equals(receiverAgent.getAgentId()))
-        {
+        System.out.println("-- "+ agentId + " received a configuration message --");
+        //System.out.println("Id : "+receiverAgent.getAgentId());
+        //System.out.println("WS address: "+ receiverAgent.getWsAddress());
+        if (this.agentId.equals(receiverAgent.getAgentId())) {
             if (receiverAgent instanceof ConsumerConfiguration) {
                 simulationEntity = new ConsumerEntity(this.agentId);
                 simulationEntity.setListener(this);
@@ -92,7 +80,7 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      */
     public void configurationDone()
     {
-        System.out.println("Configuration done");
+        System.out.println("-- "+ agentId + " configuration done --");
         msgHandler.configurationDone(this.agentId);
     }
 
@@ -112,93 +100,18 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
     }
 
     public void contextInitialized(ServletContextEvent sce) {
-        this.agentId = sce.getServletContext().getInitParameter("agentId");
+       this.agentId = sce.getServletContext().getInitParameter("agentId");
+       msgHandler = new AgentMessageHandler(this.agentId);
+       msgHandler.setListener(this);
+
+       jmsThread = new Thread(msgHandler);
+       jmsThread.start();
+
        System.out.println("-- Agent started with id : "+this.agentId+" --");
     }
 
     public void contextDestroyed(ServletContextEvent sce) {
+        jmsThread.stop();
         System.out.println("-- Agent stopped --");
     }
 }
-/* public void actualiserController(interfaceObservableJMS a){
-if(a instanceof JMSHandler){
-jms=(JMSHandler) a;
-MessageFromJMSEntity_TEST mess;
-mess=jms.getMessageFRomJMS();
-System.out.println(mess.getMessageType());
-
-//if messsadeTYpe=1 ==> configuration of agents
-if(jms.getMessageFRomJMS().getMessageType()==0)
-{
-if(jms.getMessageFRomJMS().getAgent().getWsAgentType() == jms.getMessageFRomJMS().getAgent().getWsAgentType().CONSUMER)
-{
-consumer = new  ConsumerEntity();
-
-//ICI creer le thread du producteur et enregister son pid
-
-consumer.configureConsumer(jms.getMessageFRomJMS().getScenario().getTabScenario());
-} else {
-producer = new  ProducerEntity();
-
-//ICI creer le thread du producteur et enregister son pid
-// hMapProducer.put(jms.getMessageFRomJMS().getAgent().getName(), producer);
-
-//????? la configuration du provider c'est a dire son temps de reponse et son id,
-producer.configureProducer(jms.getMessageFRomJMS().getResponseTime(),jms.getMessageFRomJMS().getResponseSize());
-
-}
-
-}
-//If we receive a message of startSimulation (messageType = 1)
-else if(jms.getMessageFRomJMS().getMessageType()==1)
-{
-
-if(jms.getMessageFRomJMS().getAgent().getWsAgentType() == jms.getMessageFRomJMS().getAgent().getWsAgentType().CONSUMER)
-{
-
-String wsAdresse=jms.getMessageFRomJMS().getAgent().getWsAddress();
-String monitoringWsAdresse=jms.getMessageFRomJMS().getAgent().getMonitoringWSAddress();
-
-//recuperer le consumer à demarrer ??
-
-consumer.startSimulation();
-}
-else
-{
-String wsAdresse=jms.getMessageFRomJMS().getAgent().getWsAddress();
-String monitoringWsAdresse=jms.getMessageFRomJMS().getAgent().getMonitoringWSAddress();
-
-//recuperer le provider à demarrer ???
-
-producer.startSimulation();
-}
-}
-
-//If we receive a message of abortSimulation (messageType = 2)
-else if(jms.getMessageFRomJMS().getMessageType()==1)
-{
-
-if(jms.getMessageFRomJMS().getAgent().getWsAgentType() == jms.getMessageFRomJMS().getAgent().getWsAgentType().CONSUMER)
-{
-
-String wsAdresse=jms.getMessageFRomJMS().getAgent().getWsAddress();
-String monitoringWsAdresse=jms.getMessageFRomJMS().getAgent().getMonitoringWSAddress();
-
-//recuperer le consumer à ABORTER ??
-
-consumer.abortSimulation();
-}
-else
-{
-String wsAdresse=jms.getMessageFRomJMS().getAgent().getWsAddress();
-String monitoringWsAdresse=jms.getMessageFRomJMS().getAgent().getMonitoringWSAddress();
-
-//recuperer le provider à ABORTER ???
-
-producer.abortSimulation();
-}
-}
-}
-
-}
- */

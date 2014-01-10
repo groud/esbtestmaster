@@ -22,6 +22,7 @@ public class CLI implements UserOutputsInterface {
     private UserInputsListener listener;
     private Set<Command> cs = new HashSet<Command>();
     private Scanner input = new Scanner(System.in);
+    private boolean addNewLine = false;
 
     /**
      * Returns an instance of a CLI. A simple shell like command line interface.
@@ -41,7 +42,9 @@ public class CLI implements UserOutputsInterface {
             try {
                 // Execute
                 System.out.print("ESB# ");
+                addNewLine = true;
                 cmd = input.nextLine();
+                addNewLine = false;
                 new NaturalCLI(cs).execute(cmd);
             } catch (ExecutionException ex) {
                 if (!cmd.trim().isEmpty()) System.out.println("Invalid command, run \"help\" for usage.");
@@ -161,11 +164,19 @@ public class CLI implements UserOutputsInterface {
 
     }
 
+    private void newLineIfNeeded() {
+        if (addNewLine) {
+            System.out.println();
+            addNewLine = false;
+        }
+    }
+
     /**
      * Displays an error message
      * @param msg
      */
     public void displayErrorMessage(String msg) {
+        newLineIfNeeded();
         System.err.println("ERROR : " + msg);
     }
 
@@ -177,6 +188,7 @@ public class CLI implements UserOutputsInterface {
      * @param msg
      */
     public void notifySimulationDone() {
+        newLineIfNeeded();
         System.out.println("Simulation done.");
     }
 
@@ -185,6 +197,7 @@ public class CLI implements UserOutputsInterface {
      * @param msg
      */
     public void notifySimulationAborted() {
+        newLineIfNeeded();
         System.out.println("Simulation aborted.");
     }
 
@@ -193,6 +206,7 @@ public class CLI implements UserOutputsInterface {
      * @param msg
      */
     public void notifyConfigurationLoaded(SimulationScenario ss) {
+        newLineIfNeeded();
         System.out.println("System configuration done. Ready for the simulation.");
     }
 }

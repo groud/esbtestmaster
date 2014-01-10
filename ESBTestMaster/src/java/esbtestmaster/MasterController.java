@@ -77,7 +77,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
             }
             for (Iterator<AgentConfiguration> i = this.currentScenario.getAgentsconfiguration().iterator(); i.hasNext();) {
                 AgentConfiguration agentConfiguration = i.next();
-                msgHandler.startSimulationMessage(agentConfiguration);
+                msgHandler.startSimulationMessage(agentConfiguration.getAgentId());
                 finishedMap.put(agentConfiguration.getAgentId(), false);
 
             }
@@ -94,7 +94,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
         if (this.currentScenario != null) {
             //We ask to the agents to abort the simulation.
             for (int i = 0; i < this.currentScenario.getAgentsconfiguration().size(); i++) {
-                this.msgHandler.abortSimulationMessage(this.currentScenario.getAgentsconfiguration().get(i));
+                this.msgHandler.abortSimulationMessage(this.currentScenario.getAgentsconfiguration().get(i).getAgentId());
             }
             //We clear the simulation state
             clearSimulationState();
@@ -115,7 +115,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
             this.currentScenario = scenarioReader.readXMLFile(XMLfile);
             //We the send a configuration message to the agents
             for (AgentConfiguration agentConfiguration : this.currentScenario.getAgentsconfiguration()) {
-                msgHandler.configurationMessage(agentConfiguration, this.currentScenario);
+                msgHandler.configurationMessage(agentConfiguration.getAgentId(),agentConfiguration, this.currentScenario);
                 finishedConfigMap.put(agentConfiguration.getAgentId(), false);
             }
             //We create a timer for timeout problems
@@ -189,24 +189,27 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
             }
 
             //On verifie que tous les consumers ont terminé la simulation
+
             if (this.consumersTerminated == false) {
-                this.consumersTerminated = true;
+                boolean consumerTerminatedTemp = true;
+                
                 for (AgentConfiguration agentConfiguration : this.currentScenario.getAgentsconfiguration()) {
                     if (agentConfiguration instanceof ConsumerConfiguration && finishedMap.get(agentConfiguration.getAgentId()) != true) {
-                        this.consumersTerminated = false;
+                        consumerTerminatedTemp = false;
                     }
                 }
+                this.consumersTerminated = consumerTerminatedTemp;
             }
+
 
             //If the simulation is over for the consumers, we send a message to the producers
             if (this.consumersTerminated) {
                 for (AgentConfiguration agentConfiguration : this.currentScenario.getAgentsconfiguration()) {
                     if (agentConfiguration instanceof ProducerConfiguration) {
-                        msgHandler.endSimulationMessage((ProducerConfiguration) agentConfiguration);
+                        msgHandler.endSimulationMessage(agentConfiguration.getAgentId());
                     }
                 }
             }
-
 
             //On verifie que tous les agents ont terminé la simulation.
             if (consumersTerminated) {
@@ -226,12 +229,11 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
     }
 
     public void configurationDoneForOneAgent(String agentID) {
-        
         if (finishedConfigMap.get(agentID) != true) {
             finishedConfigMap.put(agentID, true);
             boolean configDoneTemp = true;
             for (AgentConfiguration agentConfiguration : this.currentScenario.getAgentsconfiguration()) {
-                if (agentConfiguration instanceof ConsumerConfiguration && finishedConfigMap.get(agentConfiguration.getAgentId()) != true) {
+                if (finishedConfigMap.get(agentConfiguration.getAgentId()) != true) {
                     configDoneTemp = false;
                 }
             }

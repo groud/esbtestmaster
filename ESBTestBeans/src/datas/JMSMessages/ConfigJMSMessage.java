@@ -12,7 +12,7 @@ import java.io.Serializable;
  *
  * @author BambaLamine
  */
-public class ConfigJMSMessage implements Serializable{
+public class ConfigJMSMessage extends JMSAddressedMessage{
     private AgentConfiguration agentConfiguration;
     private SimulationScenario scenario;
 
