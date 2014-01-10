@@ -23,11 +23,11 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
     private CLI shell;
     private ScenarioReaderInterface scenarioReader;
     private KPICalculatorInterface kpiCalculator;
-    private JMSHandler monitoringMsgHandler;
+    private MasterMessageHandler msgHandler;
     private XMLResultKeeper resultsKeeper;
     private SimulationScenario currentScenario;
     private HashMap<String, Boolean> finishedMap;
-    private HashMap<String, Boolean> finishedConfigMap;
+    private volatile HashMap<String, Boolean> finishedConfigMap;
     private boolean consumersTerminated;
     private boolean configDone;
 
@@ -39,15 +39,15 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
         shell = new CLI(this);
         scenarioReader = new ScenarioReader();
         kpiCalculator = new KPICalculator();
-        monitoringMsgHandler = new JMSHandler(this);
+        msgHandler = new MasterMessageHandler(this);
         clearSimulationState();
+
+        //We start the Thread listening to the JMS messages
+        Thread monitoringMsgThread = new Thread(msgHandler);
+        monitoringMsgThread.start();
 
         //We start the CLI
         shell.launch();
-
-        //We start the Thread listening to the JMS messages
-        Thread monitoringMsgThread = new Thread(monitoringMsgHandler);
-        monitoringMsgThread.start();
     }
 
     /**
@@ -77,9 +77,9 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
             }
             for (Iterator<AgentConfiguration> i = this.currentScenario.getAgentsconfiguration().iterator(); i.hasNext();) {
                 AgentConfiguration agentConfiguration = i.next();
-                monitoringMsgHandler.startSimulationMessage(agentConfiguration);
+                msgHandler.startSimulationMessage(agentConfiguration);
                 finishedMap.put(agentConfiguration.getAgentId(), false);
-                finishedConfigMap.put(agentConfiguration.getAgentId(), false);
+
             }
         } else {
             shell.displayErrorMessage("Starting failed : no configuration has been provided.");
@@ -94,7 +94,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
         if (this.currentScenario != null) {
             //We ask to the agents to abort the simulation.
             for (int i = 0; i < this.currentScenario.getAgentsconfiguration().size(); i++) {
-                this.monitoringMsgHandler.abortSimulationMessage(this.currentScenario.getAgentsconfiguration().get(i));
+                this.msgHandler.abortSimulationMessage(this.currentScenario.getAgentsconfiguration().get(i));
             }
             //We clear the simulation state
             clearSimulationState();
@@ -115,7 +115,8 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
             this.currentScenario = scenarioReader.readXMLFile(XMLfile);
             //We the send a configuration message to the agents
             for (AgentConfiguration agentConfiguration : this.currentScenario.getAgentsconfiguration()) {
-                monitoringMsgHandler.configurationMessage(agentConfiguration, this.currentScenario);
+                msgHandler.configurationMessage(agentConfiguration, this.currentScenario);
+                finishedConfigMap.put(agentConfiguration.getAgentId(), false);
             }
             //We create a timer for timeout problems
             Timer timer = new Timer();
@@ -201,7 +202,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
             if (this.consumersTerminated) {
                 for (AgentConfiguration agentConfiguration : this.currentScenario.getAgentsconfiguration()) {
                     if (agentConfiguration instanceof ProducerConfiguration) {
-                        monitoringMsgHandler.endSimulationMessage((ProducerConfiguration) agentConfiguration);
+                        msgHandler.endSimulationMessage((ProducerConfiguration) agentConfiguration);
                     }
                 }
             }
@@ -225,6 +226,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
     }
 
     public void configurationDoneForOneAgent(String agentID) {
+        
         if (finishedConfigMap.get(agentID) != true) {
             finishedConfigMap.put(agentID, true);
             boolean configDoneTemp = true;

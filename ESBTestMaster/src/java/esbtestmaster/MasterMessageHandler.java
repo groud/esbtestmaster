@@ -1,113 +1,114 @@
-package esbtestmaster;
-
-import java.io.Serializable;
-import javax.jms.*;
-import javax.naming.*;
-import interfaces.MonitoringMsgListener;
-import destination.DestinationName;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+package esbtestmaster;
+
+import datas.JMSMessages.*;
+import datas.*;
+import JMS.*;
+import interfaces.*;
+import java.io.Serializable;
+
 /**
  *
- * @author Adrien
+ * @author gilles
  */
-//generic JMS handler
-//works with both queue and topic, the choice come from the object in JNDI
-public class MasterMessageHandler {
+public class MasterMessageHandler implements MonitoringMessageHandler, Runnable {
 
-    Context context = null;
-    ConnectionFactory factory = null;
-    Connection connection = null;
-    Destination toTopic = null;
-    Destination fromTopic = null;
-    Session session = null;
-    MessageProducer sender = null;
-    MessageConsumer receiver = null;
     MonitoringMsgListener mmListener;
+    private JMSEntity jms;
 
+    public MasterMessageHandler(MonitoringMsgListener mmListener) {
+        jms = new JMSEntity(DestinationName.CONNECTION_FACTORY, DestinationName.CONFIG_DESTINATION, DestinationName.RESULTS_DESTINATION);
+
+        this.mmListener = mmListener;
+    }
+
+    /**
+     * Sets a listener for the monitoring messages
+     * @param mmListener
+     */
     public void setListener(MonitoringMsgListener mmListener) {
         this.mmListener = mmListener;
     }
 
-    public MasterMessageHandler() {
-        try {
-            //To get to JNDI context
-            context = new InitialContext();
-            //To get a ConnectionFactory from JNDI
-            factory = (ConnectionFactory) context.lookup(destination.DestinationName.CONNECTION_FACTORY);
-            //Creating a connection from the factory
-            connection = factory.createConnection();
-
-            //Creating a session from the connection
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
-            //Creating a producer to send config objects
-            toTopic = (Destination) context.lookup(destination.DestinationName.CONFIG_DESTINATION); //Topic named "config"
-
-            sender = session.createProducer(toTopic);
-
-            //Creating a consumer to receive results objects
-            fromTopic = (Destination) context.lookup(destination.DestinationName.RESULTS_DESTINATION); //Topic named "results"
-
-            receiver = session.createConsumer(fromTopic);
-
-            //Starting the connection
-            connection.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-            finalize();
-        }
-
+    // -------------------------------
+    //   INTERFACES IMPLEMENTATIONS
+    // -------------------------------
+    /**
+     * Asks an agent to start the simulation
+     * @param receiverAgent
+     */
+    public void startSimulationMessage(AgentConfiguration receiverAgent) {
+        System.out.println("-----------startSimulationMessage-----------");
+        StartJMSMessage startJMSMessage = new StartJMSMessage();
+        jms.send(startJMSMessage);
+        System.out.println("-----------startSimulationMessage-----------2");
+        //TODO JMS : Start JMS message to the receiverAgent
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    //send an object to the topic
-    public boolean sendToTopic(Serializable objectToSend) {
-        try {
-
-            final ObjectMessage message = session.createObjectMessage();
-            message.setObject(objectToSend);
-            sender.send(message);
-            System.out.println("Message Sent");
-        } catch (Exception e) {
-            e.printStackTrace();
-            finalize();
-        }
-        return true;
+    /**
+     * Asks an agent to abort the simulation
+     * @param receiverAgent
+     */
+    public void abortSimulationMessage(AgentConfiguration receiverAgent) {
+        AbortJMSMessage abortJMSMessage = new AbortJMSMessage();
+        jms.send(abortJMSMessage);
+        //TODO JMS : Abort JMS message to the receiverAgent
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    //receive an object from a topic
-    public Serializable receiveFromTopic() {
-        Serializable result = null;
-        try {
-            Message message = receiver.receive();
-            if (message instanceof ObjectMessage) {
-                ObjectMessage object = (ObjectMessage) message;
-                result = object.getObject();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            finalize();
-        }
-        return result;
+    /**
+     * Sends a message to a producer notifying that the simulation is over.
+     * The producer should then send it results.
+     * @param receiverAgent
+     */
+    public void endSimulationMessage(ProducerConfiguration receiverAgent) {
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    protected void finalize() {
-        if (context != null) {
-            try {
-                context.close();
-            } catch (NamingException e) {
-                e.printStackTrace();
-            }
-        }
+    /**
+     * Asks an agent to self configure withthe given AgentConfiguration
+     * @param receiverAgent
+     * @param simulationScenario
+     */
+    public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
+        ConfigJMSMessage configJMSMessage = new ConfigJMSMessage();
+        configJMSMessage.setAgentConfiguration(receiverAgent);
+        configJMSMessage.setScenario(simulationScenario);
+        jms.send(configJMSMessage);
 
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (JMSException e) {
-                e.printStackTrace();
+
+        //TODO JMS : Configuration JMS message to the receiverAgent
+        //throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    // -------------------------------
+    //   RUNNABLE
+    // -------------------------------
+    /**
+     * Runs a JMS Messages listening thread.
+     */
+    public void run() {
+        //TODO JMS : Ecouter les messages et les envoie au MasterController avec :
+        //mmListener.simulationDoneForOneAgent(null, null);
+        //mmListener.fatalErrorOccured(null, null);
+        
+        while (true) {
+            Serializable message;
+            message = jms.receive();
+            if (message instanceof ConfigDoneJMSMessage) {
+                System.out.println("JMSHandler : Received a ConfigDoneJMSMessage");
+                ConfigDoneJMSMessage myMessage = (ConfigDoneJMSMessage) message;
+                mmListener.configurationDoneForOneAgent(myMessage.getAgentId());
+            } else if (message instanceof SimulationDoneJMSMessage) {
+                SimulationDoneJMSMessage myMessage = (SimulationDoneJMSMessage) message;
+                mmListener.simulationDoneForOneAgent(myMessage.getAgentId(), myMessage.getResultSet());
+            } else if (message instanceof FatalErrorOccuredJMSMessage) {
+                FatalErrorOccuredJMSMessage myMessage = (FatalErrorOccuredJMSMessage) message;
+                mmListener.fatalErrorOccured(myMessage.getAgentId(), myMessage.getMessage());
             }
         }
     }
