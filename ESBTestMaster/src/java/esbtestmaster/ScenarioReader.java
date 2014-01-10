@@ -50,15 +50,15 @@ public class ScenarioReader implements ScenarioReaderInterface {
 
             for (int i = 0; i < agentslist.size(); i++) {
                 Element agent = (Element) agentslist.get(i);
-                if (agent.getName().equals("provider")) {
+                if (agent.getName().equals("producer")) {
                     ProducerConfiguration prodConf = new ProducerConfiguration();
                     prodConf.setWsAddress(agent.getChildText("address"));
-                    prodConf.setAgentId(agent.getAttributeValue("name"));
+                    prodConf.setAgentId(agent.getAttributeValue("agentId"));
                     simulationScenario.getAgentsconfiguration().add(prodConf);
                 } else if (agent.getName().equals("consumer")) {
                     ConsumerConfiguration consConf = new ConsumerConfiguration();
                     consConf.setWsAddress(agent.getChildText("address"));
-                    consConf.setAgentId(agent.getAttributeValue("name"));
+                    consConf.setAgentId(agent.getAttributeValue("agentId"));
                     simulationScenario.getAgentsconfiguration().add(consConf);
                 }
             }

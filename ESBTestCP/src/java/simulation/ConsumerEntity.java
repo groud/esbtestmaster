@@ -27,11 +27,11 @@ public class ConsumerEntity extends SimulationEntity {
 
     private SimulationScenario simulationScenario = null;
     private Hashtable<String, AgentConfiguration> hashAgentsConf;    
+    private SimulationThread simulationThread;
     private Date startDate;
     private ResultsLogger logger;
     private int nbSteps;
-    
-
+   
     private int reqId = 0;  // Don't change manually because of concurrency issues
     private int stepsDone = 0; // Don't change manually because of concurrency issues
 
@@ -45,7 +45,7 @@ public class ConsumerEntity extends SimulationEntity {
      * @param simulationScenario
      */
     public void configureConsumer(SimulationScenario simulationScenario) {
-        this.simulationScenario = simulationScenario;       
+        this.simulationScenario = simulationScenario;
         hashAgentsConf = this.initializeAgentsTable();
         logger = new ResultsLogger(this.getid());
         nbSteps = simulationScenario.getSteps().size();
@@ -162,7 +162,7 @@ public class ConsumerEntity extends SimulationEntity {
 
         //TODO : wait for the master to ask the consumer to send its results back
     }
-    */
+
     /**
      * Abort the simulation
      */

@@ -11,6 +11,6 @@ import java.io.Serializable;
  *
  * @author gilles
  */
-public class EndJMSMessage implements Serializable {
+public class EndJMSMessage extends JMSAddressedMessage{
 
 }

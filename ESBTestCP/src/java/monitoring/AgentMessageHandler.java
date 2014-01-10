@@ -1,107 +1,107 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package monitoring;
 
+import JMS.*;
+import datas.JMSMessages.*;
+import datas.ResultSet;
+import interfaces.MonitoringMessageHandler;
+import interfaces.MonitoringMessageListener;
 import java.io.Serializable;
-import javax.jms.*;
-import javax.naming.*;
-
 
 /**
  *
- * @author Adrien
+ * @author bambaLamine
  */
+public class AgentMessageHandler implements MonitoringMessageHandler, Runnable {
 
-  //generic JMS handler
-  //works with both queue and topic, the choice come from the object in JNDI
+    MonitoringMessageListener listener;
+    private JMSEntity jms;
+    private String agentId;
 
-public class AgentMessageHandler {
+    /**
+     * Returns an instance of a JMSHandler, then start a listening thread for JMS messages
+     */
+    public AgentMessageHandler(String agentId) {
+        this.agentId = agentId;
+        jms = new JMSEntity(DestinationName.CONNECTION_FACTORY, DestinationName.RESULTS_DESTINATION, DestinationName.CONFIG_DESTINATION);
+    }
 
-    Context context = null;
-    ConnectionFactory factory = null;
-    Connection connection = null;
-    Destination toTopic = null;
-    Destination fromTopic = null;
-    Session session = null;
-    MessageProducer sender = null;
-    MessageConsumer receiver = null;
+    /**
+     * Set a listener for monitoring messages.
+     * @param listener
+     */
+    public void setListener(MonitoringMessageListener listener) {
+        this.listener = listener;
+    }
 
+    // -------------------------------
+    //   INTERFACES IMPLEMENTATIONS
+    // -------------------------------
+    /**
+     * Send a configuration done message to the master
+     * @param agentId
+     */
+    public void configurationDone(String agentId) {
+        jms.send(new ConfigDoneJMSMessage(agentId));
+    }
 
-    public AgentMessageHandler() {
-        try {
-            //To get to JNDI context
-            context = new InitialContext();
-
-            //To get a ConnectionFactory from JNDI
-            factory = (ConnectionFactory) context.lookup(destination.DestinationName.CONNECTION_FACTORY);
-
-            //Creating a connection from the factory
-            connection = factory.createConnection();
-
-            //Creating a session from the connection
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
-            //Creating a producer to send config objects
-            toTopic = (Destination) context.lookup(destination.DestinationName.RESULTS_DESTINATION); //Topic named "results"
-            sender = session.createProducer(toTopic);
-
-            //Creating a consumer to receive results objects
-            fromTopic = (Destination) context.lookup(destination.DestinationName.CONFIG_DESTINATION); //Topic named "config"
-            receiver = session.createConsumer(fromTopic);
-
-            //Starting the connection
-            connection.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-            finalize();
+    /**
+     * Sends a message to the master with the simulation results.
+     * @param resultSet
+     */
+    public void simulationDone(String agentId, ResultSet resultSet) {
+        //TODO JMS: Envoyer le message JMS au master avec le résultat
+        if (jms.send(new SimulationDoneJMSMessage(resultSet, agentId))) {
+            System.out.println("Results sent!");
+        } else {
+            System.out.println("Error while sending results to the master");
         }
     }
 
-    //send an object to the topic
-    public boolean sendToTopic(Serializable objectToSend) {
-        try {
-            final ObjectMessage message = session.createObjectMessage();
-            message.setObject(objectToSend);
-            sender.send(message);
-        } catch (Exception e) {
-            e.printStackTrace();
-            finalize();
-        }
-        return true;
+    /**
+     * Sends a message to the master notifying that a fatal error occured
+     */
+    public void fatalErrorOccured(String agentId, String message) {
+        //TODO JMS: Envoyer le message JMS au master pour indiquer que la simulation n'a pu être terminée
+        jms.send(new FatalErrorOccuredJMSMessage(agentId, message));
     }
 
-    //receive an object from the topic
-    public Serializable receiveFromTopic() {
-        Serializable result = null;
-        try {
-            Message message = receiver.receive();
-            System.out.println("Message object received1");
-            if (message instanceof ObjectMessage) {
-                ObjectMessage object = (ObjectMessage) message;
-                result = object.getObject();
-                System.out.println("Message object received2");
+    /**
+     * Listen to the messages then send them to the controller
+     */
+    public void run() {
+        //TODO JMS : Ecouter les messages et les envoie au MasterController avec :
+
+        while (true) {
+
+            Serializable message;
+            message = jms.receive();
+            //TODO JMS: Créer un thread en écoute des messages JMS. En fonction de ceux-ci, prévenir le controller à l'aide de :
+            //listener.configurationMessage(config, config);
+            //listener.startMessage()
+            //listener.abortMessage()
+            //listener.endMessage()
+            if (((JMSAddressedMessage) message).getReceiver().equals(this.agentId)) {
+                if (message instanceof ConfigJMSMessage) {
+                    //System.out.println("JMSHandler: Received a configJMSMessage");
+                    ConfigJMSMessage myMessage = (ConfigJMSMessage) message;
+                    listener.configurationMessage(myMessage.getAgentConfiguration(), myMessage.getScenario());
+                } else if (message instanceof StartJMSMessage) {
+                    //System.out.println("JMSHandler: Received a startJMSMessage");
+                    listener.startSimulationMessage();
+                } else if (message instanceof AbortJMSMessage) {
+                    //System.out.println("JMSHandler: Received an abortSimulationMessage");
+                    listener.abortSimulationMessage();
+                } else if (message instanceof EndJMSMessage) {
+                    //System.out.println("JMSHandler: Received an endSimulaitonMessage");
+                    listener.endSimulationMessage();
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            finalize();
         }
-        return result;
     }
-
-    @Override
-    protected void finalize() {
-        if (context != null) {
-            try {
-                context.close();
-            } catch (NamingException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (JMSException e) {
-                e.printStackTrace();
-            }
-        }
-    }   
 }
+
+

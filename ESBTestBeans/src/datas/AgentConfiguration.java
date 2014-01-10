@@ -38,6 +38,6 @@ public abstract class AgentConfiguration implements Serializable {
 
     @Override
     public String toString() {
-        return agentType + " " + this.getAgentId() + "\n";
+        return agentType + " " + this.getAgentId() + " at "+ this.getWsAddress()+"\n";
     }
 }

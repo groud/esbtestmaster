@@ -16,6 +16,12 @@ public class SimulationDoneJMSMessage implements Serializable {
     ResultSet resultSet;
     String agentId;
 
+    public SimulationDoneJMSMessage(ResultSet resultSet, String agentId) {
+        this.resultSet = resultSet;
+        this.agentId = agentId;
+    }
+
+
     public ResultSet getResultSet() {
         return resultSet;
     }

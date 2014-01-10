@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<scenario
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="XSD/simulationScenario.xsd">
+	<configuration>
+		<consumer agentId="agent1">
+			<address>http://lol.com:6666</address>
+		</consumer>
+		<producer agentId="agent2">
+			<address>http://lol.com:6666</address>
+		</producer>
+	</configuration>
+	<run>
+		<burst src="agent1" dest="agent2" startdate="0" stopdate="10">
+			<rate>30</rate>
+			<requestPayloadSize>120</requestPayloadSize>
+			<processTime>1000</processTime>
+			<responsePayloadSize>100</responsePayloadSize>
+		</burst>
+		<burst src="agent1" dest="agent2" startdate="10" stopdate="20">
+			<rate>30</rate>
+			<requestPayloadSize>10</requestPayloadSize>
+			<processTime>500</processTime>
+			<responsePayloadSize>20</responsePayloadSize>
+		</burst>
+	</run>
+</scenario>

@@ -14,8 +14,8 @@ import datas.SimulationScenario;
  * @author gilles
  */
 public interface MonitoringMessageHandler {
-    public void startSimulationMessage(AgentConfiguration receiverAgent);
-    public void abortSimulationMessage(AgentConfiguration receiverAgent);
-    public void endSimulationMessage(ProducerConfiguration receiverAgent);
-    public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario);
+    public void startSimulationMessage(String receiver);
+    public void abortSimulationMessage(String receiver);
+    public void endSimulationMessage(String receiver);
+    public void configurationMessage(String receiver, AgentConfiguration receiverAgent, SimulationScenario simulationScenario);
 }
