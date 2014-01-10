@@ -4,6 +4,7 @@
  */
 package simulation;
 
+import com.sun.org.apache.bcel.internal.generic.GETFIELD;
 import java.util.*;
 import datas.*;
 import java.util.TimerTask;
@@ -22,21 +23,26 @@ import javax.xml.ws.BindingProvider;
  */
 public class ConsumerEntity extends SimulationEntity {
     // time in ms to wait for all the timers to be set
-    private final int INIT_TIME = 1000;
+    // TODO : remove if not useful anymore
+    private final int INIT_TIME = 0;
 
 
     private SimulationScenario simulationScenario = null;
-    private Hashtable<String, AgentConfiguration> hashAgentsConf;    
-    private SimulationThread simulationThread;
+    private Hashtable<String, AgentConfiguration> hashAgentsConf;        
     private Date startDate;
     private ResultsLogger logger;
     private int nbSteps;
-   
+    private simulationRef.SimulationWSService wsService;
+    private simulationRef.SimulationWS wsPort;
+
     private int reqId = 0;  // Don't change manually because of concurrency issues
     private int stepsDone = 0; // Don't change manually because of concurrency issues
 
     public ConsumerEntity(String agentId) {
         super(agentId);
+        logger = new ResultsLogger(this.getid());
+        wsService = new simulationRef.SimulationWSService();
+        wsPort = wsService.getSimulationWSPort();
     }
 
     /**
@@ -46,14 +52,15 @@ public class ConsumerEntity extends SimulationEntity {
      */
     public void configureConsumer(SimulationScenario simulationScenario) {
         this.simulationScenario = simulationScenario;
-        hashAgentsConf = this.initializeAgentsTable();
-        logger = new ResultsLogger(this.getid());
+        hashAgentsConf = this.initializeAgentsTable();        
         nbSteps = simulationScenario.getSteps().size();
     }
 
     /**
      * Start the simulation
      */
+    //TODO : test overlapping steps
+    // TODO: test request rate limit
     @Override
     public void startSimulation() {
         final ScheduledExecutorService scheduler =
@@ -90,7 +97,7 @@ public class ConsumerEntity extends SimulationEntity {
 
             startDate = new Date(INIT_TIME + System.currentTimeMillis());
             logger.setStartDate(startDate);
-            stepStartDate = new Date(startDate.getTime() + step.getBurstStartDate());
+            stepStartDate = new Date(startDate.getTime() + step.getBurstStartDate());            
              final Runnable stepTask = new Runnable() {
                  int nbReqSent = 0;
                         public void run() {                            
@@ -112,27 +119,31 @@ public class ConsumerEntity extends SimulationEntity {
                             //System.out.println("Run "+nbReqSent+" bf increment : " + System.currentTimeMillis());
                             incrementRequestID(); // synchronized method
                             //System.out.println("Run "+nbReqSent+" af increment : " + System.currentTimeMillis());
-                            nbReqSent++;                            
+                            nbReqSent++;   
                         }
                     };
                 // schedule the task
                 taskDelay = stepStartDate.getTime()- System.currentTimeMillis();
+
+                // Schedule the periodic task of sending requests
                 final ScheduledFuture<?> stepTaskHandle =
                     scheduler.scheduleAtFixedRate(stepTask, taskDelay, period, TimeUnit.MILLISECONDS);
-            System.out.println("delay :"+taskDelay);
-            System.out.println("period :"+period);
-            //TODO : cancel
+            System.out.println("task delay :"+taskDelay);
+            System.out.println("task period :"+period);            //TODO : cancel
 
-            taskEnd = step.getBurstStopDate() + startDate.getTime();
+            
             scheduler.schedule(new Runnable() {
-                    public void run() { stepTaskHandle.cancel(true); }
-                }, taskEnd, TimeUnit.SECONDS);
+                    public void run() {
+                        stepTaskHandle.cancel(true);
+                        System.out.println("step task done");
+                    }
+                }, step.getBurstStopDate() + INIT_TIME, TimeUnit.MILLISECONDS);
             
         }
 
         try {
-            //TODO : Wait for end properly
-            Thread.sleep(20000);
+            //TODO : Wait for the end of the simulation properly
+            Thread.sleep(10000);
             //System.out.println("***************\nEnd of startSimulation ended");
         } catch (InterruptedException ex) {
             Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
@@ -140,35 +151,13 @@ public class ConsumerEntity extends SimulationEntity {
         System.out.println("***************\nEnd of startSimulation ended");
         System.out.println(logger.getResultSet().toString());
     }
-
-
-    /*
-    
-    public void startSimulation() {
-        //TODO : add receive response code        
-        simulationThread = new SimulationThread();
-        simulationThread.start();
-        
-        try {
-            simulationThread.join();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.out.println("***************\nSimulation thread ended");
-
-        System.out.println(logger.getResultSet().toString());
-        
-        //TODO : warn master when the consumer has finished its scenario
-
-        //TODO : wait for the master to ask the consumer to send its results back
-    }
-
+   
     /**
      * Abort the simulation
      */
     @Override
     public void abortSimulation() {
-        
+        //TODO : shutdown the sheduledexecutorservice
     }
 
     /**
@@ -194,7 +183,6 @@ public class ConsumerEntity extends SimulationEntity {
         stepsDone++;        
     }
 
-    
 
     /**
      * Sends an asynchronous request to the WS whose ID is producerID.
@@ -208,10 +196,9 @@ public class ConsumerEntity extends SimulationEntity {
        
 
         try { // Call Web Service Operation(async. callback)
-            simulationRef.SimulationWSService service = new simulationRef.SimulationWSService();
-            simulationRef.SimulationWS port = service.getSimulationWSPort();
-
-            ((BindingProvider)port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsAddress);
+           
+            // Dynamic WS addressing
+            ((BindingProvider)wsPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsAddress);
 
             javax.xml.ws.AsyncHandler<simulationRef.RequestOperationResponse> asyncHandler = new javax.xml.ws.AsyncHandler<simulationRef.RequestOperationResponse>() {
 
@@ -229,7 +216,7 @@ public class ConsumerEntity extends SimulationEntity {
             requestData = Utils.getDummyString(reqPayloadSize, 'A');
 
             // Call web service asynchronously (callback)
-            java.util.concurrent.Future<? extends java.lang.Object> callBackResult = port.requestOperationAsync(producerId, requestId, requestData, processTime, respPayloadSize,asyncHandler);
+            java.util.concurrent.Future<? extends java.lang.Object> callBackResult = wsPort.requestOperationAsync(producerId, requestId, requestData, processTime, respPayloadSize,asyncHandler);
         } catch (Exception ex) {
             // TODO handle custom exceptions here
         }

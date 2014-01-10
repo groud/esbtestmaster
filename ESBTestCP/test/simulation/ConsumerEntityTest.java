@@ -67,7 +67,7 @@ public class ConsumerEntityTest {
         ss.getAgentsconfiguration().add(pc);
 
         ss.addStep(new SimulationStep(consumerId, producerId, 0, 5000, 1, 16, 1000L, 20));
-        //ss.addStep(new SimulationStep(consumerId, producerId, 3000, 4500, 2, 16, 1000L, 20));
+        ss.addStep(new SimulationStep(consumerId, producerId, 5000, 7500, 2, 16, 1000L, 20));
 
         instance.configureConsumer(ss);
         instance.startSimulation();

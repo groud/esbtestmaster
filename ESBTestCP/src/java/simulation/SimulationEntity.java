@@ -15,7 +15,7 @@ public abstract class SimulationEntity {
     SimulationMessageListener listener;
 
     public SimulationEntity(String id) {
-
+        this.id = id;
     }
 
     /**
