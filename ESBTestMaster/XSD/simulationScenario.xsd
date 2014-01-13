@@ -18,11 +18,8 @@
 		      	 </xsd:complexType>
 		      </xsd:element>
 		      <xsd:element name="consumer">
-			 <xsd:complexType>
-			   <xsd:sequence>
-			       <xsd:element type="xsd:string" name="address" minOccurs="1" maxOccurs="1"/>
-		           </xsd:sequence>
-		     	   <xsd:attribute type="xsd:string" name="agentId" use="required"/>
+		     	 <xsd:complexType>
+			    <xsd:attribute type="xsd:string" name="agentId" use="required"/>
 			 </xsd:complexType>
 		      </xsd:element>
             	</xsd:choice>

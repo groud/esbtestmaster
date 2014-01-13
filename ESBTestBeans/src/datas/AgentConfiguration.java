@@ -17,7 +17,7 @@ public abstract class AgentConfiguration implements Serializable {
     protected AgentType agentType;
 
     private String agentId;
-    private String wsAddress;
+
 
 
     public String getAgentId() {
@@ -28,16 +28,8 @@ public abstract class AgentConfiguration implements Serializable {
         this.agentId = name;
     }
 
-    public String getWsAddress() {
-        return wsAddress;
-    }
-
-    public void setWsAddress(String wsAddress) {
-        this.wsAddress = wsAddress;
-    }
-
     @Override
     public String toString() {
-        return agentType + " " + this.getAgentId() + " at "+ this.getWsAddress()+"\n";
+        return agentType + " " + this.getAgentId()+"\n";
     }
 }

@@ -57,7 +57,6 @@ public class ScenarioReader implements ScenarioReaderInterface {
                     simulationScenario.getAgentsconfiguration().add(prodConf);
                 } else if (agent.getName().equals("consumer")) {
                     ConsumerConfiguration consConf = new ConsumerConfiguration();
-                    consConf.setWsAddress(agent.getChildText("address"));
                     consConf.setAgentId(agent.getAttributeValue("agentId"));
                     simulationScenario.getAgentsconfiguration().add(consConf);
                 }

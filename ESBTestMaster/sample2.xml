@@ -3,9 +3,7 @@
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:noNamespaceSchemaLocation="XSD/simulationScenario.xsd">
 	<configuration>
-		<consumer agentId="agent1">
-			<address>http://lol.com:6666</address>
-		</consumer>
+		<consumer agentId="agent1"/>
 		<producer agentId="agent2">
 			<address>http://lol.com:6666</address>
 		</producer>

@@ -77,7 +77,7 @@ public class ConsumerEntity extends SimulationEntity {
 
             // parameters for the scheduledExecutor run() method
             final String destId = step.getDestID();
-            final String wsUrl = hashAgentsConf.get(destId).getWsAddress();
+            final String wsUrl = ((ProducerConfiguration)hashAgentsConf.get(destId)).getWsAddress();
             final int reqPayloadSize = step.getRequestPayloadSize();
             final long processTime =  step.getProcessTime();
             final int respPayloadSize = step.getResponsePayloadSize();
