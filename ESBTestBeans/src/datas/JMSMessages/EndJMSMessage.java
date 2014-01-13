@@ -5,7 +5,6 @@
 
 package datas.JMSMessages;
 
-import java.io.Serializable;
 
 /**
  *

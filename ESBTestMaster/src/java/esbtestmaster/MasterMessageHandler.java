@@ -62,7 +62,9 @@ public class MasterMessageHandler implements MonitoringMessageHandler, Runnable 
      * @param receiverAgent
      */
     public void endSimulationMessage(String receiverId) {
-        // TODO
+        EndJMSMessage endJMSMessage = new EndJMSMessage();
+        endJMSMessage.setReceiver(receiverId);
+        jms.send(endJMSMessage);
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 

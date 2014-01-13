@@ -100,7 +100,7 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
     }
 
     public void contextInitialized(ServletContextEvent sce) {
-       this.agentId = sce.getServletContext().getInitParameter("agentId");
+       this.agentId = sce.getServletContext().getContextPath().substring(1);
        msgHandler = new AgentMessageHandler(this.agentId);
        msgHandler.setListener(this);
 

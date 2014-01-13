@@ -5,7 +5,7 @@ xsi:noNamespaceSchemaLocation="XSD/simulationScenario.xsd">
 	<configuration>
 		<consumer agentId="agent1"/>
 		<producer agentId="agent2">
-			<address>http://lol.com:6666</address>
+			<address>http://localhost:8080/agent2/SimulationWS</address>
 		</producer>
 	</configuration>
 	<run>

@@ -57,9 +57,12 @@ public class JMSEntity {
 
     //send an object to the topic
     public boolean send(Serializable objectToSend) {
+        
         try {
-            final ObjectMessage message = session.createObjectMessage();
+            ObjectMessage message = session.createObjectMessage();
+            System.out.print("titi");
             message.setObject(objectToSend);
+                            
             sender.send(message);
         } catch (Exception e) {
             finalize();

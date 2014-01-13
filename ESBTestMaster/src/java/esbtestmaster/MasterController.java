@@ -55,8 +55,11 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
      */
     private void clearSimulationState() {
         finishedMap = new HashMap<String, Boolean>();
-        finishedConfigMap = new HashMap<String, Boolean>();
         this.consumersTerminated = false;
+    }
+
+    private void clearConfigurationState() {
+        finishedConfigMap = new HashMap<String, Boolean>();
         this.configDone = false;
     }
 
@@ -110,6 +113,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
      * @param XMLfile
      */
     public void loadScenario(String XMLfile) {
+        clearConfigurationState();
         try {
             //We get the scenario XML
             this.currentScenario = scenarioReader.readXMLFile(XMLfile);

@@ -6,7 +6,6 @@
 package datas.JMSMessages;
 import datas.AgentConfiguration;
 import datas.SimulationScenario;
-import java.io.Serializable;
 
 /**
  *
