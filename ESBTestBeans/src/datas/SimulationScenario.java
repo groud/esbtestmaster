@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class SimulationScenario implements Serializable{
     private ArrayList<AgentConfiguration> agentsconfiguration;
     private ArrayList<SimulationStep> steps;
+    private long endDate = 0;
 
     public SimulationScenario () {
         agentsconfiguration = new ArrayList<AgentConfiguration>();
@@ -44,6 +45,13 @@ public class SimulationScenario implements Serializable{
 
     public void addStep(SimulationStep step) {
         steps.add(step);
+        if(step.getBurstStopDate() > endDate) {
+            endDate = step.getBurstStopDate();
+        }
+    }
+
+    public long getEndDate() {
+        return endDate;
     }
 
         @Override
