@@ -26,6 +26,8 @@ public class ConsumerEntity extends SimulationEntity {
     private final int INIT_TIME = 0;
     //TODO : change the number of threads depending on the scenario ?
     private final int THREAD_POOL_NB = 10;
+    // time to wait after the last request is sent (in ms)
+    private final int LAST_REQ_TIMEOUT = 3000;
 
     private ScheduledExecutorService scheduler; // scheduler to send requests
     private SimulationScenario simulationScenario = null;
@@ -59,7 +61,8 @@ public class ConsumerEntity extends SimulationEntity {
 
     /**
      * Starts the simulation (non-blocking)
-     */    
+     */
+     //TODO : exit if there is an error
     @Override
     public void startSimulation() {
         scheduler =
@@ -70,7 +73,7 @@ public class ConsumerEntity extends SimulationEntity {
 
         for (i = 0; i < nbSteps; i++) {
             long taskDelay;
-            int nbRequest = 0;
+            int nbRequests = 0;
             Date stepStartDate;
             step = simulationScenario.getSteps().get(i);
 
@@ -80,19 +83,21 @@ public class ConsumerEntity extends SimulationEntity {
             final int reqPayloadSize = step.getRequestPayloadSize();
             final long processTime =  step.getProcessTime();
             final int respPayloadSize = step.getResponsePayloadSize();
+            final int currentStepNb = i;
+            //final int nbReqToSend =
 
             // duration converted in seconds from ms
             double stepDuration = (double) step.getBurstDuration() / 1000.0;
             System.out.println("stepduration="+stepDuration);
-            nbRequest = (int) (stepDuration * step.getBurstRate());
-            System.out.println("nbRequest="+nbRequest);
+            nbRequests = (int) (stepDuration * step.getBurstRate());
+            System.out.println("nbRequests="+nbRequests);
 
             // Make sure at least one request is sent
-            if(nbRequest <= 0) {
-                nbRequest = 0;
+            if(nbRequests <= 0) {
+                nbRequests = 0;
             }
             //interval between two request in ms
-            long period = (long) ((stepDuration / (float)nbRequest) *1000);
+            long period = (long) ((stepDuration / (float)nbRequests) *1000);
 
             // Set simulation starting date
             startDate = new Date(INIT_TIME + System.currentTimeMillis());
@@ -112,7 +117,16 @@ public class ConsumerEntity extends SimulationEntity {
                             
                             sendAsyncRequest(wsUrl, destId, getReqId(), reqPayloadSize, processTime, respPayloadSize);                            
                             incrementReqId(); // synchronized method                            
-                            nbReqSent++;   
+                            nbReqSent++;
+
+                            /* Not an efficient way to do this
+                            // If this is the last step
+                            if(currentStepNb == nbRequests -1) {
+                                if(nbReqSent == n) {
+                                    listener.simulationDone(logger.getResultSet());
+                                }
+                            }
+                             * */
                         }
                     };
                 // schedule the task
@@ -128,11 +142,36 @@ public class ConsumerEntity extends SimulationEntity {
             scheduler.schedule(new Runnable() {
                     public void run() {
                         stepTaskHandle.cancel(true);
-                        System.out.println("step task done");
+                        System.out.println("step task done");                        
                     }
                 }, step.getBurstStopDate() + INIT_TIME, TimeUnit.MILLISECONDS);
             
         }
+
+        // Notify the AgentController when the simulation is done
+        //******************************************************************
+        // Note : this just calls the AgentController when the scenario is
+        // SUPPOSED to be done, it does not count the number of requests sent
+        //******************************************************************
+        //TODO : fix above issue ?
+            scheduler.schedule(new Runnable() {
+                    public void run() {
+                        System.out.println("**************\nSimulation done\n****************");
+                        if(listener == null) {
+                            try {
+                                throw new Exception("ConsumerEntity listener not set");
+                            } catch (Exception ex) {
+                                Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        else {
+                            listener.simulationDone(logger.getResultSet());
+                        }
+                        
+                    }
+                }, simulationScenario.getEndDate() + LAST_REQ_TIMEOUT, TimeUnit.MILLISECONDS);
+
+                
        
     }
    

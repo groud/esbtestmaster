@@ -64,7 +64,7 @@ public class ConsumerEntityTest {
         
         int burstStartDate1 = 0;
         int burstStopDate1 = 5000;
-        int burstRate1 = 10;
+        int burstRate1 = 1;
         int requestPayloadSize1 = 16;
         long processTime1 = 0;
         int responsePayloadSize1 = 32;
@@ -77,7 +77,7 @@ public class ConsumerEntityTest {
         int responsePayloadSize2 = 32;
 
         // Test ConsumerEntity
-        ConsumerEntity instance = new ConsumerEntity(consumerId);
+        ConsumerEntity instance = new ConsumerEntity(consumerId);        
 
         SimulationScenario ss = new SimulationScenario();
         ProducerConfiguration pc = new ProducerConfiguration();
@@ -86,14 +86,14 @@ public class ConsumerEntityTest {
         ss.getAgentsconfiguration().add(pc);
 
         ss.addStep(new SimulationStep(consumerId, producerId, burstStartDate1, burstStopDate1, burstRate1, requestPayloadSize1, processTime1, responsePayloadSize1));
-        ss.addStep(new SimulationStep(consumerId, producerId, burstStartDate2, burstStopDate2, burstRate2, requestPayloadSize2, processTime2, responsePayloadSize2));
+        //ss.addStep(new SimulationStep(consumerId, producerId, burstStartDate2, burstStopDate2, burstRate2, requestPayloadSize2, processTime2, responsePayloadSize2));
         
 
         instance.configureConsumer(ss);
         instance.startSimulation();
         
         try {
-            Thread.sleep(8000);
+            Thread.sleep(15000);
         } catch (InterruptedException ex) {
             Logger.getLogger(ConsumerEntityTest.class.getName()).log(Level.SEVERE, null, ex);
         }
