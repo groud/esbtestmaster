@@ -25,8 +25,9 @@ public class ConsumerEntity extends SimulationEntity {
     // time in ms to wait for all the timers to be set
     // TODO : remove if not useful anymore
     private final int INIT_TIME = 0;
+    private final int THREAD_POOL_NB = 10;
 
-
+    private ScheduledExecutorService scheduler;
     private SimulationScenario simulationScenario = null;
     private Hashtable<String, AgentConfiguration> hashAgentsConf;        
     private Date startDate;
@@ -35,7 +36,7 @@ public class ConsumerEntity extends SimulationEntity {
     private simulationRef.SimulationWSService wsService;
     private simulationRef.SimulationWS wsPort;
 
-    private int reqId = 0;  // Don't change manually because of concurrency issues
+    private volatile int reqId = 0;  // Don't change manually because of concurrency issues
     private int stepsDone = 0; // Don't change manually because of concurrency issues
 
     public ConsumerEntity(String agentId) {
@@ -63,8 +64,8 @@ public class ConsumerEntity extends SimulationEntity {
     // TODO: test request rate limit
     @Override
     public void startSimulation() {
-        final ScheduledExecutorService scheduler =
-            Executors.newScheduledThreadPool(5);
+        scheduler =
+            Executors.newScheduledThreadPool(THREAD_POOL_NB);
         SimulationStep step;
         int i;
         
@@ -106,7 +107,8 @@ public class ConsumerEntity extends SimulationEntity {
                             //System.out.println("Run "+nbReqSent+" start date : " + System.currentTimeMillis());
                             //System.out.println("Run "+nbReqSent+" bf log : " + System.currentTimeMillis());
                             try {
-                                logger.writeSimulationEvent(reqId,AgentType.CONSUMER, EventType.REQUEST_SENT);
+                                //logger.writeSimulationEvent(reqId,AgentType.CONSUMER, EventType.REQUEST_SENT);
+                                logger.writeSimulationEvent(getRequestID(),AgentType.CONSUMER, EventType.REQUEST_SENT);
                             } catch (Exception ex) {
                                 Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -114,7 +116,8 @@ public class ConsumerEntity extends SimulationEntity {
                             // Send the request to the producer
                             // (the response logging is done in the request callback)
                             //System.out.println("Run "+nbReqSent+" bf async req : " + System.currentTimeMillis());
-                            sendAsyncRequest(wsUrl, destId, reqId, reqPayloadSize, processTime, respPayloadSize);
+                            //sendAsyncRequest(wsUrl, destId, reqId, reqPayloadSize, processTime, respPayloadSize);
+                            sendAsyncRequest(wsUrl, destId, getRequestID(), reqPayloadSize, processTime, respPayloadSize);
                             //System.out.println("Run "+nbReqSent+" af async req : " + System.currentTimeMillis());
                             //System.out.println("Run "+nbReqSent+" bf increment : " + System.currentTimeMillis());
                             incrementRequestID(); // synchronized method
@@ -128,10 +131,10 @@ public class ConsumerEntity extends SimulationEntity {
                 // Schedule the periodic task of sending requests
                 final ScheduledFuture<?> stepTaskHandle =
                     scheduler.scheduleAtFixedRate(stepTask, taskDelay, period, TimeUnit.MILLISECONDS);
-            System.out.println("task delay :"+taskDelay);
-            System.out.println("task period :"+period);            //TODO : cancel
+            //System.out.println("task delay :"+taskDelay);
+            System.out.println("task period :"+period);    
 
-            
+
             scheduler.schedule(new Runnable() {
                     public void run() {
                         stepTaskHandle.cancel(true);
@@ -140,16 +143,7 @@ public class ConsumerEntity extends SimulationEntity {
                 }, step.getBurstStopDate() + INIT_TIME, TimeUnit.MILLISECONDS);
             
         }
-
-        try {
-            //TODO : Wait for the end of the simulation properly
-            Thread.sleep(10000);
-            //System.out.println("***************\nEnd of startSimulation ended");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.out.println("***************\nEnd of startSimulation ended");
-        System.out.println(logger.getResultSet().toString());
+       
     }
    
     /**
@@ -157,7 +151,10 @@ public class ConsumerEntity extends SimulationEntity {
      */
     @Override
     public void abortSimulation() {
-        //TODO : shutdown the sheduledexecutorservice
+        scheduler.shutdownNow();
+        if(scheduler.isShutdown()) {
+            System.out.println("Scheduler shutdown");
+        }
     }
 
     /**
@@ -178,6 +175,9 @@ public class ConsumerEntity extends SimulationEntity {
     synchronized private void incrementRequestID() {
         reqId++;
     }
+    synchronized private int getRequestID() {
+        return reqId;
+    }
 
     synchronized private void stepDone() {
         stepsDone++;        
@@ -193,7 +193,7 @@ public class ConsumerEntity extends SimulationEntity {
      */
     private void sendAsyncRequest(String wsAddress, String producerId, int requestId, int reqPayloadSize, long processTime, int respPayloadSize) {
         String requestData = null;        
-       
+        final int finalReqId = requestId;
 
         try { // Call Web Service Operation(async. callback)
            
@@ -204,7 +204,7 @@ public class ConsumerEntity extends SimulationEntity {
 
                 public void handleResponse(javax.xml.ws.Response<simulationRef.RequestOperationResponse> response) {
                     try {                        
-                        logger.writeSimulationEvent(reqId, AgentType.CONSUMER , EventType.RESPONSE_RECEIVED);
+                        logger.writeSimulationEvent(finalReqId, AgentType.CONSUMER , EventType.RESPONSE_RECEIVED);
 
                         System.out.println("Result :\n " + response.get().getReturn());
                     } catch (Exception ex) {

@@ -10,6 +10,8 @@ import datas.EventType;
 import datas.ProducerConfiguration;
 import datas.SimulationScenario;
 import datas.SimulationStep;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -50,11 +52,62 @@ public class ConsumerEntityTest {
 
     /**
      * Test of startSimulation method, of class ConsumerEntity.
+     * //TODO : test max rate, max respSize, max requestSize
      */
-    
+    //@Ignore
     @Test
     public void testStartSimulation() {
         System.out.println("startSimulation");
+        String producerId = "producer1";
+        String consumerId = "consumer1";
+        
+        
+        int burstStartDate1 = 0;
+        int burstStopDate1 = 5000;
+        int burstRate1 = 10;
+        int requestPayloadSize1 = 16;
+        long processTime1 = 0;
+        int responsePayloadSize1 = 32;
+
+        int burstStartDate2 = 2500;
+        int burstStopDate2 = 7000;
+        int burstRate2 = 10;
+        int requestPayloadSize2 = 16;
+        long processTime2 = 0;
+        int responsePayloadSize2 = 32;
+
+        // Test ConsumerEntity
+        ConsumerEntity instance = new ConsumerEntity(consumerId);
+
+        SimulationScenario ss = new SimulationScenario();
+        ProducerConfiguration pc = new ProducerConfiguration();
+        pc.setAgentId(producerId);
+        pc.setWsAddress("http://localhost:8090/ESBTestCompositeService1/casaPort1");
+        ss.getAgentsconfiguration().add(pc);
+
+        ss.addStep(new SimulationStep(consumerId, producerId, burstStartDate1, burstStopDate1, burstRate1, requestPayloadSize1, processTime1, responsePayloadSize1));
+        ss.addStep(new SimulationStep(consumerId, producerId, burstStartDate2, burstStopDate2, burstRate2, requestPayloadSize2, processTime2, responsePayloadSize2));
+        
+
+        instance.configureConsumer(ss);
+        instance.startSimulation();
+        
+        try {
+            Thread.sleep(8000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ConsumerEntityTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        System.out.println(instance.getLogger().getResultSet().toString());
+    }
+
+    /**
+     * Test of abortSimulation method, of class ConsumerEntity.
+     */
+    @Ignore
+    @Test
+    public void testAbortSimulation() {
+       System.out.println("startSimulation");
         String producerId = "producer1";
         String consumerId = "consumer1";
         // Test ConsumerEntity
@@ -71,21 +124,20 @@ public class ConsumerEntityTest {
 
         instance.configureConsumer(ss);
         instance.startSimulation();
-        
-        
-    }
-
-    /**
-     * Test of abortSimulation method, of class ConsumerEntity.
-     */
-    @Ignore
-    @Test
-    public void testAbortSimulation() {
-        System.out.println("abortSimulation");
-        ConsumerEntity instance = new ConsumerEntity("consumerId");
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ConsumerEntityTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
         instance.abortSimulation();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ConsumerEntityTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        System.out.println(instance.getLogger().getResultSet().toString());
     }    
 
    
