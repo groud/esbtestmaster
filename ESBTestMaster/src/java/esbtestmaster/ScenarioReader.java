@@ -62,7 +62,7 @@ public class ScenarioReader implements ScenarioReaderInterface {
                 }
             }
 
-            //Run
+            //Rune
             Element run = rootNode.getChild("run");//Get the configuration object
             List burstslist = run.getChildren("burst");//Get the configuration object
 
@@ -78,7 +78,7 @@ public class ScenarioReader implements ScenarioReaderInterface {
                 simulationStep.setRequestPayloadSize(Integer.parseInt(burst.getChildText("requestPayloadSize")));
                 simulationStep.setProcessTime(Long.parseLong(burst.getChildText("processTime")));
                 simulationStep.setResponsePayloadSize(Integer.parseInt(burst.getChildText("responsePayloadSize")));
-                simulationScenario.getSteps().add(simulationStep);
+                simulationScenario.addStep(simulationStep);
             }
             Debug.info("ScenarioReader : \n" + simulationScenario);
         } catch (JDOMException ex) {

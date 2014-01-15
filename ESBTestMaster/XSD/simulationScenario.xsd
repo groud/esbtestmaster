@@ -39,8 +39,8 @@
                   </xsd:sequence>
                   <xsd:attribute type="xsd:string" name="src" use="required"/>
                   <xsd:attribute type="xsd:string" name="dest" use="required"/>
-                  <xsd:attribute type="xsd:byte" name="startdate" use="required"/>
-                  <xsd:attribute type="xsd:byte" name="stopdate" use="required"/>
+                  <xsd:attribute type="xsd:unsignedLong" name="startdate" use="required"/>
+                  <xsd:attribute type="xsd:unsignedLong" name="stopdate" use="required"/>
                 </xsd:complexType>
               </xsd:element>
             </xsd:sequence>
@@ -50,3 +50,5 @@
     </xsd:complexType>
   </xsd:element>
 </xsd:schema>
+
+
