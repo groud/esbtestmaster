@@ -100,7 +100,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
                 this.msgHandler.abortSimulationMessage(this.currentScenario.getAgentsconfiguration().get(i).getAgentId());
             }
             //We clear the simulation state
-            clearSimulationState();
+            //clearSimulationState();
             //We notify the user that the simulation has been aborted.
             this.shell.notifySimulationAborted();
         } else {
@@ -203,18 +203,16 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
                     }
                 }
                 this.consumersTerminated = consumerTerminatedTemp;
-            }
 
-
-            //If the simulation is over for the consumers, we send a message to the producers
-            if (this.consumersTerminated) {
-                for (AgentConfiguration agentConfiguration : this.currentScenario.getAgentsconfiguration()) {
-                    if (agentConfiguration instanceof ProducerConfiguration) {
-                        msgHandler.endSimulationMessage(agentConfiguration.getAgentId());
+                //If the simulation is over for the consumers, we send a message to the producers
+                if (this.consumersTerminated) {
+                    for (AgentConfiguration agentConfiguration : this.currentScenario.getAgentsconfiguration()) {
+                        if (agentConfiguration instanceof ProducerConfiguration) {
+                            msgHandler.endSimulationMessage(agentConfiguration.getAgentId());
+                        }
                     }
                 }
             }
-
             //On verifie que tous les agents ont terminé la simulation.
             if (consumersTerminated) {
                 boolean terminated = true;
