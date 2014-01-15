@@ -49,7 +49,7 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
     public void endSimulationMessage() {
         System.out.println("-- "+ agentId + " stopping --");
         if (simulationEntity instanceof ProducerEntity) {
-            ((ProducerEntity) simulationEntity).endOfSimulation();
+            ((ProducerEntity)simulationEntity).endOfSimulation();
         } 
     }
 

@@ -39,7 +39,7 @@ public class ProducerEntity extends SimulationEntity implements ProducerWSListen
     /**
      * End the simulation and send the results
      */
-    public void endOfSimlation() {
+    public void endOfSimulation() {
         simulationDone = true;
         listener.simulationDone(resultSet);
     }
