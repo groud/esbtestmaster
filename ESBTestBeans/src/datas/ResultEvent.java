@@ -1,5 +1,7 @@
 package datas;
 
+import java.io.Serializable;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -12,7 +14,7 @@ package datas;
  *
  * @author gilles
  */
-public class ResultEvent implements Comparable<ResultEvent>{
+public class ResultEvent implements Comparable<ResultEvent>, Serializable{
     private long eventDate;
     private EventType eventType;
     private AgentType agentType;

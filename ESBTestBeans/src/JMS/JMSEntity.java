@@ -20,7 +20,8 @@ public class JMSEntity {
     private Connection connection = null;
     private Destination toDestination = null;
     private Destination fromDestination = null;
-    private Session session = null;
+    private Session sessionOut = null;
+    private Session sessionIn = null;
     private MessageProducer sender = null;
     private MessageConsumer receiver = null;
 
@@ -36,21 +37,23 @@ public class JMSEntity {
             //Creating a connection from the factory
             connection = factory.createConnection();
 
-            //Creating a session from the connection
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            //Creating 2 sessions from the connection
+            sessionOut = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            sessionIn = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
             //Creating a producer to send config objects
             toDestination = (Destination) context.lookup(destinationOut);
-            sender = session.createProducer(toDestination);
+            sender = sessionOut.createProducer(toDestination);
 
             //Creating a consumer to receive results objects
             fromDestination = (Destination) context.lookup(destinationIn);
-            receiver = session.createConsumer(fromDestination);
+            receiver = sessionIn.createConsumer(fromDestination);
 
             //Starting the connection
             connection.start();
 
         } catch (Exception e) {
+            e.printStackTrace();
             finalize();
         }
     }
@@ -59,12 +62,10 @@ public class JMSEntity {
     public boolean send(Serializable objectToSend) {
         
         try {
-            ObjectMessage message = session.createObjectMessage();
-            System.out.print("titi");
-            message.setObject(objectToSend);
-                            
+            ObjectMessage message = sessionOut.createObjectMessage(objectToSend);
             sender.send(message);
         } catch (Exception e) {
+            e.printStackTrace();
             finalize();
         }
         return true;
@@ -80,6 +81,7 @@ public class JMSEntity {
                 result = object.getObject();
             }
         } catch (Exception e) {
+            e.printStackTrace();
             finalize();
         }
         return result;
@@ -91,7 +93,7 @@ public class JMSEntity {
             try {
                 context.close();
             } catch (NamingException e) {
-                
+                e.printStackTrace();
             }
         }
 

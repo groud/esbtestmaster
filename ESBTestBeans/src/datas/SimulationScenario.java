@@ -47,6 +47,7 @@ public class SimulationScenario implements Serializable{
         steps.add(step);
         if(step.getBurstStopDate() > endDate) {
             endDate = step.getBurstStopDate();
+        
         }
     }
 
