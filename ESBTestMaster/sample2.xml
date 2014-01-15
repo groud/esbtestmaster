@@ -15,7 +15,7 @@ xsi:noNamespaceSchemaLocation="XSD/simulationScenario.xsd">
 			<processTime>1000</processTime>
 			<responsePayloadSize>100</responsePayloadSize>
 		</burst>
-		<burst src="agent1" dest="agent2" startdate="10" stopdate="20">
+		<burst src="agent1" dest="agent2" startdate="10" stopdate="20000">
 			<rate>30</rate>
 			<requestPayloadSize>10</requestPayloadSize>
 			<processTime>500</processTime>
