@@ -1,6 +1,6 @@
 #!/bin/bash
 
-glassfishPath="/home/ubuntu/GlassFishESBv22/glassfish/bin"
+glassfishPath="/home/gilles/GlassFishESBv22/glassfish/bin"
 
 if [ $# != 1 ]
 then

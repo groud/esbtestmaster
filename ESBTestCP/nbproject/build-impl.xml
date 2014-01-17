@@ -19,6 +19,7 @@
         -->
 <project xmlns:webproject1="http://www.netbeans.org/ns/web-project/1" xmlns:webproject2="http://www.netbeans.org/ns/web-project/2" xmlns:webproject3="http://www.netbeans.org/ns/web-project/3" basedir=".." default="default" name="ESBTestCP-impl">
     <import file="jaxws-build.xml"/>
+    <import file="rest-build.xml"/>
     <import file="ant-deploy.xml"/>
     <fail message="Please build using Ant 1.7.1 or higher.">
         <condition>
@@ -526,14 +527,16 @@ exists or setup the property manually. For example like this:
     <target depends="init,compile,compile-jsps,-pre-dist,-do-dist-with-manifest,-do-dist-without-manifest" name="do-dist"/>
     <target depends="init" if="dist.ear.dir" name="library-inclusion-in-manifest">
         <copyfiles files="${reference.ESBTestBeans.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.reference.ESBTestBeans.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${libs.restlib_gfv2.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.restlib_gfv2.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${reference.ESBTestBeans.jar}" todir="${build.web.dir}//"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${manifest.reference.ESBTestBeans.jar} "/>
+            <attribute name="Class-Path" value="${manifest.reference.ESBTestBeans.jar} ${manifest.libs.restlib_gfv2.classpath} "/>
         </manifest>
     </target>
     <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
         <copyfiles files="${reference.ESBTestBeans.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${libs.restlib_gfv2.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${reference.ESBTestBeans.jar}" todir="${build.web.dir}//"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" if="do.tmp.war.package" name="do-ear-dist">
