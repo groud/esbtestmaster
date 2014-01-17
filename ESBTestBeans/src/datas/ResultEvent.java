@@ -19,7 +19,7 @@ public class ResultEvent implements Comparable<ResultEvent>, Serializable{
     private EventType eventType;
     private AgentType agentType;
     private String agentId;
-    private int reqId;
+    
 
 
     // ----------------------------------
@@ -57,10 +57,6 @@ public class ResultEvent implements Comparable<ResultEvent>, Serializable{
         this.eventType = eventType;
     }
 
-    public void setReqId(int id) {
-        reqId = id;
-    }
-
     //Comparison method
     public int compareTo(ResultEvent event) {
         if (this.getEventDate() < event.getEventDate()) return -1;
@@ -70,7 +66,6 @@ public class ResultEvent implements Comparable<ResultEvent>, Serializable{
 
     @Override
     public String toString() {
-        return "Event from "+this.getAgentType()+" "+this.getAgentId()+" - "+this.getEventType()+" at "+this.getEventDate()
-                + " (Request ID : " + reqId + ")";
+        return "Event from "+this.getAgentType()+" "+this.getAgentId()+" - "+this.getEventType()+" at "+this.getEventDate();
     }
 }
