@@ -9,6 +9,7 @@ import datas.AgentType;
 import datas.EventType;
 import datas.ResultEvent;
 import datas.ResultSet;
+import datas.ResultSimulationEvent;
 import java.util.Date;
 
 /**
@@ -46,14 +47,14 @@ public class ResultsLogger {
             throw new Exception("The simulation start date was not saved");
         }
 
-        ResultEvent currentEvent = new ResultEvent();
+        ResultSimulationEvent currentEvent = new ResultSimulationEvent();
         currentEvent.setAgentId(agentID);
         currentEvent.setAgentType(agent);
         // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         Date now = new Date();
         currentEvent.setEventDate(now.getTime() - startDate.getTime());
         currentEvent.setEventType(event);
-        currentEvent.setReqId(reqId);
+        currentEvent.setRequestId(reqId);
 
         //add in list of events
         resultSet.addEvent(currentEvent);
