@@ -12,8 +12,8 @@ import interfaces.MonitoringMessageListener;
 import java.io.Serializable;
 
 /**
- *
- * @author bambaLamine
+ * The AgentMessageHandler runs a two-way interface to communicate with the Agents, through a JMS server.
+ * It needs 2 JMS topics named : "config" and "results"
  */
 public class AgentMessageHandler implements MonitoringMessageHandler, Runnable {
 
@@ -23,10 +23,11 @@ public class AgentMessageHandler implements MonitoringMessageHandler, Runnable {
 
     /**
      * Returns an instance of a JMSHandler, then start a listening thread for JMS messages
+     * @param agentId the receiver agentId. This id should fit the curren agentId for the message to be interpreted.
      */
     public AgentMessageHandler(String agentId) {
         this.agentId = agentId;
-        jms = new JMSEntity(DestinationName.CONNECTION_FACTORY, DestinationName.RESULTS_DESTINATION, DestinationName.CONFIG_DESTINATION);
+        jms = new JMSEntity(JMSEntity.CONNECTION_FACTORY, JMSEntity.RESULTS_DESTINATION, JMSEntity.CONFIG_DESTINATION);
     }
 
     /**
@@ -42,7 +43,7 @@ public class AgentMessageHandler implements MonitoringMessageHandler, Runnable {
     // -------------------------------
     /**
      * Send a configuration done message to the master
-     * @param agentId
+     * @param agentId The sending agent Id.
      */
     public void configurationDone(String agentId) {
         jms.send(new ConfigDoneJMSMessage(agentId));
@@ -63,6 +64,8 @@ public class AgentMessageHandler implements MonitoringMessageHandler, Runnable {
 
     /**
      * Sends a message to the master notifying that a fatal error occured
+     * @param agentId The sending agent Id.
+     * @param message The error message
      */
     public void fatalErrorOccured(String agentId, String message) {
         //TODO JMS: Envoyer le message JMS au master pour indiquer que la simulation n'a pu être terminée
@@ -74,16 +77,10 @@ public class AgentMessageHandler implements MonitoringMessageHandler, Runnable {
      */
     public void run() {
         //TODO JMS : Ecouter les messages et les envoie au MasterController avec :
-
         while (true) {
-
             Serializable message;
             message = jms.receive();
-            //TODO JMS: Créer un thread en écoute des messages JMS. En fonction de ceux-ci, prévenir le controller à l'aide de :
-            //listener.configurationMessage(config, config);
-            //listener.startMessage()
-            //listener.abortMessage()
-            //listener.endMessage()
+            
             if (((JMSAddressedMessage) message).getReceiver().equals(this.agentId)) {
                 if (message instanceof ConfigJMSMessage) {
                     //System.out.println("JMSHandler: Received a configJMSMessage");

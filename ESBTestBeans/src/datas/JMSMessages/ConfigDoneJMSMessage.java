@@ -2,16 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package datas.JMSMessages;
 
 import java.io.Serializable;
 
 /**
- *
- * @author Adrien
+ * A JMS message sent by an agent to specify that a donfiguration is done.
  */
-public class ConfigDoneJMSMessage implements Serializable{
+public class ConfigDoneJMSMessage implements Serializable {
+
     private String agentId;
 
     /**
@@ -37,6 +36,4 @@ public class ConfigDoneJMSMessage implements Serializable{
     public void setAgentId(String agentId) {
         this.agentId = agentId;
     }
-
-
 }

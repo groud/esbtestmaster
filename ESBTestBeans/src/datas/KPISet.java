@@ -1,49 +1,69 @@
 package datas;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 /**
- *
- * @author gilles
+ * Describes a set of Key Perforamance Indicators.
  */
 public class KPISet {
     private HashMap<String,Integer> numberOfRequestSent;
     private HashMap<String,Integer> numberOfRequestLost;
     private HashMap<String, Long> averageResponseTime;
 
+    /**
+     * Returns a hashmap containing the average respose time indexed by consumers ids.
+     * @return The Hashmap
+     */
     public HashMap<String, Long> getAverageResponseTime() {
         return averageResponseTime;
     }
 
+    /**
+     * Set the average response time.
+     * @param averageResponseTime A hashmap containing the average respose time indexed by consumers ids
+     */
     public void setAverageResponseTime(HashMap<String, Long> averageResponseTime) {
         this.averageResponseTime = averageResponseTime;
     }
 
+    /**
+     * Returns a hashmap containing the number of requests lost indexed by consumers ids.
+     * @return The hashmap
+     */
     public HashMap<String, Integer> getNumberOfRequestLost() {
         return numberOfRequestLost;
     }
 
+    /**
+     * Set the number of requests lost.
+     * @param numberOfRequestLost A hashmap containing the number of requests lost indexed by consumers ids.
+     */
     public void setNumberOfRequestLost(HashMap<String, Integer> numberOfRequestLost) {
         this.numberOfRequestLost = numberOfRequestLost;
     }
 
+    /**
+     * Get an hashmap containing the number of requests sent indexed by consumers ids.
+     * @return The hashmap
+     */
     public HashMap<String, Integer> getNumberOfRequestSent() {
         return numberOfRequestSent;
     }
 
+    /**
+     * Set the number of requests sent
+     * @param numberOfRequestSent A hashmap containing the number of requests sent indexed by consumers ids.
+     */
     public void setNumberOfRequestSent(HashMap<String, Integer> numberOfRequestSent) {
         this.numberOfRequestSent = numberOfRequestSent;
     }
 
+    /**
+     * Returns a String representation of this object.
+     * @return
+     */
     @Override
     public String toString(){
         String resultat = new String("");

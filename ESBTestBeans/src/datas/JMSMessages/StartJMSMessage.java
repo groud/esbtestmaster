@@ -1,15 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package datas.JMSMessages;
 
-import java.io.Serializable;
-
 /**
- *
- * @author BambaLamine
+ * A JMS to ask an agent to start the simulation
  */
 public class StartJMSMessage extends JMSAddressedMessage {
 

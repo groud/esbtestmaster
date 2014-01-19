@@ -16,8 +16,9 @@ import javax.servlet.ServletContextEvent;
 import simulation.*;
 
 /**
- *
- * @author BambaLamine
+ * This is the main controller for the client side.
+ * It instanciates the diffents interfaces and components of the application.
+ * It is a stateful component.
  */
 public class AgentController implements MonitoringMessageListener, SimulationMessageListener, javax.servlet.ServletContextListener {
 
@@ -27,8 +28,12 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
 
     private String agentId;
 
+
+    // -------------------------------
+    //   INTERFACES IMPLEMENTATIONS
+    // -------------------------------
     /**
-     * Asks the simulationEntity to start the simulation
+     * Starts the simulation
      */
     public void startSimulationMessage() {
         System.out.println("-- "+ agentId + " starting --");
@@ -36,7 +41,7 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
     }
 
     /**
-     * Asks the simulationEntity to abort the simulation
+     * Abort the simulation
      */
     public void abortSimulationMessage() {
         System.out.println("-- "+ agentId + " aborting --");
@@ -44,7 +49,7 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
     }
 
     /**
-     * Asks to the simulationEntity (configured as a producer) to end the simulation
+     * Ends the simulation
      */
     public void endSimulationMessage() {
         System.out.println("-- "+ agentId + " stopping --");
@@ -54,7 +59,9 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
     }
 
     /**
-     * Configure the simulationEntity
+     * Configures the simulation
+     * @param receiverAgent The AgeneConfiguration corresponding to this agent.
+     * @param simulationScenario The full simulation scenario
      */
     public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
         //On crée une simulationEntity correspondant à la configuration reçue
@@ -85,7 +92,7 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
     }
 
     /**
-     * Send the simulation results to the master
+     * Sends the simulation results to the master
      * @param resultSet
      */
     public void simulationDone(ResultSet resultSet) {
@@ -100,6 +107,11 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
         msgHandler.fatalErrorOccured(this.agentId, message);
     }
 
+    /**
+     * This method is called when the web app context is initialized.
+     * It creates the JMS monitoring messages handler then run it.
+     * @param sce
+     */
     public void contextInitialized(ServletContextEvent sce) {
        this.agentId = sce.getServletContext().getContextPath().substring(1);
        msgHandler = new AgentMessageHandler(this.agentId);
@@ -111,6 +123,11 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
        System.out.println("-- Agent started with id : "+this.agentId+" --");
     }
 
+    /**
+     * This method is called when the web app context is destroyed.
+     * Kills the remaining threads.
+     * @param sce
+     */
     public void contextDestroyed(ServletContextEvent sce) {
         jmsThread.stop();
         System.out.println("-- Agent stopped --");

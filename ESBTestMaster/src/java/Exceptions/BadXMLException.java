@@ -6,8 +6,7 @@
 package Exceptions;
 
 /**
- *
- * @author gilles
+ * When an XML File does not fit the requirements, this exception should be thrown.
  */
 public class BadXMLException extends Exception {
 

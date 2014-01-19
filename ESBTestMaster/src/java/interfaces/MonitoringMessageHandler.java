@@ -6,12 +6,10 @@
 package interfaces;
 
 import datas.AgentConfiguration;
-import datas.ProducerConfiguration;
 import datas.SimulationScenario;
 
 /**
- *
- * @author gilles
+ * MonitoringMessageHandler
  */
 public interface MonitoringMessageHandler {
     public void startSimulationMessage(String receiver);

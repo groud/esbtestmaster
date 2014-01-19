@@ -8,8 +8,7 @@ package interfaces;
 import datas.SimulationScenario;
 
 /**
- *
- * @author gilles
+ * UserOutputsInterface
  */
 public interface UserOutputsInterface {
     public void displayErrorMessage(String msg);

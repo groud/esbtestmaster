@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package simulation;
 
 import interfaces.ProducerWSListener;
@@ -14,23 +9,23 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 
 /**
- *
- * @author samy
+ * The SimulationWS responds with dummy data.
+ * It can notify a ProducerWSListener about request received and responses sent.
+ * When a request is received, it
  */
-
-
 @WebService()
 public class SimulationWS {
     private static ProducerWSListener listener;
 
     /**
-     * Note : processing time = respTime + time to create the response
-     * 
-     * @param agentId of agent : which should be a producer
-     * @param requestData : dummy data -> do not read
-     * @param respTime : fake processing time (ms) before sending the response
-     * @param respSize : response size in bytes
-     * @return
+     * Dummy request.
+     * Waits the request time before sending the response.
+     * The response payload has also to be specified.
+     * @param The agent identifyer (should be a producer identifiyer).
+     * @param Dummy data (This data is not used, but this size is important to qualify the ESB).
+     * @param Fake processing time (ms) before sending the response.
+     * @param Response size in bytes
+     * @return A fake response (or eventully an error messages)
      */
     @WebMethod(operationName = "requestOperation")
     public String requestOperation(@WebParam(name = "agentId")

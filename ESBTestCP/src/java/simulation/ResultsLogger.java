@@ -1,20 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package simulation;
 
 import datas.AgentType;
 import datas.EventType;
-import datas.ResultEvent;
 import datas.ResultSet;
 import datas.ResultSimulationEvent;
 import java.util.Date;
 
 /**
- *
- * @author samy
+ * The result logger is able to log event as a set of events.
+ * It uses RAM storage using a ResultSet object.
+ * Be careful with big simulation, this could trigger out of meomry issues.
  */
 public class ResultsLogger {
     private ResultSet resultSet;
@@ -22,15 +17,16 @@ public class ResultsLogger {
     private String agentID;
 
     /**
-     *create a ResultSet to save simulation events, and attribute a agent id to this resultsLogger
-     * @param agentID, ID of the local agent logging the results
+     * Return a ResultSet instance.
+     * @param The agent identifier.
      */
     public ResultsLogger(String agentID) {
         resultSet = new ResultSet();
         this.agentID = agentID;
     }
+    
      /**
-      * set simulation start date
+      * Sets simulation start date
       * @param date
       */
     public void setStartDate(Date date) {
@@ -39,32 +35,30 @@ public class ResultsLogger {
 
     /**
      * Logs a simulation event
-     * @param agent
-     * @param event
+     * @param agent The agent type (ex: CONSUMER, PROVIDER, ...)
+     * @param event The event type (ex: REQUEST_SENT, REQUEST_RECEIVED ...)
      */
-    public void writeSimulationEvent(int reqId, AgentType agent, EventType event) throws Exception {
+    public void writeSimulationEvent(int reqId, AgentType agentType, EventType eventType) throws Exception {
         if(startDate == null) {
             throw new Exception("The simulation start date was not saved");
         }
 
         ResultSimulationEvent currentEvent = new ResultSimulationEvent();
         currentEvent.setAgentId(agentID);
-        currentEvent.setAgentType(agent);
+        currentEvent.setAgentType(agentType);
+
         // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         Date now = new Date();
         currentEvent.setEventDate(now.getTime() - startDate.getTime());
-        currentEvent.setEventType(event);
+        currentEvent.setEventType(eventType);
         currentEvent.setRequestId(reqId);
 
-        //add in list of events
+        // Adds in list of events
         resultSet.addEvent(currentEvent);
 
-        //*************************
-        //TODO : write results to file after X events and clear ResultSet
-        //*************************
     }
     /**
-     * grab resultSet
+     * Returns the result set
      * @return ResultSet
      */
     public ResultSet getResultSet() {

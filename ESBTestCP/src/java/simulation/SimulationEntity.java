@@ -1,20 +1,18 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package simulation;
 
 import interfaces.SimulationMessageListener;
 
 /**
- *
- * @author root
+ * A SimulationEntity is responsible for the behaviour of an agent
  */
 public abstract class SimulationEntity {
     private String id;
+    protected ResultsLogger logger;
+    
     SimulationMessageListener listener;
 
     public SimulationEntity(String id) {
+        logger = new ResultsLogger(id);
         this.id = id;
     }
 

@@ -6,8 +6,7 @@
 package interfaces;
 
 /**
- *
- * @author gilles
+ * UserInputsListener
  */
 public interface UserInputsListener {
     public void startSimulation(String resultsFilename);

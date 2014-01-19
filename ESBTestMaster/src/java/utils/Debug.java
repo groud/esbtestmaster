@@ -6,8 +6,8 @@
 package utils;
 
 /**
- *
- * @author gilles
+ * Debug is useful to display debugging information when it is activated.
+ * It does displays messages using the console
  */
 public class Debug {
     static private boolean activated = false;

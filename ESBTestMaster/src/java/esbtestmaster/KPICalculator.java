@@ -1,31 +1,19 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package esbtestmaster;
 
-import Exceptions.BadXMLException;
 import datas.*;
 import interfaces.KPICalculatorInterface;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedSet;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.Namespace;
-import org.jdom2.input.SAXBuilder;
 import org.jdom2.*;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 /**
- *
- * @author gilles
+ * This KPICalculators is a tool to calculate and manipulate KPIs from a ResultSet.
  */
 public class KPICalculator implements KPICalculatorInterface {
 
@@ -35,7 +23,7 @@ public class KPICalculator implements KPICalculatorInterface {
     // -------------------------------
 
     /**
-     * Calculates a KPISet from a result file.
+     * Calculates a KPISet from a result set.
      * @param filename
      * @return
      */

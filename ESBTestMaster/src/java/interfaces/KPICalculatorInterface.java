@@ -9,8 +9,7 @@ import datas.ResultSet;
 import java.io.IOException;
 
 /**
- *
- * @author bamba
+ * KPICalculatorInterface
  */
 public interface KPICalculatorInterface {
     public KPISet calculateKPI(ResultSet resultSet);

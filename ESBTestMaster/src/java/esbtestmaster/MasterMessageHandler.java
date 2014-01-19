@@ -11,17 +11,20 @@ import interfaces.*;
 import java.io.Serializable;
 
 /**
- *
- * @author gilles
+ * The MasterMessageHandler runs a two-way interface to communicate with the Agents, through a JMS server.
+ * It needs 2 JMS topics named : "config" and "results"
  */
 public class MasterMessageHandler implements MonitoringMessageHandler, Runnable {
 
     MonitoringMsgListener mmListener;
     private JMSEntity jms;
 
+    /**
+     * Returns a MasterMessageHandler.
+     * @param mmListener A listener that will be notified when a JMS message is received.
+     */
     public MasterMessageHandler(MonitoringMsgListener mmListener) {
-        jms = new JMSEntity(DestinationName.CONNECTION_FACTORY, DestinationName.CONFIG_DESTINATION, DestinationName.RESULTS_DESTINATION);
-
+        jms = new JMSEntity(JMSEntity.CONNECTION_FACTORY, JMSEntity.CONFIG_DESTINATION, JMSEntity.RESULTS_DESTINATION);
         this.mmListener = mmListener;
     }
 
@@ -37,7 +40,7 @@ public class MasterMessageHandler implements MonitoringMessageHandler, Runnable 
     //   INTERFACES IMPLEMENTATIONS
     // -------------------------------
     /**
-     * Asks an agent to start the simulation
+     * Asks an agent to start the simulation, using a JMS message
      * @param receiverAgent
      */
     public void startSimulationMessage(String receiverId) {
@@ -47,7 +50,7 @@ public class MasterMessageHandler implements MonitoringMessageHandler, Runnable 
     }
 
     /**
-     * Asks an agent to abort the simulation
+     * Asks an agent to abort the simulation, using a JMS message
      * @param receiverAgent
      */
     public void abortSimulationMessage(String receiverId) {
@@ -57,7 +60,7 @@ public class MasterMessageHandler implements MonitoringMessageHandler, Runnable 
     }
 
     /**
-     * Sends a message to a producer notifying that the simulation is over.
+     * Notify a producer that the simulation is over, using a JMS message.
      * The producer should then send it results.
      * @param receiverAgent
      */
@@ -69,7 +72,7 @@ public class MasterMessageHandler implements MonitoringMessageHandler, Runnable 
     }
 
     /**
-     * Asks an agent to self configure withthe given AgentConfiguration
+     * Asks an agent to self configure with the given AgentConfiguration, using a JMS message.
      * @param receiverAgent
      * @param simulationScenario
      */

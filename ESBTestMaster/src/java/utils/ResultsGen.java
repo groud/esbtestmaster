@@ -10,6 +10,11 @@ import java.util.Random;
 import java.util.Scanner;
 
 
+
+/**
+ * Uselful to generate fake result files.
+ * @author root
+ */
 public class ResultsGen {
 
 	/**

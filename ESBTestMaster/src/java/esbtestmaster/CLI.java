@@ -14,7 +14,11 @@ import org.naturalcli.commands.HelpCommand;
 import utils.Debug;
 
 /**
+ * CLI is a command line interface. It emulates the behaviour of a terminal.
+ * It's a two-way interface, you can use its notification methods to notify the user about what happened during the simulation.
+ * When a command is entered, the listener is notified.
  *
+ * The command line can started with launch().
  * @author root
  */
 public class CLI implements UserOutputsInterface {

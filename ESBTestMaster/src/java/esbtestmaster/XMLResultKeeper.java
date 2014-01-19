@@ -23,8 +23,8 @@ import org.jdom2.output.XMLOutputter;
 import utils.Debug;
 
 /**
- *
- * @author gilles
+ * The XMLResultKeeper is a result logger.
+ * When the simulation is done for one agent, the received log should be added using the addLog(ResultSet resultSet) method.
  */
 public class XMLResultKeeper implements ResultKeeperInterface {
 
@@ -32,6 +32,11 @@ public class XMLResultKeeper implements ResultKeeperInterface {
 
     private String XMLfilename;
 
+    /**
+     * Returns and init a XMLResultKeeper
+     * @param filename
+     * @throws IOException
+     */
     public XMLResultKeeper(String filename) throws IOException {
         this.XMLfilename = filename;
         this.init();
@@ -181,6 +186,7 @@ public class XMLResultKeeper implements ResultKeeperInterface {
     }
 
     /**
+     * //TODO : create a unit test instead
      * Un test
      * @param args
      */

@@ -1,13 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package simulation;
 
-import com.sun.xml.ws.client.ClientTransportException;
 import java.util.*;
 import datas.*;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -17,8 +11,9 @@ import java.util.logging.Logger;
 import javax.xml.ws.BindingProvider;
 
 /**
- *
- * @author mariata
+ * The ConsumerEntity is resposible for running the simulation as a consumer.
+ * It uses a ResultLogger to log events.
+ * It start a simuation according to a scenario, contacting provider at scheduled dates.
  */
 public class ConsumerEntity extends SimulationEntity {
     // time in ms to wait for all the timers to be set
@@ -33,7 +28,6 @@ public class ConsumerEntity extends SimulationEntity {
     private SimulationScenario simulationScenario = null;
     private Hashtable<String, AgentConfiguration> hashAgentsConf;
     private Date startDate; //Simulation start date
-    private ResultsLogger logger;
     private int nbSteps;    // number of steps in the scenario
     private simulationRef.SimulationWSService wsService;
     private simulationRef.SimulationWS wsPort;
@@ -41,16 +35,19 @@ public class ConsumerEntity extends SimulationEntity {
     // Use incrementReqId() and getReqId()
     private volatile int reqId = 0;
 
+    /**
+     * Returns and initilize a ConsumerEntity instance.
+     * @param agentId The agent identifiyer
+     */
     public ConsumerEntity(String agentId) {
         super(agentId);
-        logger = new ResultsLogger(this.getid());
         wsService = new simulationRef.SimulationWSService();
         wsPort = wsService.getSimulationWSPort();
     }
 
     /**
      * Configure the simulation scenario     
-     * @param simulationScenario
+     * @param simulationScenario The configuration scenario
      */
     public void configureConsumer(SimulationScenario simulationScenario) {
         this.simulationScenario = simulationScenario;
@@ -59,31 +56,30 @@ public class ConsumerEntity extends SimulationEntity {
     }
 
     /**
-     * Starts the simulation (non-blocking)
+     * Starts the simulation, by sending asynchronous requests.
+     * It follows step by step the scenario provided, sending bursts of requests according to its parameters.
+     * Uses a ResultsLogger to log the events (requests sent and responses received)
      */
     //TODO : exit if there is an error
     @Override
     public void startSimulation() {
-        scheduler =
-                Executors.newScheduledThreadPool(THREAD_POOL_NB);
+        scheduler = Executors.newScheduledThreadPool(THREAD_POOL_NB);
         SimulationStep step;
         int i;
 
-
+        //Exectute the simulation step by step
         for (i = 0; i < nbSteps; i++) {
             long taskDelay;
             int nbRequests = 0;
             Date stepStartDate;
             step = simulationScenario.getSteps().get(i);
 
-            // parameters for the scheduledExecutor run() method
+            // Parameters for the scheduledExecutor run() method
             final String destId = step.getDestID();
             final String wsUrl = ((ProducerConfiguration) hashAgentsConf.get(destId)).getWsAddress();
             final int reqPayloadSize = step.getRequestPayloadSize();
             final long processTime = step.getProcessTime();
             final int respPayloadSize = step.getResponsePayloadSize();
-            final int currentStepNb = i;
-            //final int nbReqToSend =
 
             // duration converted in seconds from ms
             double stepDuration = (double) step.getBurstDuration() / 1000.0;
@@ -95,6 +91,7 @@ public class ConsumerEntity extends SimulationEntity {
             if (nbRequests <= 0) {
                 nbRequests = 0;
             }
+
             //interval between two request in ms
             long period = (long) ((stepDuration / (float) nbRequests) * 1000);
 
@@ -110,38 +107,29 @@ public class ConsumerEntity extends SimulationEntity {
                 int nbReqSent = 0;
 
                 public void run() {
+                    //Log the event
                     try {
                         logger.writeSimulationEvent(getReqId(), AgentType.CONSUMER, EventType.REQUEST_SENT);
                     } catch (Exception ex) {
                         Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
+                    //Send the request
                     sendAsyncRequest(wsUrl, destId, getReqId(), reqPayloadSize, processTime, respPayloadSize);
                     incrementReqId(); // synchronized method
                     nbReqSent++;
-
-                    /* Not an efficient way to do this
-                    // If this is the last step
-                    if(currentStepNb == nbRequests -1) {
-                    if(nbReqSent == n) {
-                    listener.simulationDone(logger.getResultSet());
-                    }
-                    }
-                     * */
                 }
             };
-            // schedule the task
+            // Schedule the task
             taskDelay = stepStartDate.getTime() - System.currentTimeMillis();
 
             // Schedule the periodic task of sending requests
-            final ScheduledFuture<?> stepTaskHandle =
-                    scheduler.scheduleAtFixedRate(stepTask, taskDelay, period, TimeUnit.MILLISECONDS);
+            final ScheduledFuture<?> stepTaskHandle = scheduler.scheduleAtFixedRate(stepTask, taskDelay, period, TimeUnit.MILLISECONDS);
             System.out.println("task period :" + period);
 
 
             // Start the periodic task to send requests
             scheduler.schedule(new Runnable() {
-
                 public void run() {
                     stepTaskHandle.cancel(true);
                     System.out.println("step task done");
@@ -178,7 +166,7 @@ public class ConsumerEntity extends SimulationEntity {
     }
 
     /**
-     * Abort the simulation
+     * Aborts the simulation
      */
     @Override
     public void abortSimulation() {
@@ -191,7 +179,7 @@ public class ConsumerEntity extends SimulationEntity {
     /**
      * Get an hashtable of agentconfiguration indexed by agents ids.
      * Used to find a WS address corresponding to an ID.
-     * @return
+     * @return The hashtable
      */
     private Hashtable<String, AgentConfiguration> initializeAgentsTable() {
         Hashtable<String, AgentConfiguration> hashtable = new Hashtable<String, AgentConfiguration>();
@@ -201,10 +189,17 @@ public class ConsumerEntity extends SimulationEntity {
         return hashtable;
     }
 
+    /**
+     * Increments the request id counter
+     */
     synchronized private void incrementReqId() {
         reqId++;
     }
 
+    /**
+     * Returns the current request id counter
+     * @return
+     */
     synchronized private int getReqId() {
         return reqId;
     }
@@ -225,12 +220,12 @@ public class ConsumerEntity extends SimulationEntity {
             // Dynamic WS addressing
             ((BindingProvider) wsPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsAddress);
 
+            //
             javax.xml.ws.AsyncHandler<simulationRef.RequestOperationResponse> asyncHandler = new javax.xml.ws.AsyncHandler<simulationRef.RequestOperationResponse>() {
-
                 public void handleResponse(javax.xml.ws.Response<simulationRef.RequestOperationResponse> response) {
                     try {
                         String ret = response.get().getReturn();
-                        logger.writeSimulationEvent(finalReqId, AgentType.CONSUMER, EventType.NOT_FOUND_ERR);
+                        logger.writeSimulationEvent(finalReqId, AgentType.CONSUMER, EventType.REQUEST_RECEIVED);
                     } catch (Exception ex) {
                         Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
                         try {
@@ -247,10 +242,14 @@ public class ConsumerEntity extends SimulationEntity {
             // Call web service asynchronously (callback)
             java.util.concurrent.Future<? extends java.lang.Object> callBackResult = wsPort.requestOperationAsync(producerId, requestId, requestData, processTime, respPayloadSize, asyncHandler);
         } catch (Exception ex) {
-            // TODO handle custom exceptions here
+            ex.printStackTrace(System.err);
         }
     }
 
+    /**
+     * Returns the event logger
+     * @return The event logger
+     */
     public ResultsLogger getLogger() {
         return logger;
     }

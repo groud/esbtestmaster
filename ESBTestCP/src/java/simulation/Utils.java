@@ -8,12 +8,11 @@ package simulation;
 import java.util.Arrays;
 
 /**
- *
- * @author samy
+ * This class provides miscellanous tools
  */
 public class Utils {
     /**
-     * get a dummy string
+     * Get a dummy string
      * @param size
      * @param character
      * @return  string

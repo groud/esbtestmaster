@@ -16,8 +16,7 @@ import org.jdom2.input.sax.XMLReaders;
 import utils.Debug;
 
 /**
- *
- * @author gilles
+ * The scenarioReader provides a simple interface to read XML scenario defining files.
  */
 public class ScenarioReader implements ScenarioReaderInterface {
     // -------------------------------

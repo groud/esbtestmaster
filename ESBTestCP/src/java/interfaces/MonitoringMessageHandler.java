@@ -11,8 +11,7 @@ import datas.ResultSet;
 
 
 /**
- *
- * @author root
+ * MonitoringMessageHandler
  */
 public interface MonitoringMessageHandler {
     public void simulationDone(String agentId, ResultSet resultSet);

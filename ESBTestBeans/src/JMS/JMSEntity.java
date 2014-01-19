@@ -4,16 +4,16 @@ import java.io.Serializable;
 import javax.jms.*;
 import javax.naming.*;
 
-
 /**
- *
- * @author Adrien
+ * Generic JMS handler.
+ * The JMSEntity is able to send serializable objects using JMS. It needs
+ * Works with both queue and topic, the choice come from the object in JNDI
  */
-
-  //generic JMS handler
-  //works with both queue and topic, the choice come from the object in JNDI
-
 public class JMSEntity {
+
+    public static String CONNECTION_FACTORY = "TopicConnectionFactory";
+    public static String CONFIG_DESTINATION = "config";
+    public static String RESULTS_DESTINATION = "results";
 
     private Context context = null;
     private ConnectionFactory factory = null;
@@ -26,6 +26,12 @@ public class JMSEntity {
     private MessageConsumer receiver = null;
 
 
+    /**
+     * Return and init a JMSEntity instance.
+     * @param connectionFactory The connection factory identifier.
+     * @param destinationOut The topic/queue identifier used to send messages.
+     * @param destinationIn The topic/queue identifier used to receive messages.
+     */
     public JMSEntity(String connectionFactory, String destinationOut, String destinationIn) {
         try {
             //To get to JNDI context

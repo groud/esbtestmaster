@@ -1,76 +1,73 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package simulation;
 
 import datas.*;
 import interfaces.ProducerWSListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
- * @author mariata
+ * The ProduceEntity is resposible for running the simulation as a producer.
+ * It uses a ResultLogger to log events, listening to a web service class (SimulationWS)
  */
 public class ProducerEntity extends SimulationEntity implements ProducerWSListener {
-
-    private ResultSet resultSet;
     private boolean simulationDone = true;
 
+    /**
+     * Returns a ProducerEntity instance
+     * @param agentId
+     */
     public ProducerEntity(String agentId) {
         super(agentId);
     }
 
     /**
-     * Start the simulation
+     * Starts the simulation
      */
     public void startSimulation() {
-        resultSet = new ResultSet();
         SimulationWS.setListener(this);
         simulationDone = false;
     }
 
     /**
-     * Abort the simulation
+     * Aborts the simulation
      */
     public void abortSimulation() {
         simulationDone = true;
     }
 
     /**
-     * End the simulation and send the results
+     * Ends the simulation, forcig the ProducerEntity to send the results
      */
     public void endOfSimulation() {
         simulationDone = true;
-        listener.simulationDone(resultSet);
+        listener.simulationDone(logger.getResultSet());
     }
 
     /**
-     * Log a requestReceived event
+     * Logs a requestReceived event
      * @param requestId
      */
     public void requestReceived(int requestId, String requestData, long respTime, int respSize) {
-        if(!simulationDone) {
-            ResultSimulationEvent event = new ResultSimulationEvent();
-            event.setAgentId(this.getid());
-            event.setAgentType(AgentType.PRODUCER);
-            event.setEventDate(0);//TODO Modify to the real date
-            event.setEventType(EventType.REQUEST_RECEIVED);
-            resultSet.getEvents().add(event);
+        if (!simulationDone) {
+            try {
+                logger.writeSimulationEvent(requestId, AgentType.PRODUCER, EventType.REQUEST_RECEIVED);
+            } catch (Exception ex) {
+                Logger.getLogger(ProducerEntity.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
     /**
-     * Log a responseSent event
+     * Logs a responseSent event
      * @param requestId
      */
     public void responseSent(int requestId) {
-        if(!simulationDone) {
-            ResultSimulationEvent event = new ResultSimulationEvent();
-            event.setAgentId(this.getid());
-            event.setAgentType(AgentType.PRODUCER);
-            event.setEventDate(0);//TODO Modify to the real date
-            event.setEventType(EventType.RESPONSE_SENT);
-            resultSet.getEvents().add(event);
+        if (!simulationDone) {
+            try {
+                logger.writeSimulationEvent(requestId, AgentType.PRODUCER, EventType.RESPONSE_SENT);
+            } catch (Exception ex) {
+                Logger.getLogger(ProducerEntity.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }

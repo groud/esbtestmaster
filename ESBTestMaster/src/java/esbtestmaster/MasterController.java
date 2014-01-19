@@ -14,8 +14,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- *
- * @author gilles
+ * This is the main controller for the master side.
+ * It instanciates the diffents interfaces and components of the application.
+ * It is a stateful component.
  */
 public class MasterController implements UserInputsListener, MonitoringMsgListener {
 
@@ -32,7 +33,9 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
     private boolean configDone;
 
     /**
-     * Returns an instance of a master controller then start it.
+     * Returns an instance of a master controller. Then starts :
+     * - the command line interface
+     * - the monitoring messages handler
      */
     public MasterController() {
         //We instanciate the different components.
@@ -51,13 +54,16 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
     }
 
     /**
-     * Clear the simuation state
+     * Clears the simuation state
      */
     private void clearSimulationState() {
         finishedMap = new HashMap<String, Boolean>();
         this.consumersTerminated = false;
     }
 
+    /**
+     * Clears the configuration state
+     */
     private void clearConfigurationState() {
         finishedConfigMap = new HashMap<String, Boolean>();
         this.configDone = false;
@@ -230,6 +236,10 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
         }
     }
 
+    /**
+     * This method should be called when an agent is done with its configuration.
+     * @param agentID
+     */
     public void configurationDoneForOneAgent(String agentID) {
         if (finishedConfigMap.get(agentID) != true) {
             finishedConfigMap.put(agentID, true);
@@ -247,7 +257,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
     }
 
     /**
-     * Notify an agent that an error occured to an agent.
+     * This method should be called when an agent failed to run properly
      * @param agentID
      * @param msg
      */
