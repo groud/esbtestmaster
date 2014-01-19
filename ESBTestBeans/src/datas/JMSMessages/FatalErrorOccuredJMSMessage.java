@@ -6,6 +6,7 @@ import java.io.Serializable;
  * A JMS message used to notify the master that an error occured.
  */
 public class FatalErrorOccuredJMSMessage implements Serializable {
+
     private String agentId;
     private String message;
 
@@ -50,5 +51,4 @@ public class FatalErrorOccuredJMSMessage implements Serializable {
     public String getMessage() {
         return message;
     }
-
 }

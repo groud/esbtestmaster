@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package esbtestmaster;
 
 import Exceptions.BadXMLException;
@@ -29,7 +25,6 @@ import utils.Debug;
 public class XMLResultKeeper implements ResultKeeperInterface {
 
     public static final String XSD_RESULTS = "XSD/results.xsd";
-
     private String XMLfilename;
 
     /**
@@ -72,7 +67,7 @@ public class XMLResultKeeper implements ResultKeeperInterface {
             if (xmlFile.exists()) {
                 FileInputStream fis = new FileInputStream(xmlFile);
                 SAXBuilder builder = new SAXBuilder();//XMLReaders.XSDVALIDATING);
-                
+
                 // parse the xml content provided by the file input stream and create a Document object
                 document = (Document) builder.build(xmlFile);
 
@@ -83,11 +78,11 @@ public class XMLResultKeeper implements ResultKeeperInterface {
                 // if it does not exist create a new document and new root
                 document = new Document();
                 root = new Element("results");
-                Namespace ns = Namespace.getNamespace("xsi","http://www.w3.org/2001/XMLSchema-instance");
+                Namespace ns = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
                 root.addNamespaceDeclaration(ns);
                 root.removeNamespaceDeclaration(ns);
                 //root.
-                root.setAttribute("noNamespaceSchemaLocation",XSD_RESULTS,ns);
+                root.setAttribute("noNamespaceSchemaLocation", XSD_RESULTS, ns);
             }
 
             //Add the resultset to the document
@@ -205,5 +200,4 @@ public class XMLResultKeeper implements ResultKeeperInterface {
         }
 
     }
-
 }

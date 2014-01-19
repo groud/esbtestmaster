@@ -1,8 +1,10 @@
 package datas;
+
 /**
  * Describes an event than will be used to follow request and responses events.
  */
 public class ResultSimulationEvent extends ResultEvent {
+
     private int requestId;
 
     /**
@@ -27,6 +29,6 @@ public class ResultSimulationEvent extends ResultEvent {
      */
     @Override
     public String toString() {
-        return "Event from "+this.getAgentType()+" "+this.getAgentId()+" - "+this.getEventType()+" at "+this.getEventDate()+" (RequestId="+this.getRequestId()+")";
+        return "Event from " + this.getAgentType() + " " + this.getAgentId() + " - " + this.getEventType() + " at " + this.getEventDate() + " (RequestId=" + this.getRequestId() + ")";
     }
 }

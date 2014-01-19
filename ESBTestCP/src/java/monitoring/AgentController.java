@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-// EN stand by, en attente du JMs
 package monitoring;
 
 import datas.AgentConfiguration;
@@ -25,9 +20,7 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
     private SimulationEntity simulationEntity;
     private AgentMessageHandler msgHandler;
     private Thread jmsThread;
-
     private String agentId;
-
 
     // -------------------------------
     //   INTERFACES IMPLEMENTATIONS
@@ -36,7 +29,7 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      * Starts the simulation
      */
     public void startSimulationMessage() {
-        System.out.println("-- "+ agentId + " starting --");
+        System.out.println("-- " + agentId + " starting --");
         simulationEntity.startSimulation();
     }
 
@@ -44,7 +37,7 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      * Abort the simulation
      */
     public void abortSimulationMessage() {
-        System.out.println("-- "+ agentId + " aborting --");
+        System.out.println("-- " + agentId + " aborting --");
         simulationEntity.abortSimulation();
     }
 
@@ -52,10 +45,10 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      * Ends the simulation
      */
     public void endSimulationMessage() {
-        System.out.println("-- "+ agentId + " stopping --");
+        System.out.println("-- " + agentId + " stopping --");
         if (simulationEntity instanceof ProducerEntity) {
-            ((ProducerEntity)simulationEntity).endOfSimulation();
-        } 
+            ((ProducerEntity) simulationEntity).endOfSimulation();
+        }
     }
 
     /**
@@ -65,7 +58,7 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      */
     public void configurationMessage(AgentConfiguration receiverAgent, SimulationScenario simulationScenario) {
         //On crée une simulationEntity correspondant à la configuration reçue
-        System.out.println("-- "+ agentId + " received a configuration message --");
+        System.out.println("-- " + agentId + " received a configuration message --");
         //System.out.println("Id : "+receiverAgent.getAgentId());
         //System.out.println("WS address: "+ receiverAgent.getWsAddress());
         if (this.agentId.equals(receiverAgent.getAgentId())) {
@@ -85,9 +78,8 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
     /**
      * Notifies the master that the configuration is done. 
      */
-    public void configurationDone()
-    {
-        System.out.println("-- "+ agentId + " configuration done --");
+    public void configurationDone() {
+        System.out.println("-- " + agentId + " configuration done --");
         msgHandler.configurationDone(this.agentId);
     }
 
@@ -96,7 +88,7 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      * @param resultSet
      */
     public void simulationDone(ResultSet resultSet) {
-        System.out.println("-- "+ agentId + " simulation done --");
+        System.out.println("-- " + agentId + " simulation done --");
         msgHandler.simulationDone(this.agentId, resultSet);
     }
 
@@ -113,14 +105,14 @@ public class AgentController implements MonitoringMessageListener, SimulationMes
      * @param sce
      */
     public void contextInitialized(ServletContextEvent sce) {
-       this.agentId = sce.getServletContext().getContextPath().substring(1);
-       msgHandler = new AgentMessageHandler(this.agentId);
-       msgHandler.setListener(this);
+        this.agentId = sce.getServletContext().getContextPath().substring(1);
+        msgHandler = new AgentMessageHandler(this.agentId);
+        msgHandler.setListener(this);
 
-       jmsThread = new Thread(msgHandler);
-       jmsThread.start();
+        jmsThread = new Thread(msgHandler);
+        jmsThread.start();
 
-       System.out.println("-- Agent started with id : "+this.agentId+" --");
+        System.out.println("-- Agent started with id : " + this.agentId + " --");
     }
 
     /**

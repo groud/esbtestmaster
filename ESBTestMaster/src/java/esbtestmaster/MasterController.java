@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package esbtestmaster;
 
 import Exceptions.BadXMLException;
@@ -125,12 +121,13 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
             this.currentScenario = scenarioReader.readXMLFile(XMLfile);
             //We the send a configuration message to the agents
             for (AgentConfiguration agentConfiguration : this.currentScenario.getAgentsconfiguration()) {
-                msgHandler.configurationMessage(agentConfiguration.getAgentId(),agentConfiguration, this.currentScenario);
+                msgHandler.configurationMessage(agentConfiguration.getAgentId(), agentConfiguration, this.currentScenario);
                 finishedConfigMap.put(agentConfiguration.getAgentId(), false);
             }
             //We create a timer for timeout problems
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
+
                 @Override
                 public void run() {
                     if (!configDone) {
@@ -202,7 +199,7 @@ public class MasterController implements UserInputsListener, MonitoringMsgListen
 
             if (this.consumersTerminated == false) {
                 boolean consumerTerminatedTemp = true;
-                
+
                 for (AgentConfiguration agentConfiguration : this.currentScenario.getAgentsconfiguration()) {
                     if (agentConfiguration instanceof ConsumerConfiguration && finishedMap.get(agentConfiguration.getAgentId()) != true) {
                         consumerTerminatedTemp = false;

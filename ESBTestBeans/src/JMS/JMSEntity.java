@@ -14,7 +14,6 @@ public class JMSEntity {
     public static String CONNECTION_FACTORY = "TopicConnectionFactory";
     public static String CONFIG_DESTINATION = "config";
     public static String RESULTS_DESTINATION = "results";
-
     private Context context = null;
     private ConnectionFactory factory = null;
     private Connection connection = null;
@@ -24,7 +23,6 @@ public class JMSEntity {
     private Session sessionIn = null;
     private MessageProducer sender = null;
     private MessageConsumer receiver = null;
-
 
     /**
      * Return and init a JMSEntity instance.
@@ -66,7 +64,7 @@ public class JMSEntity {
 
     //send an object to the topic
     public boolean send(Serializable objectToSend) {
-        
+
         try {
             ObjectMessage message = sessionOut.createObjectMessage(objectToSend);
             sender.send(message);
@@ -110,5 +108,5 @@ public class JMSEntity {
                 e.printStackTrace();
             }
         }
-    }   
+    }
 }

@@ -9,6 +9,7 @@ import java.util.TreeSet;
  * Describes a set of event
  */
 public class ResultSet implements Serializable {
+
     private SortedSet<ResultEvent> events;
 
     /**
@@ -49,11 +50,10 @@ public class ResultSet implements Serializable {
     @Override
     public String toString() {
         String str = "-- ResultSet -- \n";
-        for(Iterator it = events.iterator(); it.hasNext();) {
-            str = str + it.next() +"\n";
+        for (Iterator it = events.iterator(); it.hasNext();) {
+            str = str + it.next() + "\n";
         }
         str = str + "--------------\n";
         return str;
     }
-
 }

@@ -5,7 +5,8 @@ import java.io.Serializable;
 /**
  * A message to be sent to an agent. The receiver id is used to address the message (using JMS)
  */
-public class JMSAddressedMessage implements Serializable{
+public class JMSAddressedMessage implements Serializable {
+
     String receiver;
 
     /**

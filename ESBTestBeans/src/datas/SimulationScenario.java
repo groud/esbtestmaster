@@ -51,10 +51,10 @@ public class SimulationScenario implements Serializable {
      */
     public void setSteps(ArrayList<SimulationStep> steps) {
         this.steps = steps;
-        for (Iterator<SimulationStep> i = steps.iterator();i.hasNext();) {
+        for (Iterator<SimulationStep> i = steps.iterator(); i.hasNext();) {
             SimulationStep step = i.next();
             if (step.getBurstStopDate() > endDate) {
-                 endDate = step.getBurstStopDate();
+                endDate = step.getBurstStopDate();
             }
         }
     }
@@ -77,7 +77,6 @@ public class SimulationScenario implements Serializable {
     public long getEndDate() {
         return endDate;
     }
-
 
     /**
      * Returns a String representation of this object.

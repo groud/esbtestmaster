@@ -4,12 +4,13 @@ package datas;
  * Describes a producer configuration
  */
 public class ProducerConfiguration extends AgentConfiguration {
+
     private String wsAddress;
 
     /**
      * Returns a ConsumerConfiguration, and set its agent type to consumer.
      */
-    public ProducerConfiguration(){
+    public ProducerConfiguration() {
         this.agentType = AgentType.PRODUCER;
     }
 
@@ -35,6 +36,6 @@ public class ProducerConfiguration extends AgentConfiguration {
      */
     @Override
     public String toString() {
-        return agentType + " " + this.getAgentId() + " at "+ this.getWsAddress()+"\n";
+        return agentType + " " + this.getAgentId() + " at " + this.getWsAddress() + "\n";
     }
 }

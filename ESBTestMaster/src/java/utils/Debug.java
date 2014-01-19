@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package utils;
 
 /**
@@ -10,6 +5,7 @@ package utils;
  * It does displays messages using the console
  */
 public class Debug {
+
     static private boolean activated = false;
 
     /**
@@ -17,7 +13,9 @@ public class Debug {
      * @param msg
      */
     static public void info(Object msg) {
-        if(Debug.isActivated()) System.out.println("INFO : "+msg.toString());
+        if (Debug.isActivated()) {
+            System.out.println("INFO : " + msg.toString());
+        }
     }
 
     /**

@@ -6,9 +6,9 @@ import interfaces.SimulationMessageListener;
  * A SimulationEntity is responsible for the behaviour of an agent
  */
 public abstract class SimulationEntity {
+
     private String id;
     protected ResultsLogger logger;
-    
     SimulationMessageListener listener;
 
     public SimulationEntity(String id) {
@@ -44,7 +44,7 @@ public abstract class SimulationEntity {
      * Start the simulation
      */
     public abstract void startSimulation();
-    
+
     /**
      * Abort the simulation
      */

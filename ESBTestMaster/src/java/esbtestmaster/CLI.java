@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package esbtestmaster;
 
 import datas.SimulationScenario;
@@ -57,7 +53,7 @@ public class CLI implements UserOutputsInterface {
     }
 
     /**
-     * Define a listener for the user inputs.
+     * Defines a listener for the user inputs.
      * @param userInputListener
      */
     public void setListener(UserInputsListener userInputListener) {
@@ -168,6 +164,9 @@ public class CLI implements UserOutputsInterface {
 
     }
 
+    /**
+     * Prints a new line if needed
+     */
     private void newLineIfNeeded() {
         if (addNewLine) {
             System.out.println();

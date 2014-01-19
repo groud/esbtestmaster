@@ -17,7 +17,7 @@ import org.jdom2.output.XMLOutputter;
  */
 public class KPICalculator implements KPICalculatorInterface {
 
-        public static final String XSD_KPIS = "XSD/kpis.xsd";
+    public static final String XSD_KPIS = "XSD/kpis.xsd";
     // -------------------------------
     //   INTERFACES IMPLEMENTATIONS
     // -------------------------------
@@ -94,51 +94,49 @@ public class KPICalculator implements KPICalculatorInterface {
 
         document = new Document();
         root = new Element("kpis");
-        Namespace ns = Namespace.getNamespace("xsi","http://www.w3.org/2001/XMLSchema-instance");
+        Namespace ns = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
         root.addNamespaceDeclaration(ns);
         root.removeNamespaceDeclaration(ns);
-         //root.
-        root.setAttribute("noNamespaceSchemaLocation",XSD_KPIS,ns);
-        
+        //root.
+        root.setAttribute("noNamespaceSchemaLocation", XSD_KPIS, ns);
+
         Element child, child1, child2, child3;
 
         Iterator it = kpiSet.getNumberOfRequestSent().entrySet().iterator();
 
         while (it.hasNext()) {
             Map.Entry entry = (Map.Entry) it.next();
-            String key = (String)entry.getKey();
-            Integer val = (Integer)entry.getValue();
+            String key = (String) entry.getKey();
+            Integer val = (Integer) entry.getValue();
             child = new Element("kpiEntry");
             child.setAttribute("agentId", key);
             child1 = new Element("nbReqSent");
             child1.addContent(String.valueOf(val));
             child.addContent(child1);
             child2 = new Element("nbReqLost");
-            if(kpiSet.getNumberOfRequestLost().containsKey(key)){                
+            if (kpiSet.getNumberOfRequestLost().containsKey(key)) {
                 child2.addContent(String.valueOf(kpiSet.getNumberOfRequestLost().get(key)));
             } else {
                 child2.addContent("Undefined");
             }
             child.addContent(child2);
-            child3=new Element("averageRespTime");
-           if(kpiSet.getAverageResponseTime().containsKey(key)){
+            child3 = new Element("averageRespTime");
+            if (kpiSet.getAverageResponseTime().containsKey(key)) {
                 child3.addContent(String.valueOf(kpiSet.getAverageResponseTime().get(key)));
             } else {
                 child3.addContent("Undefined");
             }
             child.addContent(child3);
-             root.addContent(child);
-       }
+            root.addContent(child);
+        }
 
         document.setContent(root);
 
-     //Writes the XMLFile
+        //Writes the XMLFile
         FileWriter writer = new FileWriter(filename);
         XMLOutputter outputter = new XMLOutputter();
         outputter.setFormat(Format.getPrettyFormat());
         outputter.output(document, writer);
-        writer.close();      
-
-
+        writer.close();
     }
 }

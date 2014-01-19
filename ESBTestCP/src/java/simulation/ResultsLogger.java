@@ -12,6 +12,7 @@ import java.util.Date;
  * Be careful with big simulation, this could trigger out of meomry issues.
  */
 public class ResultsLogger {
+
     private ResultSet resultSet;
     private Date startDate;
     private String agentID;
@@ -24,11 +25,11 @@ public class ResultsLogger {
         resultSet = new ResultSet();
         this.agentID = agentID;
     }
-    
-     /**
-      * Sets simulation start date
-      * @param date
-      */
+
+    /**
+     * Sets simulation start date
+     * @param date
+     */
     public void setStartDate(Date date) {
         startDate = date;
     }
@@ -39,7 +40,7 @@ public class ResultsLogger {
      * @param event The event type (ex: REQUEST_SENT, REQUEST_RECEIVED ...)
      */
     public void writeSimulationEvent(int reqId, AgentType agentType, EventType eventType) throws Exception {
-        if(startDate == null) {
+        if (startDate == null) {
             throw new Exception("The simulation start date was not saved");
         }
 
@@ -57,6 +58,7 @@ public class ResultsLogger {
         resultSet.addEvent(currentEvent);
 
     }
+
     /**
      * Returns the result set
      * @return ResultSet
@@ -64,5 +66,4 @@ public class ResultsLogger {
     public ResultSet getResultSet() {
         return resultSet;
     }
-
 }

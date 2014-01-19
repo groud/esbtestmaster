@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package monitoring;
 
 import JMS.*;
@@ -80,7 +76,7 @@ public class AgentMessageHandler implements MonitoringMessageHandler, Runnable {
         while (true) {
             Serializable message;
             message = jms.receive();
-            
+
             if (((JMSAddressedMessage) message).getReceiver().equals(this.agentId)) {
                 if (message instanceof ConfigJMSMessage) {
                     //System.out.println("JMSHandler: Received a configJMSMessage");

@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Describes an agent configuration
  */
 public abstract class AgentConfiguration implements Serializable {
+
     protected AgentType agentType;
     private String agentId;
 
@@ -31,6 +32,6 @@ public abstract class AgentConfiguration implements Serializable {
      */
     @Override
     public String toString() {
-        return agentType + " " + this.getAgentId()+"\n";
+        return agentType + " " + this.getAgentId() + "\n";
     }
 }

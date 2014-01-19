@@ -8,8 +8,9 @@ import java.util.Map;
  * Describes a set of Key Perforamance Indicators.
  */
 public class KPISet {
-    private HashMap<String,Integer> numberOfRequestSent;
-    private HashMap<String,Integer> numberOfRequestLost;
+
+    private HashMap<String, Integer> numberOfRequestSent;
+    private HashMap<String, Integer> numberOfRequestLost;
     private HashMap<String, Long> averageResponseTime;
 
     /**
@@ -65,29 +66,28 @@ public class KPISet {
      * @return
      */
     @Override
-    public String toString(){
+    public String toString() {
         String resultat = new String("");
         Iterator it = numberOfRequestSent.entrySet().iterator();
 
         while (it.hasNext()) {
             Map.Entry entry = (Map.Entry) it.next();
-            String key = (String)entry.getKey();
-            Integer val = (Integer)entry.getValue();
+            String key = (String) entry.getKey();
+            Integer val = (Integer) entry.getValue();
             resultat += "Id Agent = " + key + "\n";
-            resultat+= "\t Nombre de requêtes envoyées: " + val + "\n";
-            if(numberOfRequestLost.containsKey(key)){
-                resultat+= "\t Nombre de requêtes perdues : " + numberOfRequestLost.get(key) + "\n";
+            resultat += "\t Nombre de requêtes envoyées: " + val + "\n";
+            if (numberOfRequestLost.containsKey(key)) {
+                resultat += "\t Nombre de requêtes perdues : " + numberOfRequestLost.get(key) + "\n";
             } else {
-                resultat+= "\t Nombre de requêtes perdues : Undefined \n";
+                resultat += "\t Nombre de requêtes perdues : Undefined \n";
             }
-           if(averageResponseTime.containsKey(key)){
-                resultat+= "\t Temps de réponse moyen : " + averageResponseTime.get(key) + "\n";
+            if (averageResponseTime.containsKey(key)) {
+                resultat += "\t Temps de réponse moyen : " + averageResponseTime.get(key) + "\n";
             } else {
-                resultat+= "\t Temps de réponse moyen : Undefined \n";
+                resultat += "\t Temps de réponse moyen : Undefined \n";
             }
-       }
+        }
 
-       return resultat;
-   }
-
+        return resultat;
+    }
 }

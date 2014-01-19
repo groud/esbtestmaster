@@ -11,7 +11,7 @@ package Exceptions;
 public class BadXMLException extends Exception {
 
     /**
-     * Creates a new instance of <code>BadXMLException</code> without detail message.
+     * Returns a new instance of <code>BadXMLException</code> without detail message.
      */
     public BadXMLException() {
     }

@@ -130,6 +130,7 @@ public class ConsumerEntity extends SimulationEntity {
 
             // Start the periodic task to send requests
             scheduler.schedule(new Runnable() {
+
                 public void run() {
                     stepTaskHandle.cancel(true);
                     System.out.println("step task done");
@@ -222,6 +223,7 @@ public class ConsumerEntity extends SimulationEntity {
 
             //
             javax.xml.ws.AsyncHandler<simulationRef.RequestOperationResponse> asyncHandler = new javax.xml.ws.AsyncHandler<simulationRef.RequestOperationResponse>() {
+
                 public void handleResponse(javax.xml.ws.Response<simulationRef.RequestOperationResponse> response) {
                     try {
                         String ret = response.get().getReturn();

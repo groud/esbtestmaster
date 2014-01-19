@@ -10,6 +10,7 @@ import java.util.logging.Logger;
  * It uses a ResultLogger to log events, listening to a web service class (SimulationWS)
  */
 public class ProducerEntity extends SimulationEntity implements ProducerWSListener {
+
     private boolean simulationDone = true;
 
     /**
