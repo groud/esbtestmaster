@@ -25,20 +25,26 @@
     </connections>
     <porttypes>
         <link xlink:href="../jbiasa/localhost_8080/ESBTestCP/SimulationWSService.wsdl#xpointer(/definitions/portType[@name='SimulationWS'])" xlink:type="simple"/>
+        <link xlink:href="../jbiasa/localhost_8080/ESBAgent1/SimulationWSService.wsdl#xpointer(/definitions/portType[@name='SimulationWS'])" xlink:type="simple"/>
         <link xlink:href="../jbiasa/ESBTestComposite.wsdl#xpointer(/definitions/portType[@name='dummyCasaPortType'])" xlink:type="simple"/>
         <link xlink:href="../jbiServiceUnits/localhost_8080/ESBTestCP/SimulationWSService.wsdl#xpointer(/definitions/portType[@name='SimulationWS'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/localhost_8080/ESBAgent1/SimulationWSService.wsdl#xpointer(/definitions/portType[@name='SimulationWS'])" xlink:type="simple"/>
         <link xlink:href="../jbiServiceUnits/ESBTestComposite.wsdl#xpointer(/definitions/portType[@name='dummyCasaPortType'])" xlink:type="simple"/>
     </porttypes>
     <bindings>
         <link xlink:href="../jbiasa/localhost_8080/ESBTestCP/SimulationWSService.wsdl#xpointer(/definitions/binding[@name='SimulationWSPortBinding'])" xlink:type="simple"/>
+        <link xlink:href="../jbiasa/localhost_8080/ESBAgent1/SimulationWSService.wsdl#xpointer(/definitions/binding[@name='SimulationWSPortBinding'])" xlink:type="simple"/>
         <link xlink:href="../jbiasa/ESBTestComposite.wsdl#xpointer(/definitions/binding[@name='casaBinding1'])" xlink:type="simple"/>
         <link xlink:href="../jbiServiceUnits/localhost_8080/ESBTestCP/SimulationWSService.wsdl#xpointer(/definitions/binding[@name='SimulationWSPortBinding'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/localhost_8080/ESBAgent1/SimulationWSService.wsdl#xpointer(/definitions/binding[@name='SimulationWSPortBinding'])" xlink:type="simple"/>
         <link xlink:href="../jbiServiceUnits/ESBTestComposite.wsdl#xpointer(/definitions/binding[@name='casaBinding1'])" xlink:type="simple"/>
     </bindings>
     <services>
         <link xlink:href="../jbiasa/localhost_8080/ESBTestCP/SimulationWSService.wsdl#xpointer(/definitions/service[@name='SimulationWSService'])" xlink:type="simple"/>
+        <link xlink:href="../jbiasa/localhost_8080/ESBAgent1/SimulationWSService.wsdl#xpointer(/definitions/service[@name='SimulationWSService'])" xlink:type="simple"/>
         <link xlink:href="../jbiasa/ESBTestComposite.wsdl#xpointer(/definitions/service[@name='ESBTestCompositeService1'])" xlink:type="simple"/>
         <link xlink:href="../jbiServiceUnits/localhost_8080/ESBTestCP/SimulationWSService.wsdl#xpointer(/definitions/service[@name='SimulationWSService'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/localhost_8080/ESBAgent1/SimulationWSService.wsdl#xpointer(/definitions/service[@name='SimulationWSService'])" xlink:type="simple"/>
         <link xlink:href="../jbiServiceUnits/ESBTestComposite.wsdl#xpointer(/definitions/service[@name='ESBTestCompositeService1'])" xlink:type="simple"/>
     </services>
     <regions>

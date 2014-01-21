@@ -32,7 +32,7 @@ public class ConsumerEntity extends SimulationEntity {
     private simulationRef.SimulationWSService wsService;
     private simulationRef.SimulationWS wsPort;
     // Request ID : don't change manually because of concurrency issues
-    // Use incrementReqId() and getReqId()
+    // Use getCurrentReqId() and getReqId()
     private volatile int reqId = 0;
 
     /**
@@ -108,15 +108,16 @@ public class ConsumerEntity extends SimulationEntity {
 
                 public void run() {
                     //Log the event
+                    int currentReqId = getCurrentReqId();
                     try {
-                        logger.writeSimulationEvent(getReqId(), AgentType.CONSUMER, EventType.REQUEST_SENT);
+                        logger.writeSimulationEvent(currentReqId, AgentType.CONSUMER, EventType.REQUEST_SENT);
                     } catch (Exception ex) {
                         Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                     //Send the request
-                    sendAsyncRequest(wsUrl, destId, getReqId(), reqPayloadSize, processTime, respPayloadSize);
-                    incrementReqId(); // synchronized method
+                    sendAsyncRequest(wsUrl, destId, currentReqId, reqPayloadSize, processTime, respPayloadSize);
+                   
                     nbReqSent++;
                 }
             };
@@ -193,18 +194,19 @@ public class ConsumerEntity extends SimulationEntity {
     /**
      * Increments the request id counter
      */
-    synchronized private void incrementReqId() {
-        reqId++;
+    synchronized private int getCurrentReqId() {
+        return reqId++;
     }
 
     /**
      * Returns the current request id counter
      * @return
      */
+    /*
     synchronized private int getReqId() {
         return reqId;
     }
-
+    */
     /**
      * Sends an asynchronous request to the WS whose ID is producerID.
      * The request callback handler logs the response when it is received
@@ -215,7 +217,7 @@ public class ConsumerEntity extends SimulationEntity {
     private void sendAsyncRequest(String wsAddress, String producerId, int requestId, int reqPayloadSize, long processTime, int respPayloadSize) {
         String requestData = null;
         final int finalReqId = requestId;
-        System.out.println(wsAddress);
+        //System.out.println("ws address : " + wsAddress);
         try { // Call Web Service Operation(async. callback)
 
             // Dynamic WS addressing
@@ -228,6 +230,7 @@ public class ConsumerEntity extends SimulationEntity {
                     try {
                         String ret = response.get().getReturn();
                         logger.writeSimulationEvent(finalReqId, AgentType.CONSUMER, EventType.REQUEST_RECEIVED);
+                        System.out.println("Resp : " + ret);
                     } catch (Exception ex) {
                         Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
                         try {
