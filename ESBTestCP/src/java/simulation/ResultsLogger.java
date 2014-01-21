@@ -24,6 +24,7 @@ public class ResultsLogger {
     public ResultsLogger(String agentID) {
         resultSet = new ResultSet();
         this.agentID = agentID;
+        startDate = null;
     }
 
     /**
@@ -34,6 +35,16 @@ public class ResultsLogger {
         startDate = date;
     }
 
+    public boolean hasAStartDate() {
+        if(startDate == null) {
+            return false;
+        }
+        else {
+            return true;
+        }
+
+
+    }
     /**
      * Logs a simulation event
      * @param agent The agent type (ex: CONSUMER, PROVIDER, ...)

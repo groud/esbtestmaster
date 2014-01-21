@@ -31,13 +31,13 @@ public class SimulationWS {
     @WebMethod(operationName = "requestOperation")
     public String requestOperation(@WebParam(name = "agentId") String agentId, @WebParam(name = "requestId") int requestId, @WebParam(name = "requestData") String requestData, @WebParam(name = "respTime") long respTime, @WebParam(name = "respSize") int respSize) {
         //Log the request
-        /*
+        
         if (listener instanceof ProducerWSListener) {
             listener.requestReceived(requestId, requestData, respTime, respSize);
         } else {
             System.out.print("No listener has been provided. The event will not be logged.");
         }
-        */
+        
         // Wait for respTime ms
         try {
             Thread.sleep(respTime);
@@ -54,14 +54,14 @@ public class SimulationWS {
         } else {
             ret += "Error : response size not strictly positive";
         }
-        /*
+        
         //Log the response
         if (listener instanceof ProducerWSListener) {
             listener.responseSent(requestId);
         } else {
             System.out.print("No listener has been provided. The event will not be logged.");
         }
-        */
+        
         return ret;
     }
 

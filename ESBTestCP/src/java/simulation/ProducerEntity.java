@@ -2,6 +2,7 @@ package simulation;
 
 import datas.*;
 import interfaces.ProducerWSListener;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
 public class ProducerEntity extends SimulationEntity implements ProducerWSListener {
 
     private boolean simulationDone = true;
+
 
     /**
      * Returns a ProducerEntity instance
@@ -27,6 +29,7 @@ public class ProducerEntity extends SimulationEntity implements ProducerWSListen
     public void startSimulation() {
         SimulationWS.setListener(this);
         simulationDone = false;
+        logger.setStartDate(new Date());
     }
 
     /**
@@ -42,6 +45,8 @@ public class ProducerEntity extends SimulationEntity implements ProducerWSListen
     public void endOfSimulation() {
         simulationDone = true;
         listener.simulationDone(logger.getResultSet());
+        
+        System.out.println(logger.getResultSet().toString());
     }
 
     /**

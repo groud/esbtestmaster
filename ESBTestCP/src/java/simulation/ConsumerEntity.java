@@ -23,7 +23,7 @@ public class ConsumerEntity extends SimulationEntity {
     //TODO : change the number of threads depending on the scenario ?
     private final int THREAD_POOL_NB = 10;
     // time to wait after the last request is sent (in ms)
-    private final int LAST_REQ_TIMEOUT = 3000;
+    private final int LAST_REQ_TIMEOUT = 10000;
     private ScheduledExecutorService scheduler; // scheduler to send requests
     private SimulationScenario simulationScenario = null;
     private Hashtable<String, AgentConfiguration> hashAgentsConf;
@@ -66,6 +66,8 @@ public class ConsumerEntity extends SimulationEntity {
         scheduler = Executors.newScheduledThreadPool(THREAD_POOL_NB);
         SimulationStep step;
         int i;
+        startDate = new Date();
+        logger.setStartDate(startDate);
 
         //Exectute the simulation step by step
         for (i = 0; i < nbSteps; i++) {
@@ -96,8 +98,8 @@ public class ConsumerEntity extends SimulationEntity {
             long period = (long) ((stepDuration / (float) nbRequests) * 1000);
 
             // Set simulation starting date
-            startDate = new Date(INIT_TIME + System.currentTimeMillis());
-            logger.setStartDate(startDate);
+            //startDate = new Date(INIT_TIME + System.currentTimeMillis());
+            //logger.setStartDate(startDate);
             // Set starting date of the current scenario step
             stepStartDate = new Date(startDate.getTime() + step.getBurstStartDate());
 
@@ -229,7 +231,7 @@ public class ConsumerEntity extends SimulationEntity {
                 public void handleResponse(javax.xml.ws.Response<simulationRef.RequestOperationResponse> response) {
                     try {
                         String ret = response.get().getReturn();
-                        logger.writeSimulationEvent(finalReqId, AgentType.CONSUMER, EventType.REQUEST_RECEIVED);
+                        logger.writeSimulationEvent(finalReqId, AgentType.CONSUMER, EventType.RESPONSE_RECEIVED);
                         System.out.println("Resp : " + ret);
                     } catch (Exception ex) {
                         Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
