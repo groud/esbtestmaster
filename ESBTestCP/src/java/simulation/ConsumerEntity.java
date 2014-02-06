@@ -126,6 +126,11 @@ public class ConsumerEntity extends SimulationEntity {
             // Schedule the task
             taskDelay = stepStartDate.getTime() - System.currentTimeMillis();
 
+            if (taskDelay<0)
+            {
+                taskDelay=0;
+            }
+
             // Schedule the periodic task of sending requests
             final ScheduledFuture<?> stepTaskHandle = scheduler.scheduleAtFixedRate(stepTask, taskDelay, period, TimeUnit.MILLISECONDS);
             System.out.println("task period :" + period);
@@ -232,7 +237,7 @@ public class ConsumerEntity extends SimulationEntity {
                     try {
                         String ret = response.get().getReturn();
                         logger.writeSimulationEvent(finalReqId, AgentType.CONSUMER, EventType.RESPONSE_RECEIVED);
-                        System.out.println("Resp : " + ret);
+//                        System.out.println("Resp : " + ret);
                     } catch (Exception ex) {
                         Logger.getLogger(ConsumerEntity.class.getName()).log(Level.SEVERE, null, ex);
                         try {

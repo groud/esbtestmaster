@@ -5,7 +5,7 @@ xsi:noNamespaceSchemaLocation="XSD/simulationScenario.xsd">
 	<configuration>
 		<consumer agentId="agent1"/>
 		<producer agentId="agent2">
-			<address>http://localhost:8080/agent2/SimulationWSService</address>
+			<address>http://localhost:8090/ESBTestComposite2Service1/casaPort1</address>
 		</producer>
 	</configuration>
 	<run>

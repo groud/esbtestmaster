@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kpis xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="XSD/kpis.xsd">
+  <kpiEntry agentId="agent1">
+    <nbReqSent>608</nbReqSent>
+    <nbReqLost>318</nbReqLost>
+    <averageRespTime>10483</averageRespTime>
+  </kpiEntry>
+</kpis>

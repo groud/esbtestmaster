@@ -112,7 +112,6 @@ xsi:noNamespaceSchemaLocation="XSD/results.xsd">
         <requestId>9</requestId>
     </simulationEvent>
   
-    <event eventDate="2128025054" eventType="CONNEXION_ERR" agentType="CONSUMER" agentId="cons10" />
 
 
 
@@ -225,7 +224,6 @@ xsi:noNamespaceSchemaLocation="XSD/results.xsd">
         <requestId>19</requestId>
     </simulationEvent>
 
-  <event eventDate="1803166989" eventType="CONNEXION_ERR" agentType="CONSUMER" agentId="cons20" /> 
       <simulationEvent eventDate="340184100" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons21"> 
         <requestId>21</requestId>
     </simulationEvent>
@@ -334,7 +332,6 @@ xsi:noNamespaceSchemaLocation="XSD/results.xsd">
       <simulationEvent eventDate="1663077697" eventType="RESPONSE_RECEIVED" agentType="CONSUMER" agentId="cons29"> 
         <requestId>29</requestId>
     </simulationEvent>
-  <event eventDate="527594392" eventType="CONNEXION_ERR" agentType="CONSUMER" agentId="cons30" /> 
       <simulationEvent eventDate="263940260" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons31"> 
         <requestId>31</requestId>
     </simulationEvent>
@@ -444,7 +441,6 @@ xsi:noNamespaceSchemaLocation="XSD/results.xsd">
         <requestId>39</requestId>
     </simulationEvent>
 
-    <event eventDate="500170212" eventType="CONNEXION_ERR" agentType="CONSUMER" agentId="cons40"/>
 
 
     <simulationEvent eventDate="280244537" eventType="REQUEST_SENT" agentType="CONSUMER" agentId="cons41"> 

@@ -54,7 +54,7 @@ public class XMLResultKeeper implements ResultKeeperInterface {
      * Add a results set to the XML File
      * @param resultSet
      * @throws IOException
-     *og @throws BadXMLException
+     * @throws BadXMLException
      */
     public void addLog(ResultSet resultSet) throws IOException, BadXMLException {
         try {

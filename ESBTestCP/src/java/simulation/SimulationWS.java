@@ -71,5 +71,6 @@ public class SimulationWS {
      */
     public static void setListener(ProducerWSListener listener) {
         SimulationWS.listener = listener;
+        System.out.println(listener);
     }
 }

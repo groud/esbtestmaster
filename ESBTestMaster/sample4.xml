@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<scenario
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="XSD/simulationScenario.xsd">
+	<configuration>
+		<consumer agentId="agent1"/>
+		<producer agentId="agent2">
+			<address>http://localhost:8090/ESBTestComposite2Service1/casaPort1</address>
+		</producer>
+               	<consumer agentId="agent3"/>
+                <producer agentId="agent4">
+                        <address>http://localhost:8090/ESBTestComposite4Service1/casaPort1</address>
+                </producer>
+
+
+	</configuration>
+	<run>
+		<burst src="agent1" dest="agent2" startdate="0" stopdate="5000">
+			<rate>30</rate>
+			<requestPayloadSize>10</requestPayloadSize>
+			<processTime>500</processTime>
+			<responsePayloadSize>20</responsePayloadSize>
+		</burst>
+                <burst src="agent3" dest="agent4" startdate="5000" stopdate="10000">
+                        <rate>30</rate>
+                        <requestPayloadSize>10</requestPayloadSize>
+                        <processTime>500</processTime>
+                        <responsePayloadSize>20</responsePayloadSize>
+                </burst>
+                <burst src="agent1" dest="agent4" startdate="10000" stopdate="15000">
+                        <rate>30</rate>
+                        <requestPayloadSize>10</requestPayloadSize>
+                        <processTime>500</processTime>
+                        <responsePayloadSize>20</responsePayloadSize>
+                </burst>
+
+	</run>
+</scenario>

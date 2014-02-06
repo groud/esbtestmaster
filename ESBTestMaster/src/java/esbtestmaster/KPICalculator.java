@@ -117,7 +117,7 @@ public class KPICalculator implements KPICalculatorInterface {
             if (kpiSet.getNumberOfRequestLost().containsKey(key)) {
                 child2.addContent(String.valueOf(kpiSet.getNumberOfRequestLost().get(key)));
             } else {
-                child2.addContent("Undefined");
+                child2.addContent("0");
             }
             child.addContent(child2);
             child3 = new Element("averageRespTime");

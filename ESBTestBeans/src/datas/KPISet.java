@@ -79,7 +79,7 @@ public class KPISet {
             if (numberOfRequestLost.containsKey(key)) {
                 resultat += "\t Nombre de requêtes perdues : " + numberOfRequestLost.get(key) + "\n";
             } else {
-                resultat += "\t Nombre de requêtes perdues : Undefined \n";
+                resultat += "\t Nombre de requêtes perdues : 0 \n";
             }
             if (averageResponseTime.containsKey(key)) {
                 resultat += "\t Temps de réponse moyen : " + averageResponseTime.get(key) + "\n";

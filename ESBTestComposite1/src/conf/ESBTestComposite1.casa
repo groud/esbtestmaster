@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <casa xmlns="http://java.sun.com/xml/ns/casa" xmlns:ns1="http://simulation/" xmlns:ns2="ESBTestComposite1" xmlns:xlink="http://www.w3.org/2000/xlink">
     <endpoints>
-        <endpoint name="endpoint1" endpoint-name="SimulationWSPort" interface-name="ns1:SimulationWS" service-name="ns1:SimulationWSService"/>
-        <endpoint name="endpoint2" endpoint-name="casaPort1" interface-name="ns1:SimulationWS" service-name="ns2:ESBTestComposite1Service1"/>
+        <endpoint endpoint-name="SimulationWSPort" interface-name="ns1:SimulationWS" name="endpoint1" service-name="ns1:SimulationWSService"/>
+        <endpoint endpoint-name="casaPort1" interface-name="ns1:SimulationWS" name="endpoint2" service-name="ns2:ESBTestComposite1Service1"/>
     </endpoints>
     <service-units>
         <binding-component-service-unit artifacts-zip="sun-http-binding.jar" component-name="sun-http-binding" description="Represents this Service Unit" name="ESBTestComposite1-sun-http-binding" unit-name="sun-http-binding">
@@ -21,7 +21,7 @@
         </binding-component-service-unit>
     </service-units>
     <connections>
-        <connection state="new" consumer="endpoint2" provider="endpoint1"/>
+        <connection consumer="endpoint2" provider="endpoint1" state="new"/>
     </connections>
     <porttypes>
         <link xlink:href="../jbiasa/ESBTestComposite1.wsdl#xpointer(/definitions/portType[@name='dummyCasaPortType'])" xlink:type="simple"/>
@@ -47,4 +47,3 @@
         <region name="External Modules" width="200"/>
     </regions>
 </casa>
-
